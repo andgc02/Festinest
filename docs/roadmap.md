@@ -1,97 +1,102 @@
-# Festinest Product Roadmap
+# Festinest Product Roadmap (Updated Oct 2025)
+
+## ✅ Completed
+- Expo Router stack + tab layout with login gating (`apps/mobile/app/_layout.tsx`, `apps/mobile/app/(tabs)/_layout.tsx`).
+- Firebase Auth integration with persistent sessions and admin seeding.
+- NativeWind/Tailwind design system scaffolding (shared colors, spacing, presets).
+- Base UI primitives: `Button`, `Input`, `SearchBar`, `Card`.
+- Festival list & detail screens reading Firestore with mock fallback.
+- Schedule builder placeholder using Firebase data.
+- Settings screen wired to Firebase auth logout.
+- Docs directory established with live roadmap and seeding plan.
+
+## 🚧 In Progress
+- Expand component library (FilterChip, Tabs, Toasts).
+- Replace placeholders with Tailwind-driven screens (Group, Schedule).
+- Clean typography tokens to remove mojibake from legacy docs.
+
+## ⏭️ Upcoming (Week 1 Foundations)
+1. NativeWind component polish
+   - Build `FilterPill`, `Avatar`, `AvatarGroup`.
+   - Create consistent typography utility classes.
+2. Navigation refinements
+   - Add type-safe routes (enable `expo-router` typed routes).
+   - Implement authentication guard hooks.
+3. Theming
+   - Centralize theme tokens in `constants/theme.ts`.
+   - Provide light/dark variations for primary/accent colors.
+
+Continue following the execution timeline below.
 
 ## 1. Core MVP Screens
-
-### 1.1 FestivalListScreen
-- Festival cards with search (debounced) and filters (location, genre, month).
-- Components: `FestivalCard`, `SearchBar`, `FilterPill`, `EmptyState`.
-
-### 1.2 FestivalDetailScreen
-- Display festival metadata, lineup, and calls to action.
-- Components: `FestivalHeader`, `LineupItem`, `AddToScheduleButton`, `FestivalMapThumbnail` (optional).
-
-### 1.3 ScheduleBuilderScreen
-- Daily timeline with selectable artists, conflict highlighting, and save action.
-- Components: `ScheduleRow`, `ConflictBadge`, `SaveButton`, `DateSwitcherTabs`.
-
-### 1.4 GroupScreen
-- Group overview with member avatars, shared schedule votes, chat, and invite flows.
-- Components: `AvatarGroup`, `VoteBar`, `GroupChatList`, `InviteQR`.
-
-### 1.5 SettingsScreen
-- Editable profile, preferred genres, notifications, logout, and app metadata.
-- Components: `ProfileCard`, `GenrePicker`, `ToggleSwitch`.
+| Screen | Status | Next Steps | Notes |
+| --- | --- | --- | --- |
+| FestivalList | ✅ | Add filter interactions; debounce search | Uses `Card` + `SearchBar` components |
+| FestivalDetail | ✅ | Wire saved festivals CTA to Firestore | Add lineup expand/collapse |
+| ScheduleBuilder | ✅ | Implement conflict detection & persistence | Use `Tabs` component for day switching |
+| Group | ⏳ | Build group chat preview + vote UI | Requires Firestore group schema |
+| Settings | ✅ | Hook profile update & genre picker | Add notification toggles |
 
 ## 2. Reusable UI Library
-- Establish a shared design system inspired by Tailwind UI / shadcn.
-- Core primitives: `Button`, `Input`, `SearchBar`, `Avatar`, `AvatarGroup`, `Card`, `Tabs`, `Modal`, `Toast`.
+- **Completed:** `Button`, `Input`, `SearchBar`, `Card`.
+- **Planned:** `Avatar`, `AvatarGroup`, `Tabs`, `Modal`, `Toast`, `Toggle`.
+- **Guidelines:** Mimic shadcn/Tailwind UI; rely on design tokens from `tailwind.config`.
 
 ## 3. Design System
-- Typography: `text-xl font-bold` (headings), `text-base text-gray-800` (body), `text-sm text-gray-500` (captions).
-- Color palette:
-  - Primary: `#5A67D8`
-  - Background: `#F7FAFC`
-  - Accent: `#38B2AC`
-  - Warning: `#F6AD55`
-  - Error: `#E53E3E`
-- Spacing and sizing:
-  - Cards: `rounded-2xl p-4 shadow-md`
+- Typography utilities pending; adopt Tailwind naming:
+  - Headings: `text-[28px] font-semibold`
+  - Body: `text-base text-slate-200`
+  - Caption: `text-xs text-slate-400`
+- Color palette set in `tailwind.config.js`:
+  - Primary `#5A67D8`
+  - Accent `#38B2AC`
+  - Warning `#F6AD55`
+  - Error `#E53E3E`
+  - Background `#0F172A` / `#F7FAFC`
+- Spacing:
+  - Cards: `rounded-2xl p-4 shadow-card`
   - Buttons: `rounded-xl px-6 py-3`
   - Avatars: `h-10 w-10 rounded-full`
 
-## 4. Layout References
-- **Festival Card**
-  ```
-  -----------------------------
-  | 🎫 [Festival Name]        |
-  | 📍 [Location]             |
-  | 🗓️ Apr 11–13 | 120 artists |
-  -----------------------------
-  ```
-- **Schedule Row**
-  ```
-  -------------------------------------
-  | 1:00pm – Fred Again..      [✔️]   |
-  | Stage: Sahara                ⋮    |
-  -------------------------------------
-  ```
-- **Group Chat Bubble**
-  ```
-  Taylor: “Let’s meet before Fred Again..”
-  🕒 10:15 AM
-  ```
-- **AvatarGroup**
-  ```
-  [🧑][🧑][🧑] +2
-  ```
+## 4. Layout References (To Refresh)
+- Update diagrams in a future pass to remove mojibake imports.
+- Add Figma references for:
+  - Festival Card
+  - Schedule Row
+  - Group Chat bubble
+  - AvatarGroup
 
 ## 5. Execution Timeline
-- **Week 1: Foundations**
-  - Expo Router layout, navigation scaffolding.
-  - Shared UI component groundwork.
-  - Theming with Tailwind/NativeWind.
-- **Week 2: Core Screens**
-  - Festival list/detail flows.
-  - Schedule builder with conflict logic.
-  - Seed Firestore with sample data.
-- **Week 3: Social Features**
-  - Group creation and shared schedules.
-  - Voting interactions.
-  - QR invite flow (Expo QR + UUID).
-- **Week 4: Auth & Settings**
-  - Firebase email/password auth.
-  - User preferences (genres, saved festivals).
-  - Complete settings experience.
+### Week 1 (now)
+- ✅ Expo Router + auth gating.
+- ✅ NativeWind + base components.
+- 🔜 Expand component library and theming.
+
+### Week 2
+- Implement Festival detail interactions.
+- Schedule conflict logic.
+- Firestore seeding with realistic data.
+
+### Week 3
+- Group collaboration (votes, chat preview).
+- QR invite flow.
+- Notifications groundwork.
+
+### Week 4
+- Full settings UX.
+- Saved festivals & preferences.
+- Polish auth + onboarding flows.
 
 ## 6. Recommended Packages
 - Navigation: `expo-router`
 - Styling: `nativewind`
-- Icons: `react-native-vector-icons`
+- Icons: `@expo/vector-icons`
 - QR Codes: `react-native-qrcode-svg`
-- Dates: `dayjs` or `date-fns`
-- Backend: `firebase` + `expo-dev-client`
+- Date utils: `date-fns`
+- Backend: `firebase`, optional `firebase-admin` for scripts
 
-## 7. Optional Enhancements
-- Onboarding flow.
-- Premium upsell screen.
-- Extended sample data covering multiple festival genres.
+## 7. Enhancements / Stretch
+- Onboarding tour.
+- Premium upsell flow.
+- Genre-based recommendations.
+- Offline map caching.
