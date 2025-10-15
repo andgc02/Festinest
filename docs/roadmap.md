@@ -108,3 +108,75 @@ ativewind
 - Optional staging collection (estivals_staging) before production promotion.
 - Suggested data sources: MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain.
 - Document change log in docs/todo.md when new festivals added.
+
+## 🧼 Recommended Fixes + Cleanups
+
+1. Fix Mojibake and Character Encoding Errors  
+   You've got encoding issues that crept in - likely from pasting between editors or OS locales. These should be cleaned so the files are readable by all devs and safe for Git.
+
+   | Issue | Fix |
+   | --- | --- |
+   | � | Replace with a real em dash or bullet |
+   | pps/mobile/... | Replace `pps` with `apps` |
+   | ools/seedFestivals.js | Should be `tools/seedFestivals.js` |
+   | estivals.json | Should be `festivals.json` |
+   | ailwind.config.js | Should be `tailwind.config.js` |
+   | ounded-2xl | Should be `rounded-2xl` |
+   | ext-[28px] | Should be `text-[28px]` |
+   | ext-base | Should be `text-base` |
+   | ativewind | Should be `nativewind` |
+   | eact-native-qrcode-svg | Should be `react-native-qrcode-svg` |
+   | irebase | Should be `firebase` |
+
+   🛠 Tip: Run a find/replace in VSCode using regex to catch common non-ASCII characters.
+
+2. Clarify Status Tags in Checkboxes and Tables  
+   Instead of `?`, consider using icons like ✅ for completed, 🔄 for in progress, ⏳ or 🛠 for pending, and ❌ or ⚠️ for blocked or deprecated to make the roadmap easier to scan.
+
+3. Add Figma Link Placeholder (or Component Image References)  
+   Update the layout section with a checklist and placeholder links:
+   - [ ] Add Figma link or image exports:
+     - [ ] Festival Card
+     - [ ] Schedule Row
+     - [ ] Group Chat Bubble
+     - [ ] AvatarGroup
+   Even a placeholder like [Figma ->](https://www.figma.com/file/...) helps future collaborators.
+
+4. Theme & Typography Consistency  
+   Tighten the existing design tokens and add reusable utilities:
+   - `text-[28px] font-semibold` -> `text-2xl md:text-[28px] font-semibold` for responsive headings.
+   - `text-slate-200` -> `text-slate-800` for primary body copy contrast.
+   - Keep spacing utilities such as `px-6 py-3` and `rounded-xl`.
+
+   ```ts
+   // constants/theme.ts
+   export const FONT_SIZES = {
+     heading: 'text-2xl font-semibold',
+     body: 'text-base text-slate-800',
+     caption: 'text-xs text-slate-400',
+   };
+   ```
+
+5. Data Pipeline Section Refinement  
+   Refresh the guidance for maintainability:
+   - Store curated festivals in `data/festivals.json`.
+   - Seed via `tools/seedFestivals.js` using the Firebase Admin SDK.
+   - Promote documents from `festivals_staging` -> `festivals`.
+   - Refresh monthly or quarterly.
+   - Track additions in `docs/todo.md`.
+
+6. Add Missing Todos  
+   Capture supporting automation ideas:
+   - [ ] Create `scripts/validateFestivals.ts` to lint JSON before seeding.
+   - [ ] Add a shared `FestivalType` interface for both seeder and app.
+   - [ ] (Optional) Set up a GitHub workflow to run `npm run seed:festivals` on pushes to `main`.
+
+### ✅ Summary: Next Actions
+
+| Action | Owner |
+| --- | --- |
+| Clean all mojibake text | You or Codex |
+| Update README/roadmap for clarity | Optional polish |
+| Export/insert Figma links or mock image exports | Optional design enhancement |
+| Add a validation script for `festivals.json` | Codex can do this |
+| Consider GitHub CI for seeding (`npm run seed:festivals`) | Later |

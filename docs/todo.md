@@ -1,6 +1,6 @@
 # Festinest TODOs (Oct 2025)
 
-## Week 1 – Foundations
+## Week 1 ï¿½ Foundations
 - [x] Expo Router layout with login gating
 - [x] Firebase auth integration + persistence
 - [x] NativeWind setup with Tailwind tokens
@@ -9,19 +9,19 @@
 - [ ] Define typography utility classes and apply to all screens
 - [ ] Document theming tokens in constants/theme.ts
 
-## Week 2 – Core Screens
+## Week 2 ï¿½ Core Screens
 - [ ] Replace mock FestivalList filters with real interactions
 - [ ] Implement lineup expand/collapse in FestivalDetail
 - [ ] Add conflict detection + persistence to ScheduleBuilder
 - [ ] Build Avatar/AvatarGroup, integrate into Group screen
 
-## Week 3 – Social Features
+## Week 3 ï¿½ Social Features
 - [ ] Firestore group schema + shared schedule votes
 - [ ] Build lightweight group chat preview
 - [ ] QR invite modal (react-native-qrcode-svg)
 - [ ] Notification preferences plumbing
 
-## Week 4 – Auth & Settings
+## Week 4 ï¿½ Auth & Settings
 - [ ] Profile edit flow (name, genre preferences)
 - [ ] Saved festivals list tied to Firestore
 - [ ] Password reset + social auth entry points
@@ -29,7 +29,7 @@
 
 ## Data & Seeding
 - [x] Create data/festivals.json with curated US festivals
-- [x] Implement 	ools/seedFestivals.js script for Firestore seeding (admin SDK)
+- [x] Implement 	tools/seedFestivals.js script for Firestore seeding (admin SDK)
 - [ ] Supply service account credentials via env (FIREBASE_SERVICE_ACCOUNT_PATH/JSON)
 - [ ] Seed estivals collection and validate data
 - [ ] Document monthly update workflow + staging collection option
