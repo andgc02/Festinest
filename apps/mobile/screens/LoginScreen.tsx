@@ -1,7 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
+import { Button, Input } from '@/components/ui';
 import { useAuth } from '@/providers/AuthProvider';
 
 const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
@@ -56,52 +57,41 @@ export function LoginScreen() {
     setPassword(ADMIN_PASSWORD);
   };
 
-  if (initializing) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#4f46e5" />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>FESTINEST</Text>
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#9ca3af"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#9ca3af"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity
-          style={[styles.primaryButton, (disabled || isSubmitting) && styles.primaryButtonDisabled]}
-          onPress={handleLogin}
-          disabled={disabled}>
-          {isSubmitting ? <ActivityIndicator color="#f9fafb" /> : <Text style={styles.primaryButtonText}>Login</Text>}
-        </TouchableOpacity>
-        <View style={styles.secondaryActions}>
+    <View className="flex-1 items-center justify-center bg-slate-950 px-6">
+      <Text className="mb-10 text-3xl font-semibold uppercase tracking-[0.6em] text-slate-100">Festinest</Text>
+      <View className="w-full gap-6 rounded-3xl border border-slate-800/60 bg-slate-900/70 p-6">
+        <View className="gap-4">
+          <Input
+            label="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="you@festinest.com"
+          />
+          <Input
+            label="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            placeholder="••••••••"
+          />
+        </View>
+        <Button variant="primary" loading={isSubmitting} disabled={disabled} onPress={handleLogin} className="w-full">
+          Login
+        </Button>
+        <View className="gap-3">
           <TouchableOpacity onPress={handleSignUp}>
-            <Text style={styles.secondaryText}>Sign Up</Text>
+            <Text className="text-center text-sm font-medium text-primary">Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleGoogle}>
-            <Text style={styles.secondaryText}>Continue with Google</Text>
+            <Text className="text-center text-sm font-medium text-accent">Continue with Google</Text>
           </TouchableOpacity>
           {hasAdminDemo ? (
             <TouchableOpacity onPress={fillDemo}>
-              <Text style={styles.secondaryText}>Use Admin Demo</Text>
+              <Text className="text-center text-sm font-medium text-slate-300 underline">Use Admin Demo</Text>
             </TouchableOpacity>
           ) : null}
         </View>
@@ -109,63 +99,3 @@ export function LoginScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#050914',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-  },
-  loaderContainer: {
-    flex: 1,
-    backgroundColor: '#050914',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logo: {
-    color: '#f5f5f5',
-    fontSize: 32,
-    fontWeight: '600',
-    marginBottom: 32,
-    letterSpacing: 6,
-  },
-  form: {
-    width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-    padding: 24,
-    borderRadius: 20,
-    gap: 16,
-  },
-  input: {
-    height: 48,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    color: '#f9fafb',
-    backgroundColor: 'rgba(255, 255, 255, 0.06)',
-  },
-  primaryButton: {
-    height: 48,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4f46e5',
-  },
-  primaryButtonDisabled: {
-    opacity: 0.4,
-  },
-  primaryButtonText: {
-    color: '#f9fafb',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  secondaryActions: {
-    gap: 8,
-  },
-  secondaryText: {
-    color: '#a855f7',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-});

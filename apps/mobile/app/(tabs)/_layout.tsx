@@ -1,4 +1,4 @@
-import { Tabs, useRouter } from 'expo-router';
+import { Redirect, Tabs, usePathname, useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 
 import { HapticTab } from '@/components/haptic-tab';
@@ -10,6 +10,7 @@ import { useAuth } from '@/providers/AuthProvider';
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const pathname = usePathname();
   const { user, initializing } = useAuth();
 
   useEffect(() => {
@@ -17,6 +18,10 @@ export default function TabLayout() {
       router.replace('/login');
     }
   }, [initializing, router, user]);
+
+  if (!initializing && user && (pathname === '/(tabs)' || pathname === '/(tabs)/')) {
+    return <Redirect href="/(tabs)/festivals/index" />;
+  }
 
   return (
     <Tabs

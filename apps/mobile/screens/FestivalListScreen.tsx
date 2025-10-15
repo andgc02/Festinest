@@ -1,23 +1,16 @@
-import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from "react-native";
 
-import { fetchFestivals } from '@/services/festivals';
-import { Festival } from '@/types/festival';
+import { Card, SearchBar } from "@/components/ui";
+import { fetchFestivals } from "@/services/festivals";
+import { Festival } from "@/types/festival";
 
 export function FestivalListScreen() {
   const router = useRouter();
   const [festivals, setFestivals] = useState<Festival[]>([]);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,67 +53,62 @@ export function FestivalListScreen() {
 
   const renderFestival = ({ item }: { item: Festival }) => {
     const dates =
-      item.startDate && item.endDate ? formatDateRange(item.startDate, item.endDate) : 'Dates coming soon';
+      item.startDate && item.endDate ? formatDateRange(item.startDate, item.endDate) : "Dates coming soon";
 
     return (
       <Pressable
-        style={styles.card}
-        onPress={() => router.push({ pathname: '/festival/[festivalId]', params: { festivalId: item.id } })}>
-        <View style={styles.icon}>
-          <Text style={styles.iconText}>🎫</Text>
-        </View>
-        <View style={styles.cardBody}>
-          <Text style={styles.cardTitle}>{item.name}</Text>
-          <Text style={styles.cardSubtitle}>{`${item.location} • ${dates}`}</Text>
-          <Text style={styles.cardMeta}>
-            {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
-          </Text>
-        </View>
-        <Text style={styles.cardChevron}>›</Text>
+        className="mb-4 active:opacity-90"
+        onPress={() => router.push({ pathname: "/festival/[festivalId]", params: { festivalId: item.id } })}>
+        <Card className="flex-row items-center gap-4">
+          <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary/15">
+            <Ionicons name="ticket-outline" size={22} color="#5A67D8" />
+          </View>
+          <View className="flex-1 gap-1">
+            <Text className="text-lg font-semibold text-slate-50">{item.name}</Text>
+            <Text className="text-sm text-slate-300">{`${item.location} � ${dates}`}</Text>
+            <Text className="text-xs font-medium uppercase tracking-wide text-primary/80">
+              {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? "Lineup coming soon"}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#64748b" />
+        </Card>
       </Pressable>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Discover Festivals</Text>
-      <View style={styles.filters}>
-        <TextInput
-          style={styles.search}
-          placeholder="Search festivals"
-          placeholderTextColor="#6b7280"
-          value={query}
-          onChangeText={setQuery}
-        />
-        <View style={styles.filterRow}>
-          <Pressable style={styles.filterChip}>
-            <Text style={styles.filterText}>Genre</Text>
-          </Pressable>
-          <Pressable style={styles.filterChip}>
-            <Text style={styles.filterText}>Date</Text>
-          </Pressable>
+    <View className="flex-1 bg-slate-950 px-5 pt-16">
+      <Text className="text-3xl font-semibold text-slate-50">Discover Festivals</Text>
+      <View className="mt-6 gap-4">
+        <SearchBar placeholder="Search festivals" value={query} onChangeText={setQuery} />
+        <View className="flex-row gap-3">
+          <FilterChip label="Genre" />
+          <FilterChip label="Date" />
+          <FilterChip label="Location" />
         </View>
       </View>
       {loading ? (
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="#4f46e5" />
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color="#5A67D8" />
         </View>
       ) : (
         <FlatList
           data={filteredFestivals}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.list}
           renderItem={renderFestival}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#4f46e5" />}
+          contentContainerStyle={styles.list}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#5A67D8" />}
           ListEmptyComponent={
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateTitle}>No festivals found</Text>
-              <Text style={styles.emptyStateSubtitle}>Try adjusting your filters or check back later.</Text>
+            <View className="items-center gap-2 pt-20">
+              <Text className="text-lg font-semibold text-slate-50">No festivals found</Text>
+              <Text className="text-center text-sm text-slate-400">
+                Try adjusting your filters or check back later.
+              </Text>
             </View>
           }
         />
       )}
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? <Text className="mt-3 text-center text-sm text-error">{error}</Text> : null}
     </View>
   );
 }
@@ -130,124 +118,28 @@ function formatDateRange(startDate: string, endDate: string) {
   const end = new Date(endDate);
 
   if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-    return 'Dates coming soon';
+    return "Dates coming soon";
   }
 
-  const format = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
+  const format = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
   });
 
-  return `${format.format(start)}–${format.format(end)}`;
+  return `${format.format(start)}�${format.format(end)}`;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 20,
-    paddingTop: 60,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: '#f1f5f9',
-    marginBottom: 24,
-  },
-  filters: {
-    gap: 12,
-    marginBottom: 20,
-  },
-  search: {
-    backgroundColor: '#111827',
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    color: '#f1f5f9',
-  },
-  filterRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  filterChip: {
-    backgroundColor: '#111827',
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-  filterText: {
-    color: '#a855f7',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   list: {
-    gap: 12,
+    paddingTop: 24,
     paddingBottom: 40,
   },
-  loader: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0f172a',
-    borderRadius: 16,
-    padding: 16,
-    gap: 16,
-  },
-  icon: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    backgroundColor: 'rgba(168, 85, 247, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  iconText: {
-    fontSize: 20,
-  },
-  cardBody: {
-    flex: 1,
-    gap: 4,
-  },
-  cardTitle: {
-    color: '#f8fafc',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  cardSubtitle: {
-    color: '#94a3b8',
-    fontSize: 14,
-  },
-  cardMeta: {
-    color: '#a855f7',
-    fontSize: 13,
-  },
-  cardChevron: {
-    color: '#475569',
-    fontSize: 28,
-    fontWeight: '300',
-  },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 80,
-    gap: 8,
-  },
-  emptyStateTitle: {
-    color: '#f8fafc',
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  emptyStateSubtitle: {
-    color: '#94a3b8',
-    textAlign: 'center',
-  },
-  errorText: {
-    color: '#f87171',
-    textAlign: 'center',
-    marginTop: 12,
-  },
 });
+
+function FilterChip({ label }: { label: string }) {
+  return (
+    <Pressable className="rounded-full border border-slate-700/70 px-4 py-2 active:bg-slate-800/70">
+      <Text className="text-sm font-semibold text-slate-200">{label}</Text>
+    </Pressable>
+  );
+}
