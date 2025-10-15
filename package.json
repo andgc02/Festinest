@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "firebase": "^12.4.0",
-    "react-native-svg": "^15.12.1"
-  }
-}
