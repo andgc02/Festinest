@@ -2,7 +2,6 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
@@ -24,11 +23,7 @@ function RootNavigator() {
   const { initializing, user } = useAuth();
 
   if (initializing) {
-    return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#4f46e5" />
-      </View>
-    );
+    return null;
   }
 
   return (
@@ -66,12 +61,3 @@ function RootNavigator() {
     </Stack>
   );
 }
-
-const styles = StyleSheet.create({
-  loader: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#050914',
-  },
-});
