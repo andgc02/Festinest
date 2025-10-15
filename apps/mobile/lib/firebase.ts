@@ -11,9 +11,21 @@ const firebaseConfig = {
   appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID ?? '',
 };
 
+const missingConfigKeys = Object.entries(firebaseConfig)
+  .filter(([, value]) => !value)
+  .map(([key]) => key);
+
+if (missingConfigKeys.length > 0) {
+  // Surfaced early so developers know env vars need to be defined.
+  throw new Error(
+    `Missing Firebase config values: ${missingConfigKeys.join(
+      ', ',
+    )}. Please configure EXPO_PUBLIC_FIREBASE_* environment variables.`,
+  );
+}
+
 // Avoid re-initializing when Fast Refresh runs.
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-

@@ -1,4 +1,4 @@
-# Welcome to your Expo app 👋
+# Festinest Mobile
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -48,3 +48,33 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Firebase setup
+
+1. **Create the Firebase project**
+   - Visit [Firebase Console](https://console.firebase.google.com) and create a project named `festinest`.
+   - Enable Authentication, Firestore Database, and Storage (optional for later uploads).
+
+2. **Register a web app**
+   - In the Firebase console, open **Project settings → General → Your apps**.
+   - Add a new **Web** app and copy the generated `firebaseConfig` snippet:
+
+     ```js
+     const firebaseConfig = {
+       apiKey: '...',
+       authDomain: '...',
+       projectId: '...',
+       storageBucket: '...',
+       messagingSenderId: '...',
+       appId: '...',
+     };
+     ```
+
+3. **Populate environment variables**
+   - Duplicate `.env.example` in this directory and rename it to `.env`.
+   - Paste the values from the Firebase config into the matching `EXPO_PUBLIC_FIREBASE_*` entries.
+   - Keep `.env` out of version control; `.gitignore` already handles it.
+
+4. **Run the app**
+   - Start Metro: `npm run start`.
+   - When the app boots, `lib/firebase.ts` initializes Firebase using the env vars. If any value is missing, the app throws an error immediately so you can fix the configuration.
