@@ -3,7 +3,7 @@
 ## Apps
 - apps/mobile: Expo React Native client
 
-## Docs
+## Docs & Data
 - docs/festival_app_business_plan.md
 - docs/roadmap.md
 - docs/todo.md
@@ -16,3 +16,12 @@
 3. Lint: npm run lint
 4. Check docs/roadmap.md and docs/todo.md for current tasks.
 
+## Firestore Seeding
+1. Create a Firebase service account with Firestore Admin access.
+2. Provide credentials via either environment variable:
+   - FIREBASE_SERVICE_ACCOUNT_PATH (path to JSON file)
+   - FIREBASE_SERVICE_ACCOUNT_JSON (stringified JSON)
+3. Ensure EXPO_PUBLIC_FIREBASE_* variables point to the same project.
+4. Run: npm run seed:festivals
+
+The script upserts documents under the festivals collection.

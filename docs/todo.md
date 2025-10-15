@@ -7,7 +7,7 @@
 - [x] Base UI primitives (Button, Input, Card, SearchBar)
 - [ ] Create FilterChip, Tabs, Toast, Modal components
 - [ ] Define typography utility classes and apply to all screens
-- [ ] Document theming tokens in \\constants/theme.ts\\
+- [ ] Document theming tokens in constants/theme.ts
 
 ## Week 2 – Core Screens
 - [ ] Replace mock FestivalList filters with real interactions
@@ -28,13 +28,15 @@
 - [ ] Onboarding and premium upsell drafts
 
 ## Data & Seeding
-- [ ] Create \\data/festivals.json\\ with curated US festivals
-- [ ] Implement 	ools/seedFestivals.js script for Firestore seeding
+- [x] Create data/festivals.json with curated US festivals
+- [x] Implement 	ools/seedFestivals.js script for Firestore seeding (admin SDK)
+- [ ] Supply service account credentials via env (FIREBASE_SERVICE_ACCOUNT_PATH/JSON)
+- [ ] Seed estivals collection and validate data
 - [ ] Document monthly update workflow + staging collection option
 - [ ] Source list: MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain
 
 ## Documentation
 - [x] Roadmap updated with completed tasks
+- [x] README updated with seeding instructions
 - [ ] Clean mojibake from legacy diagrams (Festival card, schedule row)
-- [ ] Add README section for data seeding instructions
 - [ ] Track future enhancements (onboarding, premium, recs)
