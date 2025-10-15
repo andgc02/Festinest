@@ -4,8 +4,9 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useAuth } from '@/providers/AuthProvider';
 
 export function SettingsScreen() {
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const router = useRouter();
+  const email = user?.email ?? 'admin@festinest.dev';
 
   const handleLogout = async () => {
     try {
@@ -26,7 +27,7 @@ export function SettingsScreen() {
         </View>
         <View style={styles.profileRow}>
           <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>taylor@fest.com</Text>
+          <Text style={styles.value}>{email}</Text>
         </View>
         <View style={styles.profileRow}>
           <Text style={styles.label}>Preferred Genres</Text>

@@ -4,9 +4,12 @@ import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity
 
 import { useAuth } from '@/providers/AuthProvider';
 
+const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
+const ADMIN_PASSWORD = process.env.EXPO_PUBLIC_ADMIN_PASSWORD ?? '';
+
 export function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(ADMIN_EMAIL);
+  const [password, setPassword] = useState(ADMIN_PASSWORD);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { signIn, signUp, user, initializing } = useAuth();
@@ -46,6 +49,12 @@ export function LoginScreen() {
   };
 
   const disabled = email.trim().length === 0 || password.trim().length === 0 || isSubmitting;
+  const hasAdminDemo = ADMIN_EMAIL.length > 0 && ADMIN_PASSWORD.length > 0;
+
+  const fillDemo = () => {
+    setEmail(ADMIN_EMAIL);
+    setPassword(ADMIN_PASSWORD);
+  };
 
   if (initializing) {
     return (
@@ -90,6 +99,11 @@ export function LoginScreen() {
           <TouchableOpacity onPress={handleGoogle}>
             <Text style={styles.secondaryText}>Continue with Google</Text>
           </TouchableOpacity>
+          {hasAdminDemo ? (
+            <TouchableOpacity onPress={fillDemo}>
+              <Text style={styles.secondaryText}>Use Admin Demo</Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </View>
