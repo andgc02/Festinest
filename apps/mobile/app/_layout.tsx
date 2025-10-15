@@ -2,46 +2,76 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
-
-export const unstable_settings = {
-  initialRouteName: 'login',
-};
+import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerTitleAlign: 'center' }}>
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="festival/[festivalId]"
-          options={{
-            title: 'Festival',
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="schedule-builder"
-          options={{
-            title: 'Build Schedule',
-            headerStyle: { backgroundColor: '#050914' },
-            headerTintColor: '#f8fafc',
-          }}
-        />
-        <Stack.Screen
-          name="group/[groupId]"
-          options={{
-            title: 'Group',
-            headerStyle: { backgroundColor: '#050914' },
-            headerTintColor: '#f8fafc',
-          }}
-        />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <RootNavigator />
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
+
+function RootNavigator() {
+  const { initializing, user } = useAuth();
+
+  if (initializing) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#4f46e5" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack screenOptions={{ headerTitleAlign: 'center' }}>
+      {!user ? (
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+      ) : (
+        <>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="festival/[festivalId]"
+            options={{
+              title: 'Festival',
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="schedule-builder"
+            options={{
+              title: 'Build Schedule',
+              headerStyle: { backgroundColor: '#050914' },
+              headerTintColor: '#f8fafc',
+            }}
+          />
+          <Stack.Screen
+            name="group/[groupId]"
+            options={{
+              title: 'Group',
+              headerStyle: { backgroundColor: '#050914' },
+              headerTintColor: '#f8fafc',
+            }}
+          />
+        </>
+      )}
+    </Stack>
+  );
+}
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#050914',
+  },
+});

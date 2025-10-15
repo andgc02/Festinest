@@ -1,27 +1,59 @@
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+import { useAuth } from '@/providers/AuthProvider';
 
 export function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
+  const { signIn, signUp, user, initializing } = useAuth();
 
-  const handleLogin = () => {
-    // TODO: Replace with Firebase email/password authentication.
-    Alert.alert('Login pressed', email);
-    router.replace('(tabs)/festivals');
+  useEffect(() => {
+    if (!initializing && user) {
+      router.replace('(tabs)/festivals');
+    }
+  }, [initializing, router, user]);
+
+  const handleLogin = async () => {
+    setIsSubmitting(true);
+    try {
+      await signIn(email.trim(), password);
+      router.replace('(tabs)/festivals');
+    } catch (error) {
+      Alert.alert('Login failed', (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const handleSignUp = () => {
-    Alert.alert('Sign up pressed');
+  const handleSignUp = async () => {
+    setIsSubmitting(true);
+    try {
+      await signUp(email.trim(), password);
+      router.replace('(tabs)/festivals');
+    } catch (error) {
+      Alert.alert('Sign up failed', (error as Error).message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoogle = () => {
     Alert.alert('Continue with Google pressed');
   };
 
-  const disabled = email.trim().length === 0 || password.trim().length === 0;
+  const disabled = email.trim().length === 0 || password.trim().length === 0 || isSubmitting;
+
+  if (initializing) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#4f46e5" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -46,10 +78,10 @@ export function LoginScreen() {
           onChangeText={setPassword}
         />
         <TouchableOpacity
-          style={[styles.primaryButton, disabled && styles.primaryButtonDisabled]}
+          style={[styles.primaryButton, (disabled || isSubmitting) && styles.primaryButtonDisabled]}
           onPress={handleLogin}
           disabled={disabled}>
-          <Text style={styles.primaryButtonText}>Login</Text>
+          {isSubmitting ? <ActivityIndicator color="#f9fafb" /> : <Text style={styles.primaryButtonText}>Login</Text>}
         </TouchableOpacity>
         <View style={styles.secondaryActions}>
           <TouchableOpacity onPress={handleSignUp}>
@@ -71,6 +103,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,
+  },
+  loaderContainer: {
+    flex: 1,
+    backgroundColor: '#050914',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logo: {
     color: '#f5f5f5',

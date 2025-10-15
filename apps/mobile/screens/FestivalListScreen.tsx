@@ -1,31 +1,97 @@
 import { useRouter } from 'expo-router';
-import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 
-const MOCK_FESTIVALS = [
-  {
-    id: 'coachella-2025',
-    name: 'Coachella 2025',
-    location: 'Indio, CA',
-    dates: 'Apr 11–13',
-    artists: 180,
-  },
-  {
-    id: 'lollapalooza-2025',
-    name: 'Lollapalooza 2025',
-    location: 'Chicago, IL',
-    dates: 'Aug 1–4',
-    artists: 120,
-  },
-];
+import { fetchFestivals } from '@/services/festivals';
+import { Festival } from '@/types/festival';
 
 export function FestivalListScreen() {
   const router = useRouter();
+  const [festivals, setFestivals] = useState<Festival[]>([]);
+  const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadFestivals = useCallback(async () => {
+    setError(null);
+    try {
+      const results = await fetchFestivals();
+      setFestivals(results);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadFestivals();
+  }, [loadFestivals]);
+
+  const filteredFestivals = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+    if (!normalizedQuery) {
+      return festivals;
+    }
+    return festivals.filter((festival) => {
+      return (
+        festival.name.toLowerCase().includes(normalizedQuery) ||
+        festival.location.toLowerCase().includes(normalizedQuery) ||
+        (festival.genre?.toLowerCase().includes(normalizedQuery) ?? false)
+      );
+    });
+  }, [festivals, query]);
+
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true);
+    void loadFestivals();
+  }, [loadFestivals]);
+
+  const renderFestival = ({ item }: { item: Festival }) => {
+    const dates =
+      item.startDate && item.endDate ? formatDateRange(item.startDate, item.endDate) : 'Dates coming soon';
+
+    return (
+      <Pressable
+        style={styles.card}
+        onPress={() => router.push({ pathname: '/festival/[festivalId]', params: { festivalId: item.id } })}>
+        <View style={styles.icon}>
+          <Text style={styles.iconText}>🎫</Text>
+        </View>
+        <View style={styles.cardBody}>
+          <Text style={styles.cardTitle}>{item.name}</Text>
+          <Text style={styles.cardSubtitle}>{`${item.location} • ${dates}`}</Text>
+          <Text style={styles.cardMeta}>
+            {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
+          </Text>
+        </View>
+        <Text style={styles.cardChevron}>›</Text>
+      </Pressable>
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Discover Festivals</Text>
       <View style={styles.filters}>
-        <TextInput style={styles.search} placeholder="Search festivals" placeholderTextColor="#6b7280" />
+        <TextInput
+          style={styles.search}
+          placeholder="Search festivals"
+          placeholderTextColor="#6b7280"
+          value={query}
+          onChangeText={setQuery}
+        />
         <View style={styles.filterRow}>
           <Pressable style={styles.filterChip}>
             <Text style={styles.filterText}>Genre</Text>
@@ -35,28 +101,44 @@ export function FestivalListScreen() {
           </Pressable>
         </View>
       </View>
-      <FlatList
-        data={MOCK_FESTIVALS}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        renderItem={({ item }) => (
-          <Pressable
-            style={styles.card}
-            onPress={() => router.push({ pathname: '/festival/[festivalId]', params: { festivalId: item.id } })}>
-            <View style={styles.icon}>
-              <Text style={styles.iconText}>🎫</Text>
+      {loading ? (
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="#4f46e5" />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredFestivals}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.list}
+          renderItem={renderFestival}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#4f46e5" />}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateTitle}>No festivals found</Text>
+              <Text style={styles.emptyStateSubtitle}>Try adjusting your filters or check back later.</Text>
             </View>
-            <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>{item.name}</Text>
-              <Text style={styles.cardSubtitle}>{`${item.location} • ${item.dates}`}</Text>
-              <Text style={styles.cardMeta}>{`${item.artists} artists`}</Text>
-            </View>
-            <Text style={styles.cardChevron}>›</Text>
-          </Pressable>
-        )}
-      />
+          }
+        />
+      )}
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
   );
+}
+
+function formatDateRange(startDate: string, endDate: string) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return 'Dates coming soon';
+  }
+
+  const format = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+
+  return `${format.format(start)}–${format.format(end)}`;
 }
 
 const styles = StyleSheet.create({
@@ -102,6 +184,11 @@ const styles = StyleSheet.create({
     gap: 12,
     paddingBottom: 40,
   },
+  loader: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -142,5 +229,25 @@ const styles = StyleSheet.create({
     color: '#475569',
     fontSize: 28,
     fontWeight: '300',
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 80,
+    gap: 8,
+  },
+  emptyStateTitle: {
+    color: '#f8fafc',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  emptyStateSubtitle: {
+    color: '#94a3b8',
+    textAlign: 'center',
+  },
+  errorText: {
+    color: '#f87171',
+    textAlign: 'center',
+    marginTop: 12,
   },
 });
