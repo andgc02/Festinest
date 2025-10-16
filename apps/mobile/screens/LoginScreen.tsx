@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
+import { typography } from '@/constants/theme';
 import { useAuth } from '@/providers/AuthProvider';
 
 const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
@@ -59,8 +60,8 @@ export function LoginScreen() {
 
   return (
     <View className="flex-1 items-center justify-center bg-slate-950 px-6">
-      <Text className="mb-10 text-3xl font-semibold uppercase tracking-[0.6em] text-slate-100">Festinest</Text>
-      <View className="w-full gap-6 rounded-3xl border border-slate-800/60 bg-slate-900/70 p-6">
+      <Text className={typography.display}>Festinest</Text>
+      <View className="mt-8 w-full gap-6 rounded-3xl border border-slate-800/60 bg-slate-900/70 p-6">
         <View className="gap-4">
           <Input
             label="Email"

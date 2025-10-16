@@ -1,41 +1,70 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+/**
+ * Central design tokens that align with tailwind.config.js.
+ * Keep these in sync when adding new primitives so screens and components share a single source of truth.
+ */
+export const palette = {
+  primary: '#5A67D8',
+  accent: '#38B2AC',
+  warning: '#F6AD55',
+  error: '#E53E3E',
+  backgroundLight: '#F7FAFC',
+  backgroundDark: '#040A1A',
+  surfaceDark: '#0F172A',
+  slate50: '#F8FAFC',
+  slate200: '#E2E8F0',
+  slate300: '#CBD5F5',
+  slate400: '#94A3B8',
+  slate600: '#475569',
+  slate800: '#1E293B',
+  graphite: '#1A202C',
+};
+
+export const typography = {
+  display: 'text-3xl font-semibold text-slate-50',
+  heading: 'text-2xl md:text-[28px] font-semibold text-slate-50',
+  subheading: 'text-xl font-semibold text-slate-100',
+  body: 'text-base text-slate-300',
+  bodyStrong: 'text-base font-semibold text-slate-100',
+  caption: 'text-xs text-slate-400',
+  overline: 'text-[11px] uppercase tracking-[0.3em] text-slate-400',
+};
+
+export const components = {
+  card: 'rounded-2xl bg-slate-900/70 p-4 shadow-card',
+  modal: 'rounded-3xl bg-slate-900/95 p-6',
+  buttonPrimary: 'bg-primary rounded-xl px-6 py-3',
+  chip: 'rounded-full border border-slate-700/70 px-4 py-2',
+};
+
+const tintColorLight = palette.primary;
+const tintColorDark = '#FFFFFF';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
+    text: palette.graphite,
+    background: palette.backgroundLight,
     tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
+    icon: palette.slate600,
+    tabIconDefault: palette.slate400,
     tabIconSelected: tintColorLight,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
+    text: palette.slate50,
+    background: palette.backgroundDark,
     tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
+    icon: palette.slate400,
+    tabIconDefault: palette.slate600,
     tabIconSelected: tintColorDark,
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: 'ui-monospace',
   },
   default: {
@@ -51,3 +80,9 @@ export const Fonts = Platform.select({
     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });
+
+export const FONT_SIZES = {
+  heading: 'text-2xl font-semibold',
+  body: 'text-base text-slate-800',
+  caption: 'text-xs text-slate-400',
+};

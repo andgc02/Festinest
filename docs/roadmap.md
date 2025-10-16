@@ -1,182 +1,137 @@
 # Festinest Product Roadmap (Updated Oct 2025)
 
-## ? Completed
-- Expo Router stack + tab layout with login gating (pps/mobile/app/_layout.tsx, pps/mobile/app/(tabs)/_layout.tsx).
-- Firebase Auth integration with persistent sessions and admin seeding.
-- NativeWind/Tailwind design system scaffolding (shared colors, spacing, presets).
-- Base UI primitives: Button, Input, SearchBar, Card.
-- Festival list & detail screens reading Firestore with mock fallback.
-- Schedule builder placeholder using Firebase data.
-- Settings screen wired to Firebase auth logout.
-- Docs directory established with live roadmap and seeding plan.
+Status legend:
+- `[DONE]` delivered and merged
+- `[ACTIVE]` currently in flight
+- `[NEXT]` planned for the current cycle
+- `[LATER]` post-MVP stretch
+- `[BLOCKED]` waiting on an external decision or dependency
 
-## ?? In Progress
-- Expand component library (FilterChip, Tabs, Toasts).
-- Replace placeholders with Tailwind-driven screens (Group, Schedule).
-- Clean typography tokens to remove mojibake from legacy docs.
+## Snapshot Summary
+- `[DONE]` Week 1 foundation work (routing, auth, theming, core components)
+- `[ACTIVE]` Week 2 feature polish across Festival Detail, Schedule Builder, and Group
+- `[NEXT]` Social collaboration (votes, invites) plus auth/settings depth for Weeks 3-4
+- `[LATER]` Analytics, growth, premium upsell, offline support, partnerships
 
-## ?? Upcoming (Week 1 Foundations)
-1. NativeWind component polish
-   - Build FilterPill, Avatar, AvatarGroup.
-   - Create consistent typography utility classes.
-2. Navigation refinements
-   - Add type-safe routes (enable expo-router typed routes).
-   - Implement authentication guard hooks.
-3. Theming
-   - Centralize theme tokens in constants/theme.ts.
-   - Provide light/dark variations for primary/accent colors.
+## Completed to Date
+- `[DONE]` Expo Router stack with login gating (`apps/mobile/app/_layout.tsx` and tabs layout)
+- `[DONE]` Firebase Auth integration with persistent sessions and admin seeding script
+- `[DONE]` NativeWind/Tailwind design system scaffolding with shared tokens
+- `[DONE]` Base UI primitives (Button, Input, SearchBar, Card) and supporting utilities
+- `[DONE]` Week 1 UI polish: FilterChip, Tabs, Modal, Toast, typography utilities
+- `[DONE]` Festival list, detail, and schedule builder placeholders wired to seed data
+- `[DONE]` Settings screen logout flow and docs directory setup
 
-Continue following the execution timeline below.
+## In Flight (Week 2 Focus)
+- `[ACTIVE]` Festival detail lineup accordion and saved festivals CTA wiring
+- `[ACTIVE]` Schedule builder day tabs plus conflict detection research
+- `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
+- `[ACTIVE]` Theming cleanup on legacy screens; remove remaining mojibake
+- `[NEXT]` Avatar and AvatarGroup components for profile and group views
+- `[NEXT]` Saved festivals state management shared across tabs
 
-## 1. Core MVP Screens
-| Screen | Status | Next Steps | Notes |
+## Roadmap by Theme
+
+### Core MVP Screens
+| Screen | Status | Next Actions | Notes |
 | --- | --- | --- | --- |
-| FestivalList | ? | Add filter interactions; debounce search | Uses Card + SearchBar components |
-| FestivalDetail | ? | Wire saved festivals CTA to Firestore | Add lineup expand/collapse |
-| ScheduleBuilder | ? | Implement conflict detection & persistence | Use Tabs component for day switching |
-| Group | ? | Build group chat preview + vote UI | Requires Firestore group schema |
-| Settings | ? | Hook profile update & genre picker | Add notification toggles |
+| Festival List | `[ACTIVE]` | Debounce search, extend filter logic, add loading skeletons | Uses FilterChip + SearchBar |
+| Festival Detail | `[ACTIVE]` | Save CTA to Firestore favorites, lineup accordion polish | Add travel tips block |
+| Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
+| Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | Toast and modal placeholders exist |
+| Settings | `[NEXT]` | Profile edit, preferences, saved festivals list | Prepare for premium toggle |
+| Login/Onboarding | `[NEXT]` | Social auth entry points, copy and logging polish | Demo credentials prefilled |
 
-## 2. Reusable UI Library
-- **Completed:** Button, Input, SearchBar, Card.
-- **Planned:** Avatar, AvatarGroup, Tabs, Modal, Toast, Toggle.
-- **Guidelines:** Mimic shadcn/Tailwind UI; rely on design tokens from 	ailwind.config.
+### Reusable Component Library
+- `[DONE]` Button, Input, SearchBar, Card, FilterChip, Tabs, Modal, Toast
+- `[NEXT]` Avatar, AvatarGroup, Toggle, ToastProvider, modal wizard pattern
+- `[NEXT]` Empty state illustrations and copy guidelines
+- `[LATER]` Schedule heat map or timeline visual components
 
-## 3. Design System
-- Typography utilities pending; adopt Tailwind naming:
-  - Headings: 	ext-[28px] font-semibold
-  - Body: 	ext-base text-slate-200
-  - Caption: 	ext-xs text-slate-400
-- Color palette set in 	ailwind.config.js:
-  - Primary #5A67D8
-  - Accent #38B2AC
-  - Warning #F6AD55
-  - Error #E53E3E
-  - Background #0F172A / #F7FAFC
-- Spacing:
-  - Cards: ounded-2xl p-4 shadow-card
-  - Buttons: ounded-xl px-6 py-3
-  - Avatars: h-10 w-10 rounded-full
+### Navigation and Auth
+- `[DONE]` Auth guarding on router tabs
+- `[NEXT]` Expo Router typed routes and manifest documentation
+- `[NEXT]` Authentication guard hooks (redirect unauthenticated users to `/login`)
+- `[LATER]` Deep link support for invites and saved festivals
 
-## 4. Layout References (To Refresh)
-- Update diagrams in a future pass to remove mojibake imports.
-- Add Figma references for:
-  - Festival Card
-  - Schedule Row
-  - Group Chat bubble
-  - AvatarGroup
+### Theming and Design System
+- `[DONE]` Central theme tokens in `constants/theme.ts` and `tailwind.config.js`
+- `[ACTIVE]` Apply typography tokens across legacy screens and providers
+- `[NEXT]` Light theme passes; define palettes per component
+- `[NEXT]` Align Figma tokens (spacing, radii, gradients) with implementation
+- `[LATER]` Theme switcher surfaced in Settings
 
-## 5. Execution Timeline
-### Week 1 (now)
-- ? Expo Router + auth gating.
-- ? NativeWind + base components.
-- ?? Expand component library and theming.
+### Data and Seeding
+- `[DONE]` Curated `data/festivals.json` and seeding script
+- `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
+- `[NEXT]` Seed production collections and add validation checklist
+- `[NEXT]` Monthly update SOP (staging collection, review, promote)
+- `[BLOCKED]` Automated seeding pipeline (GitHub workflow pending secrets plan)
+- `[LATER]` Additional datasets (artists, vendors, travel guides)
 
-### Week 2
-- Implement Festival detail interactions.
-- Schedule conflict logic.
-- Firestore seeding with realistic data.
+### Collaboration and Social
+- `[NEXT]` Firestore group schema (members, votes, chat preview content)
+- `[NEXT]` Real-time vote tally broadcast to all group members
+- `[NEXT]` QR invite modal with `react-native-qrcode-svg` and share sheet
+- `[LATER]` Full chat experience (push notifications, unread state)
+- `[BLOCKED]` Moderation policy with product and operations
 
-### Week 3
-- Group collaboration (votes, chat preview).
-- QR invite flow.
-- Notifications groundwork.
+### Auth and Settings Expansion (Week 4)
+- `[NEXT]` Profile edit flow (name, avatar upload, genre preferences)
+- `[NEXT]` Saved festivals list tied to Firestore favorites collection
+- `[NEXT]` Password reset plus Google/Apple sign-in entry points
+- `[NEXT]` Onboarding wizard culminating in premium upsell CTA
+- `[LATER]` Privacy controls (data export, delete account workflow)
 
-### Week 4
-- Full settings UX.
-- Saved festivals & preferences.
-- Polish auth + onboarding flows.
+### Analytics and Growth
+- `[NEXT]` Define analytics events (auth, discovery, save festival, vote)
+- `[NEXT]` Implement Segment or Expo analytics shim with dev logging
+- `[LATER]` Landing page A/B tests, referral tracking, premium funnel metrics
+- `[BLOCKED]` Marketing attribution tooling (await marketing plan)
 
-## 6. Recommended Packages
-- Navigation: expo-router
-- Styling: 
-ativewind
-- Icons: @expo/vector-icons
-- QR Codes: eact-native-qrcode-svg
-- Date utils: date-fns
-- Backend: irebase, optional irebase-admin for scripts
+### Documentation and Enablement
+- `[DONE]` README and roadmap refresh with current sprint detail
+- `[ACTIVE]` Remove mojibake from diagrams and legacy notes
+- `[NEXT]` Link Figma files or image exports in layout references
+- `[NEXT]` Contributor guide (dev setup, auth, data flows)
+- `[NEXT]` Release checklist (QA sign-off, seeding, analytics verification)
+- `[LATER]` Customer support playbook (FAQ, issue triage)
 
-## 7. Enhancements / Stretch
-- Onboarding flow.
-- Premium upsell screen.
-- Genre-based recommendations.
-- Offline map caching.
+### QA, Tooling, Dev Experience
+- `[NEXT]` Storybook or Expo sandbox for rapid component QA
+- `[NEXT]` Unit tests for data services (`fetchFestivals`, schedule transforms)
+- `[NEXT]` Detox smoke test (login -> list -> detail -> schedule)
+- `[NEXT]` ESLint and TypeScript strict-mode adoption (`no-floating-promises`, etc.)
+- `[NEXT]` Pre-commit automation (lint-staged plus formatting)
+- `[BLOCKED]` Mobile CI (EAS) pending account provisioning
+- `[LATER]` Visual regression snapshots for critical flows
 
-## 8. Data Pipeline (Manual Curation + Script)
-- Maintain curated data/festivals.json file (monthly refresh).
-- Use 	ools/seedFestivals.js + service account to upsert Firestore estivals docs.
-- Optional staging collection (estivals_staging) before production promotion.
-- Suggested data sources: MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain.
-- Document change log in docs/todo.md when new festivals added.
+### Enhancements and Stretch
+- `[LATER]` Offline caching for festival data and user schedules
+- `[LATER]` Recommendations engine (genre affinity plus group overlap)
+- `[LATER]` Premium upsell screen, paywall experiment, billing integration
+- `[LATER]` Apple Wallet or Google Wallet pass export
+- `[LATER]` Marketplace or vendor partnerships exploration
 
-## 🧼 Recommended Fixes + Cleanups
+## Timeline at a Glance
+- **Week 1 (complete):** foundation scaffolding, auth, theming, base components
+- **Week 2 (in flight):** screen polish, state management, avatars, save flows
+- **Week 3 (next):** collaboration feature set (votes, chat preview, invites, notifications)
+- **Week 4 (next):** deep auth/settings, onboarding, premium preview, QA automation
+- **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
 
-1. Fix Mojibake and Character Encoding Errors  
-   You've got encoding issues that crept in - likely from pasting between editors or OS locales. These should be cleaned so the files are readable by all devs and safe for Git.
+## Recommended Cleanups and Follow-ups
+1. `[ACTIVE]` Sweep for remaining mojibake characters across docs and code comments
+2. `[NEXT]` Align README, roadmap, and todo status markers (reuse legend)
+3. `[NEXT]` Add Figma links or static exports for key layouts (Festival Card, Schedule Row, Group Bubble, AvatarGroup)
+4. `[NEXT]` Draft a `scripts/validateFestivals.ts` utility before live seeding
+5. `[NEXT]` Add a shared `FestivalType` interface used by app and seeder
+6. `[BLOCKED]` Decide on secrets management before enabling CI seeding
+7. `[LATER]` Prepare marketing brief (value prop, launch timeline, KPI targets)
 
-   | Issue | Fix |
-   | --- | --- |
-   | � | Replace with a real em dash or bullet |
-   | pps/mobile/... | Replace `pps` with `apps` |
-   | ools/seedFestivals.js | Should be `tools/seedFestivals.js` |
-   | estivals.json | Should be `festivals.json` |
-   | ailwind.config.js | Should be `tailwind.config.js` |
-   | ounded-2xl | Should be `rounded-2xl` |
-   | ext-[28px] | Should be `text-[28px]` |
-   | ext-base | Should be `text-base` |
-   | ativewind | Should be `nativewind` |
-   | eact-native-qrcode-svg | Should be `react-native-qrcode-svg` |
-   | irebase | Should be `firebase` |
-
-   🛠 Tip: Run a find/replace in VSCode using regex to catch common non-ASCII characters.
-
-2. Clarify Status Tags in Checkboxes and Tables  
-   Instead of `?`, consider using icons like ✅ for completed, 🔄 for in progress, ⏳ or 🛠 for pending, and ❌ or ⚠️ for blocked or deprecated to make the roadmap easier to scan.
-
-3. Add Figma Link Placeholder (or Component Image References)  
-   Update the layout section with a checklist and placeholder links:
-   - [ ] Add Figma link or image exports:
-     - [ ] Festival Card
-     - [ ] Schedule Row
-     - [ ] Group Chat Bubble
-     - [ ] AvatarGroup
-   Even a placeholder like [Figma ->](https://www.figma.com/file/...) helps future collaborators.
-
-4. Theme & Typography Consistency  
-   Tighten the existing design tokens and add reusable utilities:
-   - `text-[28px] font-semibold` -> `text-2xl md:text-[28px] font-semibold` for responsive headings.
-   - `text-slate-200` -> `text-slate-800` for primary body copy contrast.
-   - Keep spacing utilities such as `px-6 py-3` and `rounded-xl`.
-
-   ```ts
-   // constants/theme.ts
-   export const FONT_SIZES = {
-     heading: 'text-2xl font-semibold',
-     body: 'text-base text-slate-800',
-     caption: 'text-xs text-slate-400',
-   };
-   ```
-
-5. Data Pipeline Section Refinement  
-   Refresh the guidance for maintainability:
-   - Store curated festivals in `data/festivals.json`.
-   - Seed via `tools/seedFestivals.js` using the Firebase Admin SDK.
-   - Promote documents from `festivals_staging` -> `festivals`.
-   - Refresh monthly or quarterly.
-   - Track additions in `docs/todo.md`.
-
-6. Add Missing Todos  
-   Capture supporting automation ideas:
-   - [ ] Create `scripts/validateFestivals.ts` to lint JSON before seeding.
-   - [ ] Add a shared `FestivalType` interface for both seeder and app.
-   - [ ] (Optional) Set up a GitHub workflow to run `npm run seed:festivals` on pushes to `main`.
-
-### ✅ Summary: Next Actions
-
-| Action | Owner |
-| --- | --- |
-| Clean all mojibake text | You or Codex |
-| Update README/roadmap for clarity | Optional polish |
-| Export/insert Figma links or mock image exports | Optional design enhancement |
-| Add a validation script for `festivals.json` | Codex can do this |
-| Consider GitHub CI for seeding (`npm run seed:festivals`) | Later |
+## Appendix: Key References
+- Components: `apps/mobile/components/ui`
+- Theming: `apps/mobile/constants/theme.ts`, `tailwind.config.js`
+- Data seeding: `data/festivals.json`, `tools/seedFestivals.js`
+- Auth provider: `apps/mobile/providers/AuthProvider.tsx`
+- Screens to revisit during polish: FestivalDetail, ScheduleBuilder, Group, Settings

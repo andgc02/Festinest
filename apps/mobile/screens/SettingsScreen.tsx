@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Text, TouchableOpacity, View } from 'react-native';
 
+import { Button } from '@/components/ui';
+import { typography } from '@/constants/theme';
 import { useAuth } from '@/providers/AuthProvider';
 
 export function SettingsScreen() {
@@ -18,99 +20,38 @@ export function SettingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.profileCard}>
-        <Text style={styles.sectionTitle}>Profile</Text>
-        <View style={styles.profileRow}>
-          <Text style={styles.label}>Name</Text>
-          <Text style={styles.value}>Taylor Swift</Text>
-        </View>
-        <View style={styles.profileRow}>
-          <Text style={styles.label}>Email</Text>
-          <Text style={styles.value}>{email}</Text>
-        </View>
-        <View style={styles.profileRow}>
-          <Text style={styles.label}>Preferred Genres</Text>
-          <Text style={styles.value}>EDM, Pop</Text>
-        </View>
+    <View className="flex-1 bg-slate-950 px-6 pt-16">
+      <Text className={typography.heading}>Settings</Text>
+
+      <View className="mt-6 gap-4 rounded-3xl bg-slate-900/70 p-5">
+        <Text className={typography.subheading}>Profile</Text>
+        <ProfileRow label="Name" value="Taylor Swift" />
+        <ProfileRow label="Email" value={email} />
+        <ProfileRow label="Preferred Genres" value="EDM, Pop" />
       </View>
 
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.row}>
-          <Text style={styles.rowText}>Notifications</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.row}>
-          <Text style={styles.rowText}>Saved Festivals</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.row}>
-          <Text style={styles.rowText}>Invite Friends</Text>
-        </TouchableOpacity>
+      <View className="mt-6 rounded-3xl bg-slate-900/70">
+        {['Notifications', 'Saved Festivals', 'Invite Friends'].map((item, index, array) => (
+          <TouchableOpacity
+            key={item}
+            className={`px-5 py-4 ${index !== array.length - 1 ? 'border-b border-slate-800/60' : ''}`}>
+            <Text className="text-base text-slate-100">{item}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      <TouchableOpacity style={styles.logout} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
+      <Button className="mt-auto mb-10" variant="outline" onPress={handleLogout}>
+        Logout
+      </Button>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 24,
-    paddingTop: 48,
-    gap: 20,
-  },
-  profileCard: {
-    backgroundColor: '#0f172a',
-    borderRadius: 20,
-    padding: 20,
-    gap: 12,
-  },
-  sectionTitle: {
-    color: '#f8fafc',
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  profileRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  label: {
-    color: '#94a3b8',
-  },
-  value: {
-    color: '#f8fafc',
-    fontWeight: '600',
-  },
-  section: {
-    backgroundColor: '#0f172a',
-    borderRadius: 20,
-    paddingVertical: 8,
-  },
-  row: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(148, 163, 184, 0.2)',
-  },
-  rowText: {
-    color: '#f8fafc',
-    fontSize: 16,
-  },
-  logout: {
-    marginTop: 'auto',
-    borderRadius: 16,
-    paddingVertical: 16,
-    backgroundColor: '#dc2626',
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  logoutText: {
-    color: '#fef2f2',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
+function ProfileRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View className="flex-row items-center justify-between">
+      <Text className="text-sm text-slate-400">{label}</Text>
+      <Text className="text-sm font-semibold text-slate-100">{value}</Text>
+    </View>
+  );
+}

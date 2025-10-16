@@ -1,9 +1,11 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { Button, FilterChip, Modal, Toast } from '@/components/ui';
+import { typography } from '@/constants/theme';
 import { fetchFestivalById } from '@/services/festivals';
-import { Festival } from '@/types/festival';
+import { Festival, FestivalLineupEntry } from '@/types/festival';
 
 export function FestivalDetailScreen() {
   const { festivalId } = useLocalSearchParams<{ festivalId?: string }>();
@@ -11,6 +13,8 @@ export function FestivalDetailScreen() {
   const [festival, setFestival] = useState<Festival | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [groupModalVisible, setGroupModalVisible] = useState(false);
 
   useEffect(() => {
     if (!festivalId) {
@@ -36,10 +40,12 @@ export function FestivalDetailScreen() {
     void loadFestival();
   }, [festivalId]);
 
+  const lineupEntries: FestivalLineupEntry[] = useMemo(() => festival?.lineup ?? [], [festival]);
+
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#4f46e5" />
+        <ActivityIndicator size="large" color="#5A67D8" />
       </View>
     );
   }
@@ -47,58 +53,114 @@ export function FestivalDetailScreen() {
   if (!festival) {
     return (
       <View style={styles.loader}>
-        <Text style={styles.errorText}>{error ?? 'Festival not found.'}</Text>
-        <TouchableOpacity style={styles.secondaryButton} onPress={() => router.back()}>
-          <Text style={styles.secondaryButtonText}>Go back</Text>
-        </TouchableOpacity>
+        <Text className="text-base text-error">{error ?? 'Festival not found.'}</Text>
+        <Button variant="outline" className="mt-6 w-48" onPress={() => router.back()}>
+          Go Back
+        </Button>
       </View>
     );
   }
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{festival.name}</Text>
-        <Text style={styles.subtitle}>
-          📍 {festival.location} • {formatDateRange(festival.startDate, festival.endDate)}
-        </Text>
-        <TouchableOpacity style={styles.primaryButton}>
-          <Text style={styles.primaryButtonText}>Add to My Festivals</Text>
-        </TouchableOpacity>
-      </View>
+  const handleSave = () => {
+    setToastVisible(true);
+  };
 
-      {festival.lineup?.length ? (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Lineup</Text>
-          {festival.lineup.map((entry) => (
-            <View key={entry.artist} style={styles.lineupRow}>
-              <Text style={styles.lineupEmoji}>🎵</Text>
-              <View>
-                <Text style={styles.lineupText}>{entry.artist}</Text>
-                {entry.time ? (
-                  <Text style={styles.lineupMeta}>
-                    {entry.time} {entry.stage ? `• ${entry.stage}` : ''}
-                  </Text>
-                ) : null}
+  const handleJoinGroup = () => {
+    setGroupModalVisible(true);
+  };
+
+  return (
+    <View className="flex-1 bg-slate-950">
+      <ScrollView contentContainerStyle={styles.container}>
+        <View className="gap-6">
+          <View className="gap-4">
+            <Text className={typography.heading}>{festival.name}</Text>
+            <Text className={typography.body}>
+              {festival.location} • {formatDateRange(festival.startDate, festival.endDate)}
+            </Text>
+            <View className="flex-row flex-wrap gap-2">
+              {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
+              {festival.artistsCount ? (
+                <FilterChip label={`${festival.artistsCount} artists`} />
+              ) : null}
+              {festival.priceRange ? <FilterChip label={festival.priceRange} /> : null}
+            </View>
+            <Button onPress={handleSave} className="w-full">
+              Add to My Festivals
+            </Button>
+          </View>
+
+          {festival.description ? (
+            <View className="gap-2 rounded-2xl bg-slate-900/70 p-4">
+              <Text className={typography.subheading}>Overview</Text>
+              <Text className={typography.body}>{festival.description}</Text>
+            </View>
+          ) : null}
+
+          {lineupEntries.length ? (
+            <View className="gap-4">
+              <Text className={typography.subheading}>Lineup</Text>
+              <View className="gap-2 rounded-2xl bg-slate-900/70 p-4">
+                {lineupEntries.map((entry) => (
+                  <View
+                    key={`${entry.artist}-${entry.stage ?? 'stage'}`}
+                    className="flex-row items-center justify-between rounded-xl border border-slate-800/60 px-3 py-2">
+                    <View className="flex-1">
+                      <Text className="text-base font-semibold text-slate-100">{entry.artist}</Text>
+                      <Text className="text-xs text-slate-400">
+                        {entry.time ?? 'Time TBA'}
+                        {entry.stage ? ` • ${entry.stage}` : ''}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
               </View>
             </View>
-          ))}
+          ) : null}
         </View>
-      ) : null}
 
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => router.push({ pathname: '/schedule-builder', params: { festivalId: festival.id } })}>
-          <Text style={styles.secondaryButtonText}>View Schedule</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => router.push({ pathname: '/group/[groupId]', params: { groupId: `${festival.id}-group` } })}>
-          <Text style={styles.secondaryButtonText}>Join Group</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <View className="mt-8 flex-row gap-3">
+          <Button
+            variant="secondary"
+            className="flex-1"
+            onPress={() => router.push({ pathname: '/schedule-builder', params: { festivalId: festival.id } })}>
+            View Schedule
+          </Button>
+          <Button variant="outline" className="flex-1" onPress={handleJoinGroup}>
+            Join Group
+          </Button>
+        </View>
+      </ScrollView>
+
+      <Toast
+        visible={toastVisible}
+        message={`${festival.name} added to your saved festivals.`}
+        type="success"
+        onHide={() => setToastVisible(false)}
+      />
+
+      <Modal
+        visible={groupModalVisible}
+        onDismiss={() => setGroupModalVisible(false)}
+        title="Join Festival Group"
+        description="Collaborate on schedules, vote on sets, and sync plans with your crew."
+        primaryAction={{
+          label: 'Open Group',
+          onPress: () => {
+            setGroupModalVisible(false);
+            router.push({ pathname: '/group/[groupId]', params: { groupId: `${festival.id}-group` } });
+          },
+        }}
+        secondaryAction={{
+          label: 'Not now',
+          variant: 'outline',
+          onPress: () => setGroupModalVisible(false),
+        }}>
+        <View className="gap-3">
+          <Text className={typography.body}>Coming soon: chat previews, votes, and shared schedules.</Text>
+        </View>
+      </Modal>
+    </View>
   );
 }
 
@@ -115,13 +177,13 @@ function formatDateRange(startDate: string, endDate: string) {
     day: 'numeric',
   });
 
-  return `${format.format(start)}–${format.format(end)}`;
+  return `${format.format(start)}-${format.format(end)}`;
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 24,
-    backgroundColor: '#050914',
+    paddingBottom: 120,
     gap: 24,
   },
   loader: {
@@ -131,76 +193,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
     gap: 16,
-  },
-  errorText: {
-    color: '#f87171',
-    fontSize: 16,
-  },
-  header: {
-    gap: 12,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: '700',
-    color: '#f8fafc',
-  },
-  subtitle: {
-    color: '#94a3b8',
-    fontSize: 16,
-  },
-  primaryButton: {
-    backgroundColor: '#22d3ee',
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    alignSelf: 'flex-start',
-  },
-  primaryButtonText: {
-    color: '#0f172a',
-    fontWeight: '600',
-  },
-  section: {
-    gap: 12,
-  },
-  sectionTitle: {
-    color: '#f1f5f9',
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  lineupRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 12,
-    backgroundColor: '#0f172a',
-    borderRadius: 12,
-  },
-  lineupEmoji: {
-    fontSize: 20,
-  },
-  lineupText: {
-    color: '#e2e8f0',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  lineupMeta: {
-    color: '#94a3b8',
-    fontSize: 13,
-  },
-  actions: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  secondaryButton: {
-    flex: 1,
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#1e1b4b',
-  },
-  secondaryButtonText: {
-    color: '#a855f7',
-    textAlign: 'center',
-    fontWeight: '600',
   },
 });
