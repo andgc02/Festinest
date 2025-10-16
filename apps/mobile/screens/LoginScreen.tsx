@@ -18,7 +18,7 @@ export function LoginScreen() {
 
   useEffect(() => {
     if (!initializing && user) {
-      router.replace('(tabs)/festivals');
+      router.replace('/(tabs)/festivals');
     }
   }, [initializing, router, user]);
 
@@ -26,7 +26,7 @@ export function LoginScreen() {
     setIsSubmitting(true);
     try {
       await signIn(email.trim(), password);
-      router.replace('(tabs)/festivals');
+      router.replace('/(tabs)/festivals');
     } catch (error) {
       Alert.alert('Login failed', (error as Error).message);
     } finally {
@@ -38,7 +38,7 @@ export function LoginScreen() {
     setIsSubmitting(true);
     try {
       await signUp(email.trim(), password);
-      router.replace('(tabs)/festivals');
+      router.replace('/(tabs)/festivals');
     } catch (error) {
       Alert.alert('Sign up failed', (error as Error).message);
     } finally {
@@ -77,7 +77,7 @@ export function LoginScreen() {
             secureTextEntry
             value={password}
             onChangeText={setPassword}
-            placeholder="••••••••"
+            placeholder={'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'}
           />
         </View>
         <Button variant="primary" loading={isSubmitting} disabled={disabled} onPress={handleLogin} className="w-full">

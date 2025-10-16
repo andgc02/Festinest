@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from 'expo-router';
+﻿import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View } from 'react-native';
 
@@ -122,7 +122,7 @@ export function ScheduleBuilderScreen() {
               <Text className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.day}</Text>
               <Text className="text-base font-semibold text-slate-100">{item.artist}</Text>
               <Text className="text-xs text-slate-400">
-                {item.time} • {item.stage}
+                {`${item.time} at ${item.stage}`}
               </Text>
             </View>
             <Button
@@ -156,3 +156,7 @@ export function ScheduleBuilderScreen() {
     </View>
   );
 }
+
+
+
+

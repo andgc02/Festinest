@@ -106,7 +106,7 @@ export function FestivalListScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 pt-16">
+    <View className="flex-1 bg-slate-950 px-5 pt-16" style={styles.root}>
       <Text className={typography.display}>Discover Festivals</Text>
       <View className="mt-6 gap-4">
         <SearchBar placeholder="Search festivals" value={query} onChangeText={setQuery} />
@@ -164,6 +164,12 @@ function formatDateRange(startDate: string, endDate: string) {
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#050914',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+  },
   list: {
     paddingTop: 24,
     paddingBottom: 40,

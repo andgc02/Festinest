@@ -33,7 +33,7 @@ export function Toast({
 }: ToastProps) {
   const opacity = useRef(new Animated.Value(0)).current;
   const [shouldRender, setShouldRender] = useState(visible);
-  const hideTimeout = useRef<NodeJS.Timeout | null>(null);
+  const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (visible) {

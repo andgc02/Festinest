@@ -70,32 +70,27 @@ export function FestivalDetailScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950">
+    <View className="flex-1 bg-slate-950" style={styles.root}>
       <ScrollView contentContainerStyle={styles.container}>
         <View className="gap-6">
           <View className="gap-4">
             <Text className={typography.heading}>{festival.name}</Text>
             <Text className={typography.body}>
-              {festival.location} • {formatDateRange(festival.startDate, festival.endDate)}
+              {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
             </Text>
             <View className="flex-row flex-wrap gap-2">
               {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
               {festival.artistsCount ? (
                 <FilterChip label={`${festival.artistsCount} artists`} />
               ) : null}
-              {festival.priceRange ? <FilterChip label={festival.priceRange} /> : null}
+              {/* priceRange not present in type; omit for now */}
             </View>
             <Button onPress={handleSave} className="w-full">
               Add to My Festivals
             </Button>
           </View>
 
-          {festival.description ? (
-            <View className="gap-2 rounded-2xl bg-slate-900/70 p-4">
-              <Text className={typography.subheading}>Overview</Text>
-              <Text className={typography.body}>{festival.description}</Text>
-            </View>
-          ) : null}
+          {/* description not present in type; omit for now */}
 
           {lineupEntries.length ? (
             <View className="gap-4">
@@ -109,7 +104,7 @@ export function FestivalDetailScreen() {
                       <Text className="text-base font-semibold text-slate-100">{entry.artist}</Text>
                       <Text className="text-xs text-slate-400">
                         {entry.time ?? 'Time TBA'}
-                        {entry.stage ? ` • ${entry.stage}` : ''}
+                        {entry.stage ? ` \u2022 ${entry.stage}` : ''}
                       </Text>
                     </View>
                   </View>
@@ -181,6 +176,10 @@ function formatDateRange(startDate: string, endDate: string) {
 }
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#050914',
+  },
   container: {
     padding: 24,
     paddingBottom: 120,

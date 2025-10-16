@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typography } from '@/constants/theme';
@@ -33,7 +33,7 @@ export function GroupScreen() {
   );
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 pt-14">
+    <View className="flex-1 bg-slate-950 px-5 pt-14" style={styles.root}>
       <View className="gap-4">
         <Text className={typography.display}>{MOCK_GROUP.name}</Text>
         <View className="flex-row gap-2">
@@ -63,7 +63,7 @@ export function GroupScreen() {
               <View>
                 <Text className="text-base font-semibold text-slate-100">{item.artist}</Text>
                 <Text className="text-xs text-slate-400">
-                  {item.time} • {item.stage}
+                  {item.time} {'\u2022'} {item.stage}
                 </Text>
               </View>
               <View className="rounded-full bg-primary/20 px-3 py-1">
@@ -128,3 +128,12 @@ export function GroupScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#050914',
+    paddingHorizontal: 20,
+    paddingTop: 14,
+  },
+});

@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { forwardRef } from 'react';
-import { TextInput, TextInputProps, View } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
 
@@ -16,12 +16,15 @@ export const SearchBar = forwardRef<TextInput, SearchBarProps>(
         className={cn(
           'flex-row items-center rounded-2xl border border-slate-800 bg-slate-900/80 px-4',
           className,
-        )}>
+        )}
+        style={[styles.container]}
+      >
         <Ionicons name="search" size={20} color="#94a3b8" />
         <TextInput
           ref={ref}
           placeholderTextColor={placeholderTextColor}
           className={cn('flex-1 px-3 py-3 text-base text-slate-100', inputClassName)}
+          style={styles.input}
           {...props}
         />
       </View>
@@ -30,3 +33,22 @@ export const SearchBar = forwardRef<TextInput, SearchBarProps>(
 );
 
 SearchBar.displayName = 'SearchBar';
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#1f2937',
+    backgroundColor: 'rgba(15,23,42,0.80)',
+    paddingHorizontal: 16,
+  },
+  input: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#F1F5F9',
+  },
+});
