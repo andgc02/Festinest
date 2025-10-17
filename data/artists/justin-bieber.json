@@ -1,8 +1,8 @@
 {
   "id": "justin-bieber",
   "name": "Justin Bieber",
-  "genres": ["Pop", "R&B"],
-  "photoUrl": "https://example.com/images/justin-bieber.jpg",
+  "genres": ["Pop", "R&B", "Dance-Pop", "EDM"],
+  "photoUrl": "https://example.com/justin.jpg",
   "socials": {
     "spotify": "https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s",
     "instagram": "https://www.instagram.com/justinbieber/"

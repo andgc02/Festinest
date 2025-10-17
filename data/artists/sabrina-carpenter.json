@@ -1,0 +1,11 @@
+{
+  "id": "sabrina-carpenter",
+  "name": "Sabrina Carpenter",
+  "genres": ["Pop", "R&B"],
+  "photoUrl": "https://example.com/sabrina.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B",
+    "instagram": "https://www.instagram.com/sabrinacarpenter/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

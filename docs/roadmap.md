@@ -70,6 +70,7 @@ Status legend:
 - `[DONE]` Curated `data/festivals.json` and seeding script
 - `[DONE]` Split festival JSON into per-festival files (`data/festivals/*`) and directory-driven seeder
 - `[DONE]` Stand up `artists` collection (`data/artists/*`) and reference `lineup[].artistId`
+- `[DONE]` Normalize Coachella 2026 lineup JSON to use artist references
 - `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed production collections and add validation checklist
 - `[NEXT]` Seeder validation for missing artist references + batched writes

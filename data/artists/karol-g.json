@@ -1,0 +1,11 @@
+{
+  "id": "karol-g",
+  "name": "Karol G",
+  "genres": ["Reggaeton", "Urban Pop", "Latin R&B"],
+  "photoUrl": "https://example.com/karol.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/790FomKkXshlbRYZFtlgla",
+    "instagram": "https://www.instagram.com/karolg/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

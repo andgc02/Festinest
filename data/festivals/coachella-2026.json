@@ -4,8 +4,13 @@
   "location": "Indio, CA",
   "startDate": "2026-04-10",
   "endDate": "2026-04-19",
-  "genres": ["Pop", "EDM", "Hip-Hop", "Indie"],
-  "status": "rumored",
+  "genres": [
+    "Pop",
+    "EDM",
+    "Hip-Hop",
+    "Indie"
+  ],
+  "status": "confirmed",
   "website": "https://www.coachella.com",
   "lastUpdated": "2025-10-17T00:00:00.000Z",
   "sources": [
@@ -21,153 +26,1032 @@
     }
   ],
   "lineup": [
-    { "artist": "Sabrina Carpenter", "stage": "Friday", "time": "Headliner" },
-    { "artist": "The xx", "stage": "Friday", "time": "TBA" },
-    { "artist": "Nine Inch Noize", "stage": "Friday", "time": "TBA" },
-    { "artist": "Disclosure", "stage": "Friday", "time": "TBA" },
-    { "artist": "Turnstile", "stage": "Friday", "time": "TBA" },
-    { "artist": "Ethel Cain", "stage": "Friday", "time": "TBA" },
-    { "artist": "Dijon", "stage": "Friday", "time": "TBA" },
-    { "artist": "Teddy Swims", "stage": "Friday", "time": "TBA" },
-    { "artist": "KATSEYE", "stage": "Friday", "time": "TBA" },
-    { "artist": "Devo", "stage": "Friday", "time": "TBA" },
-    { "artist": "Sexyy Red", "stage": "Friday", "time": "TBA" },
-    { "artist": "Central Cee", "stage": "Friday", "time": "TBA" },
-    { "artist": "Foster the People", "stage": "Friday", "time": "TBA" },
-    { "artist": "Levity", "stage": "Friday", "time": "TBA" },
-    { "artist": "Blood Orange", "stage": "Friday", "time": "TBA" },
-    { "artist": "Moby", "stage": "Friday", "time": "TBA" },
-    { "artist": "Marlon Hoffstadt", "stage": "Friday", "time": "TBA" },
-    { "artist": "Lykke Li", "stage": "Friday", "time": "TBA" },
-    { "artist": "Fakemink", "stage": "Friday", "time": "TBA" },
-    { "artist": "Gordo", "stage": "Friday", "time": "TBA" },
-    { "artist": "Creepy Nuts", "stage": "Friday", "time": "TBA" },
-    { "artist": "Joyce Manor", "stage": "Friday", "time": "TBA" },
-    { "artist": "BINI", "stage": "Friday", "time": "TBA" },
-    { "artist": "Kettama", "stage": "Friday", "time": "TBA" },
-    { "artist": "Groove Armada", "stage": "Friday", "time": "TBA" },
-    { "artist": "Joost", "stage": "Friday", "time": "TBA" },
-    { "artist": "HUGEL", "stage": "Friday", "time": "TBA" },
-    { "artist": "CMAT", "stage": "Friday", "time": "TBA" },
-    { "artist": "Slayyyter", "stage": "Friday", "time": "TBA" },
-    { "artist": "Prospa", "stage": "Friday", "time": "TBA" },
-    { "artist": "Hot Mulligan", "stage": "Friday", "time": "TBA" },
-    { "artist": "Hamdi", "stage": "Friday", "time": "TBA" },
-    { "artist": "Fleshwater", "stage": "Friday", "time": "TBA" },
-    { "artist": "Max Styler", "stage": "Friday", "time": "TBA" },
-    { "artist": "Wednesday", "stage": "Friday", "time": "TBA" },
-    { "artist": "Dabeull", "stage": "Friday", "time": "TBA" },
-    { "artist": "The Two Lips", "stage": "Friday", "time": "TBA" },
-    { "artist": "Ninajirachi", "stage": "Friday", "time": "TBA" },
-    { "artist": "Max Dean x Luke Dean", "stage": "Friday", "time": "TBA" },
-    { "artist": "Cachirula & Loojan", "stage": "Friday", "time": "TBA" },
-    { "artist": "Jessica Brankka", "stage": "Friday", "time": "TBA" },
-    { "artist": "Chloé Caillet x Rossi.", "stage": "Friday", "time": "TBA" },
-    { "artist": "Arodes", "stage": "Friday", "time": "TBA" },
-    { "artist": "NewDad", "stage": "Friday", "time": "TBA" },
-    { "artist": "Carolina Durante", "stage": "Friday", "time": "TBA" },
-    { "artist": "Flowerovlove", "stage": "Friday", "time": "TBA" },
-    { "artist": "Febuary", "stage": "Friday", "time": "TBA" },
-    { "artist": "Bob Baker Marionettes", "stage": "Friday", "time": "TBA" },
-    { "artist": "Youna", "stage": "Friday", "time": "TBA" },
-    { "artist": "Sahar Z", "stage": "Friday", "time": "TBA" },
-    { "artist": "Justin Bieber", "stage": "Saturday", "time": "Headliner" },
-    { "artist": "The Strokes", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Giveon", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Addison Rae", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Labrinth", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Sombr", "stage": "Saturday", "time": "TBA" },
-    { "artist": "David Byrne", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Interpol", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Alex G", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Swae Lee", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Solomun", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Taemin", "stage": "Saturday", "time": "TBA" },
-    { "artist": "PinkPantheress", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Royel Otis", "stage": "Saturday", "time": "TBA" },
-    { "artist": "REZZ", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Fujii Kaze", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Adriatique", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Davido", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Boys Noize", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Geese", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Rusowsky", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Yousuke Yukimatsu", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Green Velvet x AYYBO", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Luísa Sonza", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Zulan", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Los Hermanos Flores", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Bedouin", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Ceremony", "stage": "Saturday", "time": "TBA" },
-    { "artist": "54 Ultra", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Noga Erez", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Ben Sterling", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Blondshell", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Lambrini Girls", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Ecca Vandal", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Mind Enterprises", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Freak Slug", "stage": "Saturday", "time": "TBA" },
-    { "artist": "SOSA", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Mahmut Orhan", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Riordan", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Die Spitz", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Whatmore", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Genesi", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Yamagucci", "stage": "Saturday", "time": "TBA" },
-    { "artist": "Karol G", "stage": "Sunday", "time": "Headliner" },
-    { "artist": "Anyma presents ÆDEN", "stage": "Sunday", "time": "Headliner" },
-    { "artist": "Young Thug", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Kaskade", "stage": "Sunday", "time": "TBA" },
-    { "artist": "BIGBANG", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Laufey", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Major Lazer", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Iggy Pop", "stage": "Sunday", "time": "TBA" },
-    { "artist": "FKA twigs", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Wet Leg", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Clipse", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Subtronics", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Little Simz", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Mochakk", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Duke Dumont", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Worship", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Armin van Buuren × Adam Beyer", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Holly Humberstone", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Gigi Perez", "stage": "Sunday", "time": "TBA" },
-    { "artist": "The Rapture", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Suicidal Tendencies", "stage": "Sunday", "time": "TBA" },
-    { "artist": "BUNT.", "stage": "Sunday", "time": "TBA" },
-    { "artist": "French Police", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Black Flag", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Oklou", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Röyksopp", "stage": "Sunday", "time": "TBA" },
-    { "artist": "The Chats", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Drain", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Model/Actriz", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Cobrah", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Los Retros", "stage": "Sunday", "time": "TBA" },
-    { "artist": "WhoMadeWho", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Jane Remover", "stage": "Sunday", "time": "TBA" },
-    { "artist": "RØZ", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Glitterer", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Carlita x Josh Baker", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Mëstiza", "stage": "Sunday", "time": "TBA" },
-    { "artist": "&Friends", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Azzecca", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Le Yora", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Samia", "stage": "Sunday", "time": "TBA" },
-    { "artist": "Tomora", "stage": "Sunday", "time": "TBA" }
+    {
+      "artistId": "sabrina-carpenter",
+      "artistName": "Sabrina Carpenter",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "Headliner"
+    },
+    {
+      "artistId": "the-xx",
+      "artistName": "The xx",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "nine-inch-noize",
+      "artistName": "Nine Inch Noize",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "disclosure",
+      "artistName": "Disclosure",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "turnstile",
+      "artistName": "Turnstile",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "ethel-cain",
+      "artistName": "Ethel Cain",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "dijon",
+      "artistName": "Dijon",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "teddy-swims",
+      "artistName": "Teddy Swims",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "katseye",
+      "artistName": "KATSEYE",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "devo",
+      "artistName": "Devo",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "sexyy-red",
+      "artistName": "Sexyy Red",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "central-cee",
+      "artistName": "Central Cee",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "foster-the-people",
+      "artistName": "Foster the People",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "levity",
+      "artistName": "Levity",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "blood-orange",
+      "artistName": "Blood Orange",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "moby",
+      "artistName": "Moby",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "marlon-hoffstadt",
+      "artistName": "Marlon Hoffstadt",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "lykke-li",
+      "artistName": "Lykke Li",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "fakemink",
+      "artistName": "Fakemink",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "gordo",
+      "artistName": "Gordo",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "creepy-nuts",
+      "artistName": "Creepy Nuts",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "joyce-manor",
+      "artistName": "Joyce Manor",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "bini",
+      "artistName": "BINI",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "kettama",
+      "artistName": "Kettama",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "groove-armada",
+      "artistName": "Groove Armada",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "joost",
+      "artistName": "Joost",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "hugel",
+      "artistName": "HUGEL",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "cmat",
+      "artistName": "CMAT",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "slayyyter",
+      "artistName": "Slayyyter",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "prospa",
+      "artistName": "Prospa",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "hot-mulligan",
+      "artistName": "Hot Mulligan",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "hamdi",
+      "artistName": "Hamdi",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "fleshwater",
+      "artistName": "Fleshwater",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "max-styler",
+      "artistName": "Max Styler",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "wednesday",
+      "artistName": "Wednesday",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "dabeull",
+      "artistName": "Dabeull",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "the-two-lips",
+      "artistName": "The Two Lips",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "ninajirachi",
+      "artistName": "Ninajirachi",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "max-dean-x-luke-dean",
+      "artistName": "Max Dean x Luke Dean",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "cachirula-loojan",
+      "artistName": "Cachirula & Loojan",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "jessica-brankka",
+      "artistName": "Jessica Brankka",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "chloe-caillet-x-rossi",
+      "artistName": "Chloé Caillet x Rossi.",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "arodes",
+      "artistName": "Arodes",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "newdad",
+      "artistName": "NewDad",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "carolina-durante",
+      "artistName": "Carolina Durante",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "flowerovlove",
+      "artistName": "Flowerovlove",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "febuary",
+      "artistName": "Febuary",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "bob-baker-marionettes",
+      "artistName": "Bob Baker Marionettes",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "youna",
+      "artistName": "Youna",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "sahar-z",
+      "artistName": "Sahar Z",
+      "stage": "TBA",
+      "day": "Friday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "justin-bieber",
+      "artistName": "Justin Bieber",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "Headliner"
+    },
+    {
+      "artistId": "the-strokes",
+      "artistName": "The Strokes",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "giveon",
+      "artistName": "Giveon",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "addison-rae",
+      "artistName": "Addison Rae",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "labrinth",
+      "artistName": "Labrinth",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "sombr",
+      "artistName": "Sombr",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "david-byrne",
+      "artistName": "David Byrne",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "interpol",
+      "artistName": "Interpol",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "alex-g",
+      "artistName": "Alex G",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "swae-lee",
+      "artistName": "Swae Lee",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "solomun",
+      "artistName": "Solomun",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "taemin",
+      "artistName": "Taemin",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "pinkpantheress",
+      "artistName": "PinkPantheress",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "royel-otis",
+      "artistName": "Royel Otis",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "rezz",
+      "artistName": "REZZ",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "fujii-kaze",
+      "artistName": "Fujii Kaze",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "adriatique",
+      "artistName": "Adriatique",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "davido",
+      "artistName": "Davido",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "boys-noize",
+      "artistName": "Boys Noize",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "geese",
+      "artistName": "Geese",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "rusowsky",
+      "artistName": "Rusowsky",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "yousuke-yukimatsu",
+      "artistName": "Yousuke Yukimatsu",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "green-velvet-x-ayybo",
+      "artistName": "Green Velvet x AYYBO",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "luisa-sonza",
+      "artistName": "Luísa Sonza",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "zulan",
+      "artistName": "Zulan",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "los-hermanos-flores",
+      "artistName": "Los Hermanos Flores",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "bedouin",
+      "artistName": "Bedouin",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "ceremony",
+      "artistName": "Ceremony",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "54-ultra",
+      "artistName": "54 Ultra",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "noga-erez",
+      "artistName": "Noga Erez",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "ben-sterling",
+      "artistName": "Ben Sterling",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "blondshell",
+      "artistName": "Blondshell",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "lambrini-girls",
+      "artistName": "Lambrini Girls",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "ecca-vandal",
+      "artistName": "Ecca Vandal",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "mind-enterprises",
+      "artistName": "Mind Enterprises",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "freak-slug",
+      "artistName": "Freak Slug",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "sosa",
+      "artistName": "SOSA",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "mahmut-orhan",
+      "artistName": "Mahmut Orhan",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "riordan",
+      "artistName": "Riordan",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "die-spitz",
+      "artistName": "Die Spitz",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "whatmore",
+      "artistName": "Whatmore",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "genesi",
+      "artistName": "Genesi",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "yamagucci",
+      "artistName": "Yamagucci",
+      "stage": "TBA",
+      "day": "Saturday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "karol-g",
+      "artistName": "Karol G",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "Headliner"
+    },
+    {
+      "artistId": "anyma-presents-aeden",
+      "artistName": "Anyma presents ÆDEN",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "Headliner"
+    },
+    {
+      "artistId": "young-thug",
+      "artistName": "Young Thug",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "kaskade",
+      "artistName": "Kaskade",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "bigbang",
+      "artistName": "BIGBANG",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "laufey",
+      "artistName": "Laufey",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "major-lazer",
+      "artistName": "Major Lazer",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "iggy-pop",
+      "artistName": "Iggy Pop",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "fka-twigs",
+      "artistName": "FKA twigs",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "wet-leg",
+      "artistName": "Wet Leg",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "clipse",
+      "artistName": "Clipse",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "subtronics",
+      "artistName": "Subtronics",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "little-simz",
+      "artistName": "Little Simz",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "mochakk",
+      "artistName": "Mochakk",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "duke-dumont",
+      "artistName": "Duke Dumont",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "worship",
+      "artistName": "Worship",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "armin-van-buuren-adam-beyer",
+      "artistName": "Armin van Buuren × Adam Beyer",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "holly-humberstone",
+      "artistName": "Holly Humberstone",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "gigi-perez",
+      "artistName": "Gigi Perez",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "the-rapture",
+      "artistName": "The Rapture",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "suicidal-tendencies",
+      "artistName": "Suicidal Tendencies",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "bunt",
+      "artistName": "BUNT.",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "french-police",
+      "artistName": "French Police",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "black-flag",
+      "artistName": "Black Flag",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "oklou",
+      "artistName": "Oklou",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "royksopp",
+      "artistName": "Röyksopp",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "the-chats",
+      "artistName": "The Chats",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "drain",
+      "artistName": "Drain",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "model-actriz",
+      "artistName": "Model/Actriz",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "cobrah",
+      "artistName": "Cobrah",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "los-retros",
+      "artistName": "Los Retros",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "whomadewho",
+      "artistName": "WhoMadeWho",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "jane-remover",
+      "artistName": "Jane Remover",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "rz",
+      "artistName": "RØZ",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "glitterer",
+      "artistName": "Glitterer",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "carlita-x-josh-baker",
+      "artistName": "Carlita x Josh Baker",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "mestiza",
+      "artistName": "Mëstiza",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "friends",
+      "artistName": "&Friends",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "azzecca",
+      "artistName": "Azzecca",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "le-yora",
+      "artistName": "Le Yora",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "samia",
+      "artistName": "Samia",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    },
+    {
+      "artistId": "tomora",
+      "artistName": "Tomora",
+      "stage": "TBA",
+      "day": "Sunday",
+      "time": "TBA"
+    }
   ],
   "schedule": [
-    { "day": "Friday Weekend 1", "artist": "Sabrina Carpenter", "time": "21:30", "stage": "Coachella Stage" },
-    { "day": "Friday Weekend 1", "artist": "The xx", "time": "20:00", "stage": "Outdoor Theatre" },
-    { "day": "Friday Weekend 1", "artist": "Disclosure", "time": "23:00", "stage": "Sahara Tent" },
-    { "day": "Friday Weekend 2", "artist": "Sabrina Carpenter", "time": "21:30", "stage": "Coachella Stage" },
-    { "day": "Saturday Weekend 1", "artist": "Justin Bieber", "time": "22:00", "stage": "Coachella Stage" },
-    { "day": "Saturday Weekend 1", "artist": "The Strokes", "time": "20:30", "stage": "Outdoor Theatre" },
-    { "day": "Saturday Weekend 2", "artist": "Justin Bieber", "time": "22:00", "stage": "Coachella Stage" },
-    { "day": "Sunday Weekend 1", "artist": "Karol G", "time": "21:00", "stage": "Coachella Stage" },
-    { "day": "Sunday Weekend 1", "artist": "Anyma presents ÆDEN", "time": "23:30", "stage": "Mojave" },
-    { "day": "Sunday Weekend 2", "artist": "Karol G", "time": "21:00", "stage": "Coachella Stage" }
+    {
+      "day": "Friday Weekend 1",
+      "artist": "Sabrina Carpenter",
+      "time": "21:30",
+      "stage": "Coachella Stage",
+      "artistId": "sabrina-carpenter",
+      "artistName": "Sabrina Carpenter"
+    },
+    {
+      "day": "Friday Weekend 1",
+      "artist": "The xx",
+      "time": "20:00",
+      "stage": "Outdoor Theatre",
+      "artistId": "the-xx",
+      "artistName": "The xx"
+    },
+    {
+      "day": "Friday Weekend 1",
+      "artist": "Disclosure",
+      "time": "23:00",
+      "stage": "Sahara Tent",
+      "artistId": "disclosure",
+      "artistName": "Disclosure"
+    },
+    {
+      "day": "Friday Weekend 2",
+      "artist": "Sabrina Carpenter",
+      "time": "21:30",
+      "stage": "Coachella Stage",
+      "artistId": "sabrina-carpenter",
+      "artistName": "Sabrina Carpenter"
+    },
+    {
+      "day": "Saturday Weekend 1",
+      "artist": "Justin Bieber",
+      "time": "22:00",
+      "stage": "Coachella Stage",
+      "artistId": "justin-bieber",
+      "artistName": "Justin Bieber"
+    },
+    {
+      "day": "Saturday Weekend 1",
+      "artist": "The Strokes",
+      "time": "20:30",
+      "stage": "Outdoor Theatre",
+      "artistId": "the-strokes",
+      "artistName": "The Strokes"
+    },
+    {
+      "day": "Saturday Weekend 2",
+      "artist": "Justin Bieber",
+      "time": "22:00",
+      "stage": "Coachella Stage",
+      "artistId": "justin-bieber",
+      "artistName": "Justin Bieber"
+    },
+    {
+      "day": "Sunday Weekend 1",
+      "artist": "Karol G",
+      "time": "21:00",
+      "stage": "Coachella Stage",
+      "artistId": "karol-g",
+      "artistName": "Karol G"
+    },
+    {
+      "day": "Sunday Weekend 1",
+      "artist": "Anyma presents ÆDEN",
+      "time": "23:30",
+      "stage": "Mojave",
+      "artistId": "anyma-presents-aeden",
+      "artistName": "Anyma presents ÆDEN"
+    },
+    {
+      "day": "Sunday Weekend 2",
+      "artist": "Karol G",
+      "time": "21:00",
+      "stage": "Coachella Stage",
+      "artistId": "karol-g",
+      "artistName": "Karol G"
+    }
   ]
 }
-

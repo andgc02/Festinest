@@ -1,0 +1,11 @@
+{
+  "id": "the-xx",
+  "name": "The xx",
+  "genres": ["Indie Rock", "Indie Electronic", "R&B", "Indie Pop", "Dream Pop", "Electronic Rock"],
+  "photoUrl": "https://example.com/thexx.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/3iOvXCl6edW5Um0fXEBRXy",
+    "instagram": "https://www.instagram.com/the_xx/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

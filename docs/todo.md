@@ -55,6 +55,7 @@ Status legend (use one marker per task):
 - `[DONE]` `tools/seedFestivals.js` Firestore seeder
 - `[DONE]` Restructure festival data into `data/festivals/*.json` and directory-driven seeding
 - `[DONE]` Split artists into `data/artists` directory and seed dedicated collection
+- `[DONE]` Normalize Coachella 2026 lineup to reference artistIds
 - `[NEXT]` Supply service account path or JSON via env (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed `festivals` collection and run validation spot checks
 - `[NEXT]` Add seeder validation for missing `artistId` references and batched writes
