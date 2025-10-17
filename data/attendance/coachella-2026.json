@@ -1,0 +1,11 @@
+{
+  "festivalId": "coachella-2026",
+  "updatedAt": "2025-10-17T00:00:00.000Z",
+  "entries": [
+    { "artistId": "sabrina-carpenter", "goingCount": 1243 },
+    { "artistId": "justin-bieber", "goingCount": 2110 },
+    { "artistId": "karol-g", "goingCount": 1854 },
+    { "artistId": "the-xx", "goingCount": 972 },
+    { "artistId": "anyma-presents-aeden", "goingCount": 1436 }
+  ]
+}

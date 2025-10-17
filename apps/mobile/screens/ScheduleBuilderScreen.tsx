@@ -1,6 +1,6 @@
 ﻿import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Animated, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Button, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -11,6 +11,7 @@ import { fetchFestivalById } from '@/services/festivals';
 import { FestivalScheduleEntry } from '@/types/festival';
 import { useArtistsCatalog } from '@/hooks/useArtistsCatalog';
 import { Artist } from '@/types/artist';
+import { formatArtistGenres, getArtistSocialLinks } from '@/utils/artist';
 
 type ScheduleItem = FestivalScheduleEntry & {
   id: string;
@@ -162,6 +163,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.screenPadding,
     paddingTop: 16,
   },
+  socialPill: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 9999,
+    borderWidth: 1,
+    borderColor: "#C7D2FE",
+    backgroundColor: "#EEF2FF",
+  },
 });
 
 type ScheduleListItemProps = {
@@ -174,6 +183,9 @@ type ScheduleListItemProps = {
 function ScheduleListItem({ item, index, toggleSelection, artistsById }: ScheduleListItemProps) {
   const animatedStyle = useFadeInUp({ delay: index * 70 });
   const displayName = getScheduleArtistName(item, artistsById);
+  const artist = item.artistId ? artistsById.get(item.artistId) : undefined;
+  const genresText = formatArtistGenres(artist);
+  const socialLinks = getArtistSocialLinks(artist);
 
   return (
     <Animated.View
@@ -198,6 +210,23 @@ function ScheduleListItem({ item, index, toggleSelection, artistsById }: Schedul
           {item.time ?? 'Time TBA'}
           {item.stage ? ` at ${item.stage}` : ''}
         </Text>
+        {genresText ? (
+          <Text style={{ marginTop: 4, fontSize: 11, color: '#64748B' }}>{genresText}</Text>
+        ) : null}
+        {socialLinks.length ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+            {socialLinks.map((link) => (
+              <Pressable
+                key={link.key}
+                style={styles.socialPill}
+                onPress={() => openExternalLink(link.url)}
+                accessibilityRole="link"
+                accessibilityLabel={`Open ${displayName} on ${link.label}`}>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: Colors.primary }}>{link.label}</Text>
+              </Pressable>
+            ))}
+          </View>
+        ) : null}
       </View>
       <Button
         variant={item.selected ? 'secondary' : 'primary'}
@@ -226,3 +255,10 @@ function getScheduleArtistName(entry: ScheduleItem, artistsById: Map<string, Art
 
 
 
+
+
+function openExternalLink(url: string) {
+  Linking.openURL(url).catch((error) => {
+    console.warn('Failed to open url', error);
+  });
+}

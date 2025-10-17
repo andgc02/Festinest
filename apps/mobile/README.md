@@ -89,6 +89,7 @@ Join our community of developers creating universal apps.
 ## Festival data & seeding
 
 - Festival JSON lives under `../data/festivals/*.json`; artist profiles live under `../data/artists/*.json`.
+- Attendance aggregates live under `../data/attendance/*.json` and seed the `festivalAttendees` collection.
 - To seed Firestore locally run from the repo root:
   ```bash
   npm run seed:festivals
@@ -97,3 +98,4 @@ Join our community of developers creating universal apps.
 - Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields—everything is merged when seeding.
 - After seeding, spot-check Firestore to ensure every `festival.lineup[].artistId` has a matching artist document.
 - The seeder now batches writes and will warn if a festival lineup or schedule references an unknown artist or omits required slot metadata (day, stage, time).
+- Use `npm run seed:festivals -- --dry-run` to preview writes or `--validate` to fail CI on validation warnings without mutating Firestore.

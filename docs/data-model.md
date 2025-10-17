@@ -4,9 +4,9 @@ _Last updated: Oct 2025_
 
 ## Collections Overview
 
-### `artists`
+### rtists
 
-```json
+`json
 {
   "id": "fred-again",
   "name": "Fred again..",
@@ -18,11 +18,11 @@ _Last updated: Oct 2025_
   },
   "updatedAt": "2025-10-17T00:00:00.000Z"
 }
-```
+`
 
-### `festivals`
+### estivals
 
-```json
+`json
 {
   "id": "electric-forest-2025",
   "name": "Electric Forest 2025",
@@ -43,9 +43,23 @@ _Last updated: Oct 2025_
     }
   ]
 }
-```
+`
 
-Each lineup/schedule entry references an artist by `artistId` and keeps any critical metadata (`stage`, `day`, `time`). Optional denormalised fields such as `artistName` can be stored for fast reads, but the canonical profile lives in `artists`.
+Each lineup/schedule entry references an artist by rtistId and keeps any critical metadata (stage, day, 	ime). Optional denormalised fields such as rtistName can be stored for fast reads, but the canonical profile lives in rtists.
+
+### estivalAttendees
+
+`json
+{
+  "id": "coachella-2026_sabrina-carpenter",
+  "festivalId": "coachella-2026",
+  "artistId": "sabrina-carpenter",
+  "goingCount": 1243,
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}
+`
+
+Each document tracks opt-in attendance interest for a festival/artist pairing and can power social proof (e.g., "35 friends are going").
 
 ## Why split artists from festivals?
 
@@ -58,20 +72,23 @@ Each lineup/schedule entry references an artist by `artistId` and keeps any crit
 
 ## Trade-offs
 
-- Seeder must ensure referenced artists exist (`artists` first, then `festivals`).
-- Client code needs a resolver (e.g., hook or cache) to map `artistId` to artist details.
-- Analytics / "people going" features require aggregations keyed by `festivalId` + `artistId`.
+- Seeder must ensure referenced artists exist (rtists first, then estivals).
+- Client code needs a resolver (e.g., hook or cache) to map rtistId to artist details.
+- Analytics / "people going" features require aggregations keyed by estivalId + rtistId.
 
 ## Seeder Workflow
 
-1. Store artist JSON files in `data/artists/*.json`. Each file should include `id`, `name`, and any optional fields.
-2. Store festival JSON files in `data/festivals/*.json`, referencing artists via `artistId`.
-3. Run `npm run seed:festivals` (see README). The script now:
-   - Upserts `artists` before `festivals`.
-   - Normalises `id`, `updatedAt`, and derived `genre` fields.
+1. Store artist JSON files in data/artists/*.json. Each file should include id, 
+ame, and any optional fields.
+2. Store festival JSON files in data/festivals/*.json, referencing artists via rtistId.
+3. Store attendance JSON files in data/attendance/*.json to seed estivalAttendees rollups.
+4. Run 
+pm run seed:festivals (see README). The script now:
+   - Upserts rtists before estivals.
+   - Normalises id, updatedAt, and derived genre fields.
    - Batches writes (<=400 per batch) to stay under Firestore limits.
-   - Emits warnings when a lineup/schedule slot is missing `artistId`, `day`, `stage`, or `time`, or if the `artistId` does not match an artist JSON file.
-4. Validate Firestore: confirm every `festival.lineup[].artistId` has a matching artist document and review any warnings printed during seeding.
+   - Emits warnings when a lineup/schedule slot is missing rtistId, day, stage, or 	ime, or if the rtistId does not match an artist JSON file.
+5. Validate Firestore: confirm every estival.lineup[].artistId has a matching artist document and review any warnings printed during seeding.
 
 ## Product Recommendations
 
@@ -83,6 +100,6 @@ Each lineup/schedule entry references an artist by `artistId` and keeps any crit
 
 ## Next Steps
 
-1. Surface artist metadata (genres, socials) in lineup and schedule UI via the shared `useArtistsCatalog` hook.
-2. Persist "I'm going" counts as `festivalAttendees/{festivalId}/{artistId}` documents to support social proof.
+1. Surface artist metadata (genres, socials) in lineup and schedule UI via the shared useArtistsCatalog hook.
+2. Persist "I'm going" counts as estivalAttendees/{festivalId}/{artistId} documents to support social proof.
 3. Add a CLI flag to the seeder for dry-run validation without writing.

@@ -1,15 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  Linking,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, Image, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, Card } from '@/components/ui';
@@ -20,6 +11,7 @@ import { fetchArtistById } from '@/services/artists';
 import { fetchFestivals } from '@/services/festivals';
 import { Artist } from '@/types/artist';
 import { Festival, FestivalLineupEntry, FestivalScheduleEntry } from '@/types/festival';
+import { getArtistSocialLinks } from '@/utils/artist';
 
 type ArtistAppearance = {
   festival: Festival;
@@ -28,14 +20,6 @@ type ArtistAppearance = {
     day?: string;
     time?: string;
   }>;
-};
-
-const SOCIAL_LABELS: Record<string, string> = {
-  spotify: 'Spotify',
-  instagram: 'Instagram',
-  soundcloud: 'SoundCloud',
-  twitter: 'Twitter / X',
-  website: 'Website',
 };
 
 export function ArtistDetailScreen() {
@@ -80,19 +64,7 @@ export function ArtistDetailScreen() {
     void load();
   }, [artistId]);
 
-  const socialLinks = useMemo(() => {
-    if (!artist?.socials) {
-      return [];
-    }
-
-    return Object.entries(artist.socials)
-      .filter(([, value]) => Boolean(value))
-      .map(([key, value]) => ({
-        key,
-        label: SOCIAL_LABELS[key] ?? key,
-        url: value as string,
-      }));
-  }, [artist]);
+  const socialLinks = useMemo(() => getArtistSocialLinks(artist), [artist]);
 
   const safeAreaEdges = ['top', 'bottom'] as const;
 

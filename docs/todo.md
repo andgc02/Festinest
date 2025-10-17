@@ -24,6 +24,7 @@ Status legend (use one marker per task):
 - `[NEXT]` Group screen vote persistence (Firestore) and empty states
 - `[DONE]` Settings screen saved festivals list and genre preferences form
 - `[DONE]` Artist discovery tab with list and detail screens
+- `[DONE]` Lineup and schedule cards surface artist genres and socials
 - `[NEXT]` Optimistic loading states and skeletons for list and detail views
 
 ## Week 2.5 - Expo Go Internal Demo
@@ -59,6 +60,7 @@ Status legend (use one marker per task):
 - `[NEXT]` Supply service account path or JSON via env (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed `festivals` collection and run validation spot checks
 - `[DONE]` Add seeder validation for missing `artistId` references and batched writes
+- `[ACTIVE]` Seed `festivalAttendees` aggregates from `data/attendance/*.json`
 - `[NEXT]` Monthly update workflow and staging collection documentation
 - `[NEXT]` Expand source list (MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain) with attribution notes
 - `[BLOCKED]` Automated seeding via GitHub workflow (secrets management decision)
