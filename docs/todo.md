@@ -58,7 +58,7 @@ Status legend (use one marker per task):
 - `[DONE]` Normalize Coachella 2026 lineup to reference artistIds
 - `[NEXT]` Supply service account path or JSON via env (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed `festivals` collection and run validation spot checks
-- `[NEXT]` Add seeder validation for missing `artistId` references and batched writes
+- `[DONE]` Add seeder validation for missing `artistId` references and batched writes
 - `[NEXT]` Monthly update workflow and staging collection documentation
 - `[NEXT]` Expand source list (MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain) with attribution notes
 - `[BLOCKED]` Automated seeding via GitHub workflow (secrets management decision)

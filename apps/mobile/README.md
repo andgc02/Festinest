@@ -96,4 +96,4 @@ Join our community of developers creating universal apps.
   The script loads artists first, then festivals, and upserts each document by `id`.
 - Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields—everything is merged when seeding.
 - After seeding, spot-check Firestore to ensure every `festival.lineup[].artistId` has a matching artist document.
-
+- The seeder now batches writes and will warn if a festival lineup or schedule references an unknown artist or omits required slot metadata (day, stage, time).

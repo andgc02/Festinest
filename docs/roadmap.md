@@ -73,7 +73,7 @@ Status legend:
 - `[DONE]` Normalize Coachella 2026 lineup JSON to use artist references
 - `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed production collections and add validation checklist
-- `[NEXT]` Seeder validation for missing artist references + batched writes
+- `[DONE]` Seeder validation for missing artist references + batched writes
 - `[NEXT]` Monthly update SOP (staging collection, review, promote)
 - `[BLOCKED]` Automated seeding pipeline (GitHub workflow pending secrets plan)
 - `[LATER]` Additional datasets (artists, vendors, travel guides)
