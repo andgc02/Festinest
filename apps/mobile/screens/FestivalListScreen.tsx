@@ -10,6 +10,7 @@ import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { fetchFestivals } from '@/services/festivals';
 import { Festival } from '@/types/festival';
+import { useSavedFestivals } from '@/providers/SavedFestivalsProvider';
 
 type FilterKey = 'genre' | 'date' | 'location';
 
@@ -159,6 +160,8 @@ type FestivalListItemProps = {
 function FestivalListItem({ item, index, onPress }: FestivalListItemProps) {
   const dates = item.startDate && item.endDate ? formatDateRange(item.startDate, item.endDate) : 'Dates coming soon';
   const animatedStyle = useFadeInUp({ delay: index * 80 });
+  const { isSaved } = useSavedFestivals();
+  const saved = isSaved(item.id);
 
   return (
     <Animated.View style={[{ marginBottom: 16 }, animatedStyle]}>
@@ -174,7 +177,15 @@ function FestivalListItem({ item, index, onPress }: FestivalListItemProps) {
               {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
             </Text>
           </View>
-          <Ionicons name="chevron-forward" size={20} color="#475569" />
+          <View style={{ alignItems: 'center', gap: 8 }}>
+            {saved ? (
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#E2E8F0', borderRadius: 9999, paddingHorizontal: 8, paddingVertical: 4 }}>
+                <Ionicons name="bookmark" size={14} color="#5A67D8" />
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#5A67D8' }}>Saved</Text>
+              </View>
+            ) : null}
+            <Ionicons name="chevron-forward" size={20} color="#475569" />
+          </View>
         </Card>
       </Pressable>
     </Animated.View>

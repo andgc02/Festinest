@@ -17,7 +17,8 @@ Status legend (use one marker per task):
 
 ## Week 2 - Core Screens
 - `[DONE]` Light theme polish + entrance animations (Festival list, chips, Group, Schedule)
-- `[ACTIVE]` Festival detail lineup accordion plus save CTA wiring
+- `[DONE]` Festival detail lineup accordion plus save CTA wiring
+- `[DONE]` Saved festivals state management shared across screens
 - `[ACTIVE]` Schedule builder day tabs with conflict detection logic
 - `[NEXT]` Avatar and AvatarGroup components shared across screens
 - `[NEXT]` Group screen vote persistence (Firestore) and empty states
@@ -42,6 +43,7 @@ Status legend (use one marker per task):
 ## Data and Seeding
 - `[DONE]` Curated `data/festivals.json`
 - `[DONE]` `tools/seedFestivals.js` Firestore seeder
+- `[DONE]` Restructure festival data into `data/festivals/*.json` and directory-driven seeding
 - `[NEXT]` Supply service account path or JSON via env (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed `festivals` collection and run validation spot checks
 - `[NEXT]` Monthly update workflow and staging collection documentation

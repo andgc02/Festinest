@@ -31,28 +31,49 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-const dataPath = path.resolve(__dirname, "../data/festivals.json");
+const dataDir = path.resolve(__dirname, "../data/festivals");
 
-if (!fs.existsSync(dataPath)) {
-  console.error(`Cannot find data file at ${dataPath}`);
+if (!fs.existsSync(dataDir)) {
+  console.error(`Cannot find data directory at ${dataDir}`);
   process.exit(1);
 }
 
-const festivals = JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+const festivalFiles = fs
+  .readdirSync(dataDir)
+  .filter((filename) => filename.toLowerCase().endsWith(".json"))
+  .sort();
+
+if (!festivalFiles.length) {
+  console.warn(`No festival json files found in ${dataDir}`);
+}
 
 async function seedFestivals() {
-  if (!Array.isArray(festivals)) {
-    throw new Error("Festival data must be an array.");
-  }
+  for (const filename of festivalFiles) {
+    const filePath = path.join(dataDir, filename);
 
-  for (const fest of festivals) {
-    if (!fest.id) {
-      console.warn("Skipping festival without id:", fest);
-      continue;
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      const fest = JSON.parse(raw);
+
+      const festivalId = fest.id ?? path.basename(filename, path.extname(filename));
+
+      if (!festivalId) {
+        console.warn(`Skipping ${filename} because it is missing an id.`);
+        continue;
+      }
+
+      const document = {
+        ...fest,
+        id: festivalId,
+        genre: fest.genre ?? (Array.isArray(fest.genres) ? fest.genres.join(", ") : undefined),
+        lastUpdated: fest.lastUpdated ?? new Date().toISOString(),
+      };
+
+      await db.collection("festivals").doc(festivalId).set(document, { merge: true });
+      console.log(`Seeded ${festivalId} from ${filename}`);
+    } catch (error) {
+      console.error(`Failed to process ${filename}:`, error.message);
     }
-
-    await db.collection("festivals").doc(fest.id).set(fest, { merge: true });
-    console.log(`Seeded ${fest.name}`);
   }
 
   console.log("Seeding complete.");

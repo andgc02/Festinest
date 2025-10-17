@@ -18,6 +18,11 @@ export type Festival = {
   startDate: string;
   endDate: string;
   genre?: string;
+  genres?: string[];
+  status?: string;
+  website?: string;
+  ticketUrl?: string;
+  lastUpdated?: string;
   artistsCount?: number;
   lineup?: FestivalLineupEntry[];
   schedule?: FestivalScheduleEntry[];

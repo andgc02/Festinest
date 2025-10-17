@@ -1,0 +1,22 @@
+{
+    "id":  "coachella-2025",
+    "name":  "Coachella",
+    "location":  "Indio, CA",
+    "startDate":  "2025-04-11",
+    "endDate":  "2025-04-13",
+    "genres":  [
+                   "EDM",
+                   "Pop"
+               ],
+    "website":  "https://coachella.com",
+    "status":  "confirmed",
+    "lineup":  [
+
+               ],
+    "schedule":  [
+
+                 ],
+    "ticketUrl":  "https://coachella.com/tickets",
+    "lastUpdated": "2025-10-17T00:00:00.000Z"
+}
+

@@ -55,7 +55,7 @@ export function FestivalDetailScreen() {
     } else {
       setOpenSection(null);
     }
-  }, [lineupSections.length]);
+  }, [lineupSections]);
 
   if (loading) {
     return (
@@ -97,41 +97,33 @@ export function FestivalDetailScreen() {
     <View style={styles.root}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ gap: 24 }}>
-            <View style={{ gap: 16 }}>
-              <Text style={typographyRN.heading}>{festival.name}</Text>
-              <Text style={typographyRN.body}>
-                {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
-              </Text>
+          <View style={{ gap: 16 }}>
+            <Text style={typographyRN.heading}>{festival.name}</Text>
+            <Text style={typographyRN.body}>
+              {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
+            </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
-              {festival.artistsCount ? (
-                <FilterChip label={`${festival.artistsCount} artists`} />
-              ) : null}
-              {/* priceRange not present in type; omit for now */}
+              {festival.artistsCount ? <FilterChip label={`${festival.artistsCount} artists`} /> : null}
             </View>
-            <Button onPress={handleSave} style={{ width: '100%' }}>
-              Add to My Festivals
+            <Button onPress={handleSaveToggle} style={{ width: '100%' }} disabled={savedLoading}>
+              {saved ? 'Remove from My Festivals' : 'Add to My Festivals'}
             </Button>
           </View>
 
           {/* description not present in type; omit for now */}
 
-          {lineupEntries.length ? (
+          {lineupSections.length ? (
             <View style={{ gap: 16 }}>
               <Text style={typographyRN.subheading}>Lineup</Text>
-              <View style={{ gap: 8, borderRadius: 16, backgroundColor: '#FFFFFF', padding: 16 }}>
-                {lineupEntries.map((entry) => (
-                  <View
-                    key={`${entry.artist}-${entry.stage ?? 'stage'}`}
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0', paddingHorizontal: 12, paddingVertical: 8 }}>
-                    <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, fontWeight: '600', color: '#1A202C' }}>{entry.artist}</Text>
-                      <Text style={{ fontSize: 12, color: '#64748B' }}>
-                        {entry.time ?? 'Time TBA'}
-                        {entry.stage ? ` \u2022 ${entry.stage}` : ''}
-                      </Text>
-                    </View>
-                  </View>
+              <View style={{ borderRadius: 16, backgroundColor: '#FFFFFF', padding: 8 }}>
+                {lineupSections.map((section) => (
+                  <LineupAccordionSection
+                    key={section.key}
+                    section={section}
+                    expanded={openSection === section.key}
+                    onToggle={() => setOpenSection((prev) => (prev === section.key ? null : section.key))}
+                  />
                 ))}
               </View>
             </View>
@@ -151,12 +143,7 @@ export function FestivalDetailScreen() {
         </View>
       </ScrollView>
 
-      <Toast
-        visible={toastVisible}
-        message={`${festival.name} added to your saved festivals.`}
-        type="success"
-        onHide={() => setToastVisible(false)}
-      />
+      <Toast visible={toastVisible} message={toastMessage} type="success" onHide={() => setToastVisible(false)} />
 
       <Modal
         visible={groupModalVisible}
@@ -179,6 +166,95 @@ export function FestivalDetailScreen() {
           <Text style={typographyRN.body}>Coming soon: chat previews, votes, and shared schedules.</Text>
         </View>
       </Modal>
+    </View>
+  );
+}
+
+type LineupSection = {
+  key: string;
+  title: string;
+  entries: FestivalLineupEntry[];
+};
+
+function groupLineup(entries: FestivalLineupEntry[]): LineupSection[] {
+  if (!entries.length) {
+    return [];
+  }
+
+  const map = new Map<string, FestivalLineupEntry[]>();
+  entries.forEach((entry) => {
+    const raw = (entry.stage ?? 'Stage TBA').trim();
+    const key = raw.length ? raw : 'Stage TBA';
+    const list = map.get(key) ?? [];
+    list.push(entry);
+    map.set(key, list);
+  });
+
+  return Array.from(map.entries()).map(([title, grouped]) => ({
+    key: title,
+    title,
+    entries: grouped,
+  }));
+}
+
+type LineupAccordionSectionProps = {
+  section: LineupSection;
+  expanded: boolean;
+  onToggle: () => void;
+};
+
+function LineupAccordionSection({ section, expanded, onToggle }: LineupAccordionSectionProps) {
+  return (
+    <View style={{ marginBottom: 8 }}>
+      <Pressable
+        accessibilityRole="button"
+        onPress={onToggle}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: expanded ? '#EEF2FF' : '#FFFFFF',
+          borderRadius: 12,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderWidth: 1,
+          borderColor: expanded ? '#C7D2FE' : '#E2E8F0',
+        }}>
+        <View>
+          <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text }}>{section.title}</Text>
+          <Text style={{ fontSize: 12, color: '#475569' }}>{`${section.entries.length} set${section.entries.length !== 1 ? 's' : ''}`}</Text>
+        </View>
+        <Ionicons name={expanded ? 'chevron-up' : 'chevron-down'} size={18} color="#475569" />
+      </Pressable>
+      {expanded ? (
+        <View
+          style={{
+            gap: 8,
+            paddingHorizontal: 16,
+            paddingBottom: 16,
+            paddingTop: 12,
+            backgroundColor: '#FFFFFF',
+            borderBottomLeftRadius: 12,
+            borderBottomRightRadius: 12,
+            borderWidth: 1,
+            borderTopWidth: 0,
+            borderColor: '#E2E8F0',
+          }}>
+          {section.entries.map((entry) => (
+            <View
+              key={`${entry.artist}-${entry.time ?? 'time'}`}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text }}>{entry.artist}</Text>
+                <Text style={{ fontSize: 12, color: '#475569' }}>
+                  {entry.time ?? 'Time TBA'}
+                  {entry.stage ? ` \u2022 ${entry.stage}` : ''}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : null}
     </View>
   );
 }

@@ -21,15 +21,16 @@ Status legend:
 - `[DONE]` Week 1 UI polish: FilterChip, Tabs, Modal, Toast, typography utilities
 - `[DONE]` Festival list, detail, and schedule builder placeholders wired to seed data
 - `[DONE]` Light theme polish with entrance animations (Festival list, Group, Schedule, chips)
+- `[DONE]` Saved festivals persistence (AsyncStorage provider) and detail CTA toggle
 - `[DONE]` Settings screen logout flow and docs directory setup
 
 ## In Flight (Week 2 Focus)
-- `[ACTIVE]` Festival detail lineup accordion and saved festivals CTA wiring
+- `[DONE]` Festival detail lineup accordion and saved festivals CTA wiring
 - `[ACTIVE]` Schedule builder day tabs plus conflict detection research
 - `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
 - `[DONE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
 - `[NEXT]` Avatar and AvatarGroup components for profile and group views
-- `[NEXT]` Saved festivals state management shared across tabs
+- `[DONE]` Saved festivals state management shared across tabs
 
 ## Roadmap by Theme
 
@@ -37,7 +38,7 @@ Status legend:
 | Screen | Status | Next Actions | Notes |
 | --- | --- | --- | --- |
 | Festival List | `[ACTIVE]` | Debounce search, extend filter logic, add loading skeletons | Entrance animation + light theme pass done |
-| Festival Detail | `[ACTIVE]` | Save CTA to Firestore favorites, lineup accordion polish | Add travel tips block |
+| Festival Detail | `[ACTIVE]` | Persist saved festivals to Firestore, add travel tips block | Local persistence + accordion shipped |
 | Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
 | Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | UI polished with animated rows + light surfaces |
 | Settings | `[NEXT]` | Profile edit, preferences, saved festivals list | Prepare for premium toggle |
@@ -64,6 +65,7 @@ Status legend:
 
 ### Data and Seeding
 - `[DONE]` Curated `data/festivals.json` and seeding script
+- `[DONE]` Split festival JSON into per-festival files (`data/festivals/*`) and directory-driven seeder
 - `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed production collections and add validation checklist
 - `[NEXT]` Monthly update SOP (staging collection, review, promote)
