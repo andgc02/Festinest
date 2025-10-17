@@ -5,11 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/styles/colors';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/providers/AuthProvider';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   const pathname = usePathname();
   const { user, initializing } = useAuth();
 
@@ -43,6 +41,13 @@ export default function TabLayout() {
           options={{
             title: 'Festivals',
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="sparkles" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="artists/index"
+          options={{
+            title: 'Artists',
+            tabBarIcon: ({ color }) => <IconSymbol size={28} name="music.mic" color={color} />,
           }}
         />
         <Tabs.Screen

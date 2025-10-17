@@ -3,18 +3,14 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SystemUI from 'expo-system-ui';
 import { useEffect } from 'react';
-import { Platform } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { Colors } from '@/styles/colors';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { SavedFestivalsProvider } from '@/providers/SavedFestivalsProvider';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(Colors.background);
     // Navigation bar styling requires a dev build when edge-to-edge is enabled in Expo Go.

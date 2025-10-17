@@ -1,7 +1,5 @@
 import { ActivityIndicator, Animated, Pressable, PressableProps, StyleSheet, Text } from 'react-native';
-import { useRef } from 'react';
-import { ReactNode } from 'react';
-
+import { ReactNode, useRef } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline';
 type ButtonSize = 'md' | 'lg';
