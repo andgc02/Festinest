@@ -15,10 +15,10 @@ type ToastProps = {
 };
 
 const typeStyles = StyleSheet.create({
-  info: { backgroundColor: 'rgba(2,6,23,0.95)', borderWidth: 1, borderColor: 'rgba(51,65,85,0.60)' },
-  success: { backgroundColor: 'rgba(16,185,129,0.90)', borderWidth: 1, borderColor: 'rgba(52,211,153,0.60)' },
-  warning: { backgroundColor: 'rgba(245,158,11,0.90)', borderWidth: 1, borderColor: 'rgba(251,191,36,0.60)' },
-  error: { backgroundColor: 'rgba(239,68,68,0.90)', borderWidth: 1, borderColor: 'rgba(248,113,113,0.60)' },
+  info: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0' },
+  success: { backgroundColor: 'rgba(16,185,129,0.10)', borderWidth: 1, borderColor: 'rgba(16,185,129,0.30)' },
+  warning: { backgroundColor: 'rgba(245,158,11,0.10)', borderWidth: 1, borderColor: 'rgba(245,158,11,0.30)' },
+  error: { backgroundColor: 'rgba(239,68,68,0.10)', borderWidth: 1, borderColor: 'rgba(239,68,68,0.30)' },
 });
 
 export function Toast({
@@ -74,7 +74,7 @@ export function Toast({
       <Animated.View
         style={[{ opacity }, styles.container, typeStyles[type]]}>
         {title ? <Text style={styles.title}>{title}</Text> : null}
-        <Text style={[styles.message, type !== 'info' && styles.messageOnColored]}>{message}</Text>
+        <Text style={[styles.message, type !== 'info' && styles.message]}>{message}</Text>
       </Animated.View>
     </View>
   );
@@ -101,7 +101,6 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     shadowOffset: { width: 0, height: 6 },
   },
-  title: { fontSize: 14, fontWeight: '600', color: '#F8FAFC' },
-  message: { fontSize: 14, color: '#E2E8F0' },
-  messageOnColored: { color: '#FFFFFF' },
+  title: { fontSize: 14, fontWeight: '600', color: '#1A202C' },
+  message: { fontSize: 14, color: '#1A202C' },
 });

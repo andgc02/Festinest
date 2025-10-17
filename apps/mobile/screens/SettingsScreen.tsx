@@ -35,7 +35,7 @@ export function SettingsScreen() {
       <View style={styles.list}>
         {['Notifications', 'Saved Festivals', 'Invite Friends'].map((item, index, array) => (
           <TouchableOpacity key={item} style={[styles.listItem, index !== array.length - 1 && styles.listDivider]}>
-            <Text style={{ fontSize: 16, color: '#F1F5F9' }}>{item}</Text>
+            <Text style={{ fontSize: 16, color: '#1A202C' }}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>

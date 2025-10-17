@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 
-import { cn } from '@/lib/utils';
 
 export type InputProps = TextInputProps & {
   label?: string;
@@ -11,10 +10,10 @@ export type InputProps = TextInputProps & {
 };
 
 export const Input = forwardRef<TextInput, InputProps>(
-  ({ label, error, hint, className, placeholderTextColor = '#94a3b8', ...props }, ref) => {
+  ({ label, error, hint, className, placeholderTextColor = '#94A3B8', ...props }, ref) => {
     return (
       <View style={{ gap: 8 }}>
-        {label ? <Text style={{ fontSize: 14, fontWeight: '600', color: '#E2E8F0' }}>{label}</Text> : null}
+        {label ? <Text style={{ fontSize: 14, fontWeight: '600', color: '#334155' }}>{label}</Text> : null}
         <TextInput
           ref={ref}
           placeholderTextColor={placeholderTextColor}
@@ -38,10 +37,10 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#1f2937', // slate-800
-    backgroundColor: 'rgba(15,23,42,0.80)', // slate-900/80
+    borderColor: '#E2E8F0',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
     fontSize: 16,
-    color: '#F1F5F9', // slate-100
+    color: '#1A202C',
   },
 });

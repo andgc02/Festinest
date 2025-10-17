@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
     padding: 16,
-    backgroundColor: 'rgba(15,23,42,0.70)',
-    shadowColor: '#0f172a',
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 4,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
 });

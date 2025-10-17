@@ -1,4 +1,5 @@
-import { ActivityIndicator, Pressable, PressableProps, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Animated, Pressable, PressableProps, StyleSheet, Text } from 'react-native';
+import { useRef } from 'react';
 import { ReactNode } from 'react';
 
 
@@ -26,8 +27,13 @@ export function Button({
   textClassName,
   ...props
 }: ButtonProps) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const animateTo = (toValue: number) =>
+    Animated.spring(scale, { toValue, useNativeDriver: true, speed: 20, bounciness: 6 }).start();
+
   return (
-    <Pressable
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable
       accessibilityRole="button"
       disabled={disabled || loading}
       style={[
@@ -39,9 +45,11 @@ export function Button({
         (disabled || loading) && styles.disabled,
         props.style as any,
       ]}
+      onPressIn={() => animateTo(0.98)}
+      onPressOut={() => animateTo(1)}
       {...props}>
       {loading ? (
-        <ActivityIndicator color={variant === 'secondary' ? '#38B2AC' : '#F8FAFC'} />
+        <ActivityIndicator color="#5A67D8" />
       ) : (
         <Text
           style={[
@@ -53,7 +61,8 @@ export function Button({
           {children}
         </Text>
       )}
-    </Pressable>
+      </Pressable>
+    </Animated.View>
   );
 }
 
@@ -66,12 +75,12 @@ const styles = StyleSheet.create({
   },
   sizeMd: { height: 48, paddingHorizontal: 20 },
   sizeLg: { height: 56, paddingHorizontal: 24 },
-  primary: { backgroundColor: '#5A67D8' },
-  secondary: { backgroundColor: 'rgba(56,178,172,0.20)', borderWidth: 1, borderColor: 'rgba(56,178,172,0.60)' },
-  outline: { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#475569' },
+  primary: { backgroundColor: '#E2E8F0', borderWidth: 1, borderColor: '#CBD5E1' },
+  secondary: { backgroundColor: '#FFFFFF', borderWidth: 1, borderColor: '#E2E8F0' },
+  outline: { backgroundColor: 'transparent', borderWidth: 1, borderColor: '#CBD5E1' },
   disabled: { opacity: 0.6 },
   text: { fontSize: 16, fontWeight: '600' },
-  textOnPrimary: { color: '#F8FAFC' },
-  textOnSecondary: { color: '#38B2AC' },
-  textOnOutline: { color: '#F1F5F9' },
+  textOnPrimary: { color: '#1A202C' },
+  textOnSecondary: { color: '#1A202C' },
+  textOnOutline: { color: '#1A202C' },
 });

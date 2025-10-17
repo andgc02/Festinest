@@ -60,10 +60,10 @@ export function GroupScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
           renderItem={({ item }) => (
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', paddingHorizontal: 16, paddingVertical: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 16, backgroundColor: Colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
               <View>
-                <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{item.artist}</Text>
-                <Text style={{ fontSize: 12, color: '#94A3B8' }}>
+                <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
+                <Text style={{ fontSize: 12, color: '#64748B' }}>
                   {item.time} {'\u2022'} {item.stage}
                 </Text>
               </View>
@@ -76,8 +76,8 @@ export function GroupScreen() {
       ) : (
         <View style={{ flex: 1, gap: 12, paddingVertical: 24 }}>
           {MOCK_GROUP.chat.map((message) => (
-            <View key={message.id} style={{ gap: 4, borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', padding: 16 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600', color: '#F1F5F9' }}>
+            <View key={message.id} style={{ gap: 4, borderRadius: 16, backgroundColor: Colors.surface, padding: 16 }}>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
                 {message.author}{' '}
                 <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#64748B' }}>
                   {message.timestamp}

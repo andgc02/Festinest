@@ -9,10 +9,10 @@ type SearchBarProps = TextInputProps & {
 };
 
 export const SearchBar = forwardRef<TextInput, SearchBarProps>(
-  ({ className, inputClassName, placeholderTextColor = '#94a3b8', ...props }, ref) => {
+  ({ className, inputClassName, placeholderTextColor = '#94A3B8', ...props }, ref) => {
     return (
       <View style={styles.container}>
-        <Ionicons name="search" size={20} color="#94a3b8" />
+        <Ionicons name="search" size={20} color="#64748B" />
         <TextInput
           ref={ref}
           placeholderTextColor={placeholderTextColor}
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#1f2937',
-    backgroundColor: 'rgba(15,23,42,0.80)',
+    borderColor: '#E2E8F0',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 16,
   },
   input: {
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#F1F5F9',
+    color: '#1A202C',
   },
 });

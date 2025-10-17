@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, Animated, Easing, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -17,12 +17,21 @@ export function LoginScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { signIn, signUp, user, initializing } = useAuth();
+  const cardOpacity = useRef(new Animated.Value(0)).current;
+  const cardTranslate = useRef(new Animated.Value(8)).current;
 
   useEffect(() => {
     if (!initializing && user) {
       router.replace('/(tabs)/festivals');
     }
   }, [initializing, router, user]);
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(cardOpacity, { toValue: 1, duration: 260, useNativeDriver: true, easing: Easing.out(Easing.ease) }),
+      Animated.timing(cardTranslate, { toValue: 0, duration: 260, useNativeDriver: true, easing: Easing.out(Easing.ease) }),
+    ]).start();
+  }, [cardOpacity, cardTranslate]);
 
   const handleLogin = async () => {
     setIsSubmitting(true);
@@ -63,7 +72,7 @@ export function LoginScreen() {
   return (
     <View style={styles.root}>
       <Text style={typographyRN.display}>Festinest</Text>
-      <View style={styles.card}>
+      <Animated.View style={[styles.card, { opacity: cardOpacity, transform: [{ translateY: cardTranslate }] }]}>
         <View style={{ gap: 16 }}>
           <Input
             label="Email"
@@ -82,7 +91,12 @@ export function LoginScreen() {
             placeholder={'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'}
           />
         </View>
-        <Button variant="primary" loading={isSubmitting} disabled={disabled} onPress={handleLogin} style={{ width: '100%' }}>
+        <Button
+          variant="primary"
+          loading={isSubmitting}
+          disabled={disabled}
+          onPress={handleLogin}
+          style={{ width: '100%' }}>
           Login
         </Button>
         <View style={{ gap: 12 }}>
@@ -98,7 +112,7 @@ export function LoginScreen() {
             </TouchableOpacity>
           ) : null}
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 }

@@ -94,8 +94,8 @@ export function FestivalListScreen() {
             <Ionicons name="ticket-outline" size={22} color="#5A67D8" />
           </View>
           <View style={{ flex: 1, gap: 4 }}>
-            <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>{item.name}</Text>
-            <Text style={{ fontSize: 14, color: '#CBD5E1' }}>{`${item.location} \u2022 ${dates}`}</Text>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{item.name}</Text>
+            <Text style={{ fontSize: 14, color: '#475569' }}>{`${item.location} \u2022 ${dates}`}</Text>
             <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: 'rgba(90,103,216,0.8)' }}>
               {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
             </Text>
@@ -135,8 +135,8 @@ export function FestivalListScreen() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#5A67D8" />}
           ListEmptyComponent={
             <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>No festivals found</Text>
-              <Text style={{ fontSize: 16, color: '#CBD5E1', textAlign: 'center' }}>
+              <Text style={{ fontSize: 18, fontWeight: '600', color: '#1A202C' }}>No festivals found</Text>
+              <Text style={{ fontSize: 16, color: '#475569', textAlign: 'center' }}>
                 Try adjusting your filters or check back later.
               </Text>
             </View>

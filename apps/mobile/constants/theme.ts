@@ -1,8 +1,8 @@
 import { Platform, StyleSheet, TextStyle } from 'react-native';
 
 /**
- * Central design tokens that align with tailwind.config.js.
- * Keep these in sync when adding new primitives so screens and components share a single source of truth.
+ * Legacy tokens plus runtime color palette.
+ * Note: NativeWind/Tailwind has been removed; prefer StyleSheet tokens in `apps/mobile/styles/*`.
  */
 export const palette = {
   primary: '#5A67D8',
@@ -36,13 +36,13 @@ export const typography = {
  * Prefer these over class strings on Text.
  */
 export const typographyRN: Record<keyof typeof typography, TextStyle> = StyleSheet.create({
-  display: { fontSize: 24, fontWeight: '600', color: '#F8FAFC' },
-  heading: { fontSize: 22, fontWeight: '600', color: '#F8FAFC' },
-  subheading: { fontSize: 18, fontWeight: '600', color: '#F1F5F9' },
-  body: { fontSize: 16, color: '#CBD5E1' },
-  bodyStrong: { fontSize: 16, color: '#F1F5F9', fontWeight: '600' },
-  caption: { fontSize: 12, color: '#94A3B8' },
-  overline: { fontSize: 11, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1.8 },
+  display: { fontSize: 24, fontWeight: '600', color: '#1A202C' },
+  heading: { fontSize: 22, fontWeight: '600', color: '#1A202C' },
+  subheading: { fontSize: 18, fontWeight: '600', color: '#334155' },
+  body: { fontSize: 16, color: '#334155' },
+  bodyStrong: { fontSize: 16, color: '#1A202C', fontWeight: '600' },
+  caption: { fontSize: 12, color: '#64748B' },
+  overline: { fontSize: 11, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1.2 },
 });
 
 export const components = {

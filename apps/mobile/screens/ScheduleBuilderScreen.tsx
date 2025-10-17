@@ -124,13 +124,13 @@ export function ScheduleBuilderScreen() {
               borderWidth: 1,
               paddingHorizontal: 16,
               paddingVertical: 12,
-              borderColor: item.selected ? 'rgba(90,103,216,0.60)' : 'rgba(30,41,59,0.60)',
-              backgroundColor: item.selected ? 'rgba(90,103,216,0.10)' : 'rgba(15,23,42,0.70)',
+              borderColor: item.selected ? 'rgba(90,103,216,0.60)' : '#E2E8F0',
+              backgroundColor: item.selected ? 'rgba(90,103,216,0.10)' : Colors.surface,
             }}>
             <View>
               <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#94A3B8' }}>{item.day}</Text>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{item.artist}</Text>
-              <Text style={{ fontSize: 12, color: '#94A3B8' }}>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
+              <Text style={{ fontSize: 12, color: '#64748B' }}>
                 {`${item.time} at ${item.stage}`}
               </Text>
             </View>
@@ -144,7 +144,7 @@ export function ScheduleBuilderScreen() {
         )}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
-            <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>Nothing scheduled yet</Text>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: '#1A202C' }}>Nothing scheduled yet</Text>
             <Text style={typographyRN.body}>Come back once the festival releases the set times.</Text>
           </View>
         }

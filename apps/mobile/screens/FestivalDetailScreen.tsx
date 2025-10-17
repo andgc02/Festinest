@@ -75,11 +75,11 @@ export function FestivalDetailScreen() {
     <View style={styles.root}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ gap: 24 }}>
-          <View style={{ gap: 16 }}>
-            <Text style={typographyRN.heading}>{festival.name}</Text>
-            <Text style={typographyRN.body}>
-              {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
-            </Text>
+            <View style={{ gap: 16 }}>
+              <Text style={typographyRN.heading}>{festival.name}</Text>
+              <Text style={typographyRN.body}>
+                {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
+              </Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
               {festival.artistsCount ? (
@@ -97,14 +97,14 @@ export function FestivalDetailScreen() {
           {lineupEntries.length ? (
             <View style={{ gap: 16 }}>
               <Text style={typographyRN.subheading}>Lineup</Text>
-              <View style={{ gap: 8, borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', padding: 16 }}>
+              <View style={{ gap: 8, borderRadius: 16, backgroundColor: '#FFFFFF', padding: 16 }}>
                 {lineupEntries.map((entry) => (
                   <View
                     key={`${entry.artist}-${entry.stage ?? 'stage'}`}
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(30,41,59,0.60)', paddingHorizontal: 12, paddingVertical: 8 }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, borderWidth: 1, borderColor: '#E2E8F0', paddingHorizontal: 12, paddingVertical: 8 }}>
                     <View style={{ flex: 1 }}>
-                      <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{entry.artist}</Text>
-                      <Text style={{ fontSize: 12, color: '#94A3B8' }}>
+                      <Text style={{ fontSize: 16, fontWeight: '600', color: '#1A202C' }}>{entry.artist}</Text>
+                      <Text style={{ fontSize: 12, color: '#64748B' }}>
                         {entry.time ?? 'Time TBA'}
                         {entry.stage ? ` \u2022 ${entry.stage}` : ''}
                       </Text>
