@@ -25,6 +25,15 @@ Status legend (use one marker per task):
 - `[NEXT]` Settings screen saved festivals list and genre preferences form
 - `[NEXT]` Optimistic loading states and skeletons for list and detail views
 
+## Week 2.5 - Expo Go Internal Demo
+- `[NEXT]` Prep Expo Go share build (documentation + QA checklist)
+- `[NEXT]` Harden festival list search & filters for demo
+- `[NEXT]` Add minimal profile read/edit view for demo
+- `[NEXT]` Ensure schedule builder read-only preview works end-to-end
+- `[NEXT]` QA navigation + theming consistency (tabs, status bar)
+- `[LATER]` (Post-demo) layer in Firestore persistence for saved festivals
+- `[-]` Exclude group chat/social features from demo scope
+
 ## Week 3 - Social Features
 - `[NEXT]` Firestore group schema (members, votes, chat preview)
 - `[NEXT]` Real-time schedule voting integration
