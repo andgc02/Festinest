@@ -10,7 +10,9 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { fetchFestivalById } from '@/services/festivals';
 import { Festival, FestivalLineupEntry } from '@/types/festival';
+import { Artist } from '@/types/artist';
 import { useSavedFestivals } from '@/providers/SavedFestivalsProvider';
+import { useArtistsCatalog } from '@/hooks/useArtistsCatalog';
 
 export function FestivalDetailScreen() {
   const { festivalId } = useLocalSearchParams<{ festivalId?: string }>();
@@ -22,6 +24,7 @@ export function FestivalDetailScreen() {
   const [toastMessage, setToastMessage] = useState('');
   const [groupModalVisible, setGroupModalVisible] = useState(false);
   const { isSaved, toggle, loading: savedLoading } = useSavedFestivals();
+  const { byId: artistsById } = useArtistsCatalog();
 
   useEffect(() => {
     if (!festivalId) {
@@ -131,6 +134,7 @@ export function FestivalDetailScreen() {
                     section={section}
                     expanded={openSection === section.key}
                     onToggle={() => setOpenSection((prev) => (prev === section.key ? null : section.key))}
+                    artistsById={artistsById}
                   />
                 ))}
               </View>
@@ -209,9 +213,10 @@ type LineupAccordionSectionProps = {
   section: LineupSection;
   expanded: boolean;
   onToggle: () => void;
+  artistsById: Map<string, Artist>;
 };
 
-function LineupAccordionSection({ section, expanded, onToggle }: LineupAccordionSectionProps) {
+function LineupAccordionSection({ section, expanded, onToggle, artistsById }: LineupAccordionSectionProps) {
   return (
     <View style={{ marginBottom: 8 }}>
       <Pressable
@@ -248,23 +253,44 @@ function LineupAccordionSection({ section, expanded, onToggle }: LineupAccordion
             borderTopWidth: 0,
             borderColor: '#E2E8F0',
           }}>
-          {section.entries.map((entry) => (
-            <View
-              key={`${entry.artist}-${entry.time ?? 'time'}`}
-              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text }}>{entry.artist}</Text>
-                <Text style={{ fontSize: 12, color: '#475569' }}>
-                  {entry.time ?? 'Time TBA'}
-                  {entry.stage ? ` \u2022 ${entry.stage}` : ''}
-                </Text>
+          {section.entries.map((entry, index) => {
+            const name = getLineupArtistName(entry, artistsById);
+            return (
+              <View
+                key={`${entry.artistId ?? entry.artist ?? index}-${entry.time ?? 'time'}-${index}`}
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text }}>{name}</Text>
+                  <Text style={{ fontSize: 12, color: '#475569' }}>
+                    {entry.day ? `${entry.day} \u2022 ` : ''}
+                    {entry.time ?? 'Time TBA'}
+                    {entry.stage ? ` \u2022 ${entry.stage}` : ''}
+                  </Text>
+                </View>
               </View>
-            </View>
-          ))}
+            );
+          })}
         </View>
       ) : null}
     </View>
   );
+}
+
+function getLineupArtistName(entry: FestivalLineupEntry, artistsById: Map<string, Artist>) {
+  if (entry.artistName) {
+    return entry.artistName;
+  }
+
+  if (entry.artist) {
+    return entry.artist;
+  }
+
+  if (entry.artistId) {
+    const artist = artistsById.get(entry.artistId);
+    return artist?.name ?? entry.artistId;
+  }
+
+  return 'Artist TBA';
 }
 
 function formatDateRange(startDate: string, endDate: string) {

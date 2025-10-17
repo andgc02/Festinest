@@ -53,8 +53,10 @@ Status legend (use one marker per task):
 - `[DONE]` Curated `data/festivals.json`
 - `[DONE]` `tools/seedFestivals.js` Firestore seeder
 - `[DONE]` Restructure festival data into `data/festivals/*.json` and directory-driven seeding
+- `[DONE]` Split artists into `data/artists` directory and seed dedicated collection
 - `[NEXT]` Supply service account path or JSON via env (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed `festivals` collection and run validation spot checks
+- `[NEXT]` Add seeder validation for missing `artistId` references and batched writes
 - `[NEXT]` Monthly update workflow and staging collection documentation
 - `[NEXT]` Expand source list (MusicFestivalWizard, Festival Survival Guide, JamBase, EDMTrain) with attribution notes
 - `[BLOCKED]` Automated seeding via GitHub workflow (secrets management decision)
@@ -70,6 +72,7 @@ Status legend (use one marker per task):
 ## Documentation and Enablement
 - `[DONE]` Roadmap refreshed with full status breakdown
 - `[DONE]` README covers seeding instructions and local env
+- `[DONE]` Data model doc outlining artists/festivals schema
 - `[NEXT]` Clean mojibake in legacy diagrams (Festival card, schedule row)
 - `[NEXT]` Add Figma links and export references in layout section
 - `[DONE]` Document StyleSheet design system (colors, typography, spacing)

@@ -7,8 +7,13 @@
   "genres": ["EDM", "Jam", "Psychedelic"],
   "website": "https://electricforest.com",
   "status": "confirmed",
-  "lineup": [],
-  "schedule": [],
+  "lineup": [
+    { "artistId": "fred-again", "artistName": "Fred again..", "stage": "Ranch Arena", "day": "Thursday", "time": "22:30" },
+    { "artistId": "lana-del-rey", "artistName": "Lana Del Rey", "stage": "Sherwood Court", "day": "Friday", "time": "21:00" }
+  ],
+  "schedule": [
+    { "day": "Thursday", "stage": "Ranch Arena", "time": "22:30", "artistId": "fred-again", "artistName": "Fred again.." },
+    { "day": "Friday", "stage": "Sherwood Court", "time": "21:00", "artistId": "lana-del-rey", "artistName": "Lana Del Rey" }
+  ],
   "lastUpdated": "2025-10-17T00:00:00.000Z"
 }
-

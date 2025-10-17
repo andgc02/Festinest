@@ -31,25 +31,34 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
-const dataDir = path.resolve(__dirname, "../data/festivals");
+const festivalsDir = path.resolve(__dirname, "../data/festivals");
+const artistsDir = path.resolve(__dirname, "../data/artists");
 
-if (!fs.existsSync(dataDir)) {
-  console.error(`Cannot find data directory at ${dataDir}`);
-  process.exit(1);
+function readJsonFiles(directory) {
+  if (!fs.existsSync(directory)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(directory)
+    .filter((filename) => filename.toLowerCase().endsWith(".json"))
+    .sort()
+    .map((filename) => ({ filename, filePath: path.join(directory, filename) }));
 }
 
-const festivalFiles = fs
-  .readdirSync(dataDir)
-  .filter((filename) => filename.toLowerCase().endsWith(".json"))
-  .sort();
+const festivalFiles = readJsonFiles(festivalsDir);
+const artistFiles = readJsonFiles(artistsDir);
 
 if (!festivalFiles.length) {
-  console.warn(`No festival json files found in ${dataDir}`);
+  console.warn(`No festival json files found in ${festivalsDir}`);
+}
+
+if (!artistFiles.length) {
+  console.warn(`No artist json files found in ${artistsDir}`);
 }
 
 async function seedFestivals() {
-  for (const filename of festivalFiles) {
-    const filePath = path.join(dataDir, filename);
+  for (const { filename, filePath } of festivalFiles) {
 
     try {
       const raw = fs.readFileSync(filePath, "utf-8");
@@ -75,12 +84,43 @@ async function seedFestivals() {
       console.error(`Failed to process ${filename}:`, error.message);
     }
   }
+}
 
+async function seedArtists() {
+  for (const { filename, filePath } of artistFiles) {
+    try {
+      const raw = fs.readFileSync(filePath, "utf-8");
+      const artist = JSON.parse(raw);
+
+      const artistId = artist.id ?? path.basename(filename, path.extname(filename));
+
+      if (!artistId) {
+        console.warn(`Skipping ${filename} because it is missing an id.`);
+        continue;
+      }
+
+      const document = {
+        ...artist,
+        id: artistId,
+        updatedAt: artist.updatedAt ?? new Date().toISOString(),
+      };
+
+      await db.collection("artists").doc(artistId).set(document, { merge: true });
+      console.log(`Seeded artist ${artistId} from ${filename}`);
+    } catch (error) {
+      console.error(`Failed to process artist file ${filename}:`, error.message);
+    }
+  }
+}
+
+async function run() {
+  await seedArtists();
+  await seedFestivals();
   console.log("Seeding complete.");
   process.exit(0);
 }
 
-seedFestivals().catch((error) => {
-  console.error("Failed to seed festivals:", error);
+run().catch((error) => {
+  console.error("Failed to seed data:", error);
   process.exit(1);
 });

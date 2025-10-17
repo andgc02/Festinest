@@ -1,0 +1,11 @@
+{
+  "id": "lana-del-rey",
+  "name": "Lana Del Rey",
+  "genres": ["Indie", "Pop"],
+  "photoUrl": "https://example.com/images/lana-del-rey.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/00FQb4jTyendYWaN8pK0wa",
+    "instagram": "https://www.instagram.com/honeymoon/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

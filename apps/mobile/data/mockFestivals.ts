@@ -10,14 +10,14 @@ export const mockFestivals: Festival[] = [
     genre: 'EDM, Pop, Indie',
     artistsCount: 180,
     lineup: [
-      { artist: 'Billie Eilish', stage: 'Coachella Stage', time: '21:00' },
-      { artist: 'Fred again..', stage: 'Sahara Tent', time: '19:30' },
-      { artist: 'Tame Impala', stage: 'Outdoor Theatre', time: '20:15' },
+      { artistId: 'billie-eilish', artistName: 'Billie Eilish', stage: 'Coachella Stage', day: 'Friday', time: '21:00' },
+      { artistId: 'fred-again', artistName: 'Fred again..', stage: 'Sahara Tent', day: 'Friday', time: '19:30' },
+      { artistId: 'tame-impala', artistName: 'Tame Impala', stage: 'Outdoor Theatre', day: 'Sunday', time: '20:15' },
     ],
     schedule: [
-      { day: 'Friday', artist: 'Fred again..', time: '19:30', stage: 'Sahara Tent' },
-      { day: 'Saturday', artist: 'Billie Eilish', time: '21:00', stage: 'Coachella Stage' },
-      { day: 'Sunday', artist: 'Tame Impala', time: '20:15', stage: 'Outdoor Theatre' },
+      { day: 'Friday', time: '19:30', stage: 'Sahara Tent', artistId: 'fred-again', artistName: 'Fred again..' },
+      { day: 'Saturday', time: '21:00', stage: 'Coachella Stage', artistId: 'billie-eilish', artistName: 'Billie Eilish' },
+      { day: 'Sunday', time: '20:15', stage: 'Outdoor Theatre', artistId: 'tame-impala', artistName: 'Tame Impala' },
     ],
   },
   {
@@ -29,14 +29,15 @@ export const mockFestivals: Festival[] = [
     genre: 'Rock, Pop, Hip-Hop',
     artistsCount: 120,
     lineup: [
-      { artist: 'Kendrick Lamar', stage: 'Grant Park Stage', time: '21:30' },
-      { artist: 'Phoebe Bridgers', stage: 'Lake Shore Stage', time: '19:00' },
-      { artist: 'ODESZA', stage: 'Perry’s Stage', time: '22:15' },
+      { artistId: 'kendrick-lamar', artistName: 'Kendrick Lamar', stage: 'Grant Park Stage', day: 'Saturday', time: '21:30' },
+      { artistId: 'phoebe-bridgers', artistName: 'Phoebe Bridgers', stage: 'Lake Shore Stage', day: 'Friday', time: '19:00' },
+      { artistId: 'odesza', artistName: 'ODESZA', stage: "Perry's Stage", day: 'Sunday', time: '22:15' },
     ],
     schedule: [
-      { day: 'Friday', artist: 'Phoebe Bridgers', time: '19:00', stage: 'Lake Shore Stage' },
-      { day: 'Saturday', artist: 'Kendrick Lamar', time: '21:30', stage: 'Grant Park Stage' },
-      { day: 'Sunday', artist: 'ODESZA', time: '22:15', stage: 'Perry’s Stage' },
+      { day: 'Friday', time: '19:00', stage: 'Lake Shore Stage', artistId: 'phoebe-bridgers', artistName: 'Phoebe Bridgers' },
+      { day: 'Saturday', time: '21:30', stage: 'Grant Park Stage', artistId: 'kendrick-lamar', artistName: 'Kendrick Lamar' },
+      { day: 'Sunday', time: '22:15', stage: "Perry's Stage", artistId: 'odesza', artistName: 'ODESZA' },
     ],
   },
 ];
+

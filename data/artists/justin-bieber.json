@@ -1,0 +1,11 @@
+{
+  "id": "justin-bieber",
+  "name": "Justin Bieber",
+  "genres": ["Pop", "R&B"],
+  "photoUrl": "https://example.com/images/justin-bieber.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/1uNFoZAHBGtllmzznpCI3s",
+    "instagram": "https://www.instagram.com/justinbieber/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

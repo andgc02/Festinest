@@ -9,6 +9,8 @@ import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { fetchFestivalById } from '@/services/festivals';
 import { FestivalScheduleEntry } from '@/types/festival';
+import { useArtistsCatalog } from '@/hooks/useArtistsCatalog';
+import { Artist } from '@/types/artist';
 
 type ScheduleItem = FestivalScheduleEntry & {
   id: string;
@@ -22,6 +24,7 @@ export function ScheduleBuilderScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
+  const { byId: artistsById } = useArtistsCatalog();
 
   useEffect(() => {
     const loadSchedule = async () => {
@@ -40,11 +43,16 @@ export function ScheduleBuilderScreen() {
           return;
         }
 
-        const items: ScheduleItem[] = festival.schedule.map((entry, index) => ({
-          ...entry,
-          id: `${entry.day}-${entry.artist}-${index}`,
-          selected: true,
-        }));
+        const items: ScheduleItem[] = festival.schedule.map((entry, index) => {
+          const label = entry.artistName ?? entry.artist ?? entry.artistId ?? 'Artist TBA';
+          return {
+            ...entry,
+            id: `${entry.day}-${entry.artistId ?? entry.artist ?? index}-${index}`,
+            artistName: entry.artistName ?? entry.artist ?? entry.artistId,
+            artist: label,
+            selected: true,
+          };
+        });
 
         setSchedule(items);
         setSelectedDay(items[0]?.day ?? null);
@@ -116,7 +124,12 @@ export function ScheduleBuilderScreen() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
         renderItem={({ item, index }) => (
-          <ScheduleListItem item={item} index={index} toggleSelection={toggleSelection} />
+          <ScheduleListItem
+            item={item}
+            index={index}
+            toggleSelection={toggleSelection}
+            artistsById={artistsById}
+          />
         )}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
@@ -155,10 +168,12 @@ type ScheduleListItemProps = {
   item: ScheduleItem;
   index: number;
   toggleSelection: (id: string) => void;
+  artistsById: Map<string, Artist>;
 };
 
-function ScheduleListItem({ item, index, toggleSelection }: ScheduleListItemProps) {
+function ScheduleListItem({ item, index, toggleSelection, artistsById }: ScheduleListItemProps) {
   const animatedStyle = useFadeInUp({ delay: index * 70 });
+  const displayName = getScheduleArtistName(item, artistsById);
 
   return (
     <Animated.View
@@ -178,8 +193,11 @@ function ScheduleListItem({ item, index, toggleSelection }: ScheduleListItemProp
       ]}>
       <View>
         <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>{item.day}</Text>
-        <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
-        <Text style={{ fontSize: 12, color: '#475569' }}>{`${item.time} at ${item.stage}`}</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{displayName}</Text>
+        <Text style={{ fontSize: 12, color: '#475569' }}>
+          {item.time ?? 'Time TBA'}
+          {item.stage ? ` at ${item.stage}` : ''}
+        </Text>
       </View>
       <Button
         variant={item.selected ? 'secondary' : 'primary'}
@@ -189,6 +207,20 @@ function ScheduleListItem({ item, index, toggleSelection }: ScheduleListItemProp
       </Button>
     </Animated.View>
   );
+}
+
+function getScheduleArtistName(entry: ScheduleItem, artistsById: Map<string, Artist>) {
+  if (entry.artistName) {
+    return entry.artistName;
+  }
+  if (entry.artist) {
+    return entry.artist;
+  }
+  if (entry.artistId) {
+    const artist = artistsById.get(entry.artistId);
+    return artist?.name ?? entry.artistId;
+  }
+  return 'Artist TBA';
 }
 
 

@@ -84,13 +84,16 @@ Join our community of developers creating universal apps.
 - Design system (StyleSheet): `../docs/design-system.md`
 - Roadmap: `../docs/roadmap.md`
 - TODOs: `../docs/todo.md`
+- Data model & Firestore schema: `../docs/data-model.md`
 
 ## Festival data & seeding
 
-- Each festival lives in its own JSON file under `../data/festivals/*.json`. This keeps diffs small and makes it easy to track changes per event.
+- Festival JSON lives under `../data/festivals/*.json`; artist profiles live under `../data/artists/*.json`.
 - To seed Firestore locally run from the repo root:
   ```bash
   npm run seed:festivals
   ```
-  The script will load every JSON file in the directory and upsert it by `id`.
+  The script loads artists first, then festivals, and upserts each document by `id`.
 - Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields—everything is merged when seeding.
+- After seeding, spot-check Firestore to ensure every `festival.lineup[].artistId` has a matching artist document.
+

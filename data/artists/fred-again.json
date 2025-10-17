@@ -1,0 +1,11 @@
+{
+  "id": "fred-again",
+  "name": "Fred again..",
+  "genres": ["EDM", "House"],
+  "photoUrl": "https://example.com/images/fred-again.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/2v8YragSIcFYOnWfb9WN2j",
+    "instagram": "https://www.instagram.com/fredagainagainagainagainagain/"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

@@ -67,8 +67,10 @@ Status legend:
 ### Data and Seeding
 - `[DONE]` Curated `data/festivals.json` and seeding script
 - `[DONE]` Split festival JSON into per-festival files (`data/festivals/*`) and directory-driven seeder
+- `[DONE]` Stand up `artists` collection (`data/artists/*`) and reference `lineup[].artistId`
 - `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed production collections and add validation checklist
+- `[NEXT]` Seeder validation for missing artist references + batched writes
 - `[NEXT]` Monthly update SOP (staging collection, review, promote)
 - `[BLOCKED]` Automated seeding pipeline (GitHub workflow pending secrets plan)
 - `[LATER]` Additional datasets (artists, vendors, travel guides)
@@ -141,7 +143,7 @@ Status legend:
 1. `[NEXT]` Sweep for remaining mojibake characters across docs and code comments
 2. `[NEXT]` Align README, roadmap, and todo status markers (reuse legend)
 3. `[NEXT]` Add Figma links or static exports for key layouts (Festival Card, Schedule Row, Group Bubble, AvatarGroup)
-4. `[NEXT]` Draft a `scripts/validateFestivals.ts` utility before live seeding
+4. `[NEXT]` Draft a `scripts/validateFestivals.ts` utility to flag missing `artistId` references and blank stage/day slots
 5. `[NEXT]` Add a shared `FestivalType` interface used by app and seeder
 6. `[BLOCKED]` Decide on secrets management before enabling CI seeding
 7. `[LATER]` Prepare marketing brief (value prop, launch timeline, KPI targets)
@@ -149,6 +151,6 @@ Status legend:
 ## Appendix: Key References
 - Components: `apps/mobile/components/ui`
 - Theming: `apps/mobile/styles/*`, `apps/mobile/constants/theme.ts`
-- Data seeding: `data/festivals.json`, `tools/seedFestivals.js`
+- Data seeding: `data/festivals/*`, `data/artists/*`, `tools/seedFestivals.js`
 - Auth provider: `apps/mobile/providers/AuthProvider.tsx`
 - Screens to revisit during polish: FestivalDetail, ScheduleBuilder, Group, Settings
