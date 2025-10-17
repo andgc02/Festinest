@@ -23,6 +23,7 @@ Status legend:
 - `[DONE]` Festival list, detail, and schedule builder placeholders wired to seed data
 - `[DONE]` Light theme polish with entrance animations (Festival list, Group, Schedule, chips)
 - `[DONE]` Saved festivals persistence (AsyncStorage provider) and detail CTA toggle
+- `[DONE]` Artists discovery tab with list and detail experiences
 - `[DONE]` Settings screen logout flow and docs directory setup
 
 ## In Flight (Week 2 Focus)
@@ -40,6 +41,7 @@ Status legend:
 | --- | --- | --- | --- |
 | Festival List | `[ACTIVE]` | Debounce search, extend filter logic, add loading skeletons | Entrance animation + light theme pass done |
 | Festival Detail | `[ACTIVE]` | Persist saved festivals to Firestore, add travel tips block | Local persistence + accordion shipped |
+| Artists | `[DONE]` | Layer in previews, follow actions, and Firestore sync | Discovery list + detail screen live |
 | Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
 | Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | UI polished with animated rows + light surfaces |
 | Settings | `[ACTIVE]` | Profile edit flow and premium toggle prep (saved list + genre prefs shipped) | Prepare for premium toggle |

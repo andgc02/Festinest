@@ -23,6 +23,7 @@ Status legend (use one marker per task):
 - `[DONE]` Avatar and AvatarGroup components shared across screens
 - `[NEXT]` Group screen vote persistence (Firestore) and empty states
 - `[DONE]` Settings screen saved festivals list and genre preferences form
+- `[DONE]` Artist discovery tab with list and detail screens
 - `[NEXT]` Optimistic loading states and skeletons for list and detail views
 
 ## Week 2.5 - Expo Go Internal Demo

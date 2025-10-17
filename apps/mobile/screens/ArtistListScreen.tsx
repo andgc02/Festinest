@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Animated, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
@@ -10,6 +11,7 @@ import { fetchArtists } from '@/services/artists';
 import { Artist } from '@/types/artist';
 
 export function ArtistListScreen() {
+  const router = useRouter();
   const [artists, setArtists] = useState<Artist[]>([]);
   const [query, setQuery] = useState('');
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -79,9 +81,13 @@ export function ArtistListScreen() {
 
   const renderArtist = useCallback(
     ({ item, index }: { item: Artist; index: number }) => (
-      <ArtistListItem artist={item} index={index} />
+      <ArtistListItem
+        artist={item}
+        index={index}
+        onPress={() => router.push({ pathname: '/artist/[artistId]', params: { artistId: item.id } })}
+      />
     ),
-    [],
+    [router],
   );
 
   if (loading) {
@@ -162,15 +168,16 @@ const styles = StyleSheet.create({
 type ArtistListItemProps = {
   artist: Artist;
   index: number;
+  onPress: () => void;
 };
 
-function ArtistListItem({ artist, index }: ArtistListItemProps) {
+function ArtistListItem({ artist, index, onPress }: ArtistListItemProps) {
   const animatedStyle = useFadeInUp({ delay: index * 70 });
   const primaryGenre = artist.genres?.[0];
 
   return (
     <Animated.View style={animatedStyle}>
-      <Pressable accessibilityRole="button">
+      <Pressable accessibilityRole="button" onPress={onPress}>
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           <Avatar
             name={artist.name}
@@ -203,4 +210,3 @@ function ArtistListItem({ artist, index }: ArtistListItemProps) {
     </Animated.View>
   );
 }
-
