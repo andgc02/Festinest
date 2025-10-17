@@ -1,8 +1,8 @@
 import { useRouter } from 'expo-router';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 import { useAuth } from '@/providers/AuthProvider';
 
 export function SettingsScreen() {
@@ -20,27 +20,25 @@ export function SettingsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950 px-6 pt-16">
-      <Text className={typography.heading}>Settings</Text>
+    <View style={styles.root}>
+      <Text style={typographyRN.heading}>Settings</Text>
 
-      <View className="mt-6 gap-4 rounded-3xl bg-slate-900/70 p-5">
-        <Text className={typography.subheading}>Profile</Text>
+      <View style={styles.card}>
+        <Text style={typographyRN.subheading}>Profile</Text>
         <ProfileRow label="Name" value="Taylor Swift" />
         <ProfileRow label="Email" value={email} />
         <ProfileRow label="Preferred Genres" value="EDM, Pop" />
       </View>
 
-      <View className="mt-6 rounded-3xl bg-slate-900/70">
+      <View style={styles.list}>
         {['Notifications', 'Saved Festivals', 'Invite Friends'].map((item, index, array) => (
-          <TouchableOpacity
-            key={item}
-            className={`px-5 py-4 ${index !== array.length - 1 ? 'border-b border-slate-800/60' : ''}`}>
-            <Text className="text-base text-slate-100">{item}</Text>
+          <TouchableOpacity key={item} style={[styles.listItem, index !== array.length - 1 && styles.listDivider]}>
+            <Text style={{ fontSize: 16, color: '#F1F5F9' }}>{item}</Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      <Button className="mt-auto mb-10" variant="outline" onPress={handleLogout}>
+      <Button variant="outline" onPress={handleLogout} style={{ marginTop: 'auto', marginBottom: 40 }}>
         Logout
       </Button>
     </View>
@@ -49,9 +47,23 @@ export function SettingsScreen() {
 
 function ProfileRow({ label, value }: { label: string; value: string }) {
   return (
-    <View className="flex-row items-center justify-between">
-      <Text className="text-sm text-slate-400">{label}</Text>
-      <Text className="text-sm font-semibold text-slate-100">{value}</Text>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <Text style={{ fontSize: 14, color: '#94A3B8' }}>{label}</Text>
+      <Text style={{ fontSize: 14, fontWeight: '600', color: '#F1F5F9' }}>{value}</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1, backgroundColor: '#050914', paddingHorizontal: 24, paddingTop: 16 },
+  card: {
+    marginTop: 24,
+    gap: 16,
+    borderRadius: 24,
+    backgroundColor: 'rgba(15,23,42,0.70)',
+    padding: 20,
+  },
+  list: { marginTop: 24, borderRadius: 24, backgroundColor: 'rgba(15,23,42,0.70)' },
+  listItem: { paddingHorizontal: 20, paddingVertical: 16 },
+  listDivider: { borderBottomWidth: 1, borderBottomColor: 'rgba(30,41,59,0.60)' },
+});

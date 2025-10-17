@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
 
-import { cn } from '@/lib/utils';
 
 type ToastType = 'info' | 'success' | 'warning' | 'error';
 
@@ -15,12 +14,12 @@ type ToastProps = {
   className?: string;
 };
 
-const typeStyles: Record<ToastType, string> = {
-  info: 'bg-slate-900/95 border border-slate-700/60',
-  success: 'bg-emerald-500/90 border border-emerald-400/60',
-  warning: 'bg-amber-500/90 border border-amber-400/60',
-  error: 'bg-red-500/90 border border-red-400/60',
-};
+const typeStyles = StyleSheet.create({
+  info: { backgroundColor: 'rgba(2,6,23,0.95)', borderWidth: 1, borderColor: 'rgba(51,65,85,0.60)' },
+  success: { backgroundColor: 'rgba(16,185,129,0.90)', borderWidth: 1, borderColor: 'rgba(52,211,153,0.60)' },
+  warning: { backgroundColor: 'rgba(245,158,11,0.90)', borderWidth: 1, borderColor: 'rgba(251,191,36,0.60)' },
+  error: { backgroundColor: 'rgba(239,68,68,0.90)', borderWidth: 1, borderColor: 'rgba(248,113,113,0.60)' },
+});
 
 export function Toast({
   visible,
@@ -71,17 +70,38 @@ export function Toast({
   }
 
   return (
-    <View className="pointer-events-none absolute bottom-12 left-0 right-0 items-center px-6">
+    <View style={styles.wrapper}>
       <Animated.View
-        style={{ opacity }}
-        className={cn(
-          'w-full max-w-xl rounded-2xl px-4 py-3 shadow-lg shadow-slate-950/40',
-          typeStyles[type],
-          className,
-        )}>
-        {title ? <Text className="text-sm font-semibold text-slate-50">{title}</Text> : null}
-        <Text className={cn('text-sm', type === 'info' ? 'text-slate-200' : 'text-white')}>{message}</Text>
+        style={[{ opacity }, styles.container, typeStyles[type]]}>
+        {title ? <Text style={styles.title}>{title}</Text> : null}
+        <Text style={[styles.message, type !== 'info' && styles.messageOnColored]}>{message}</Text>
       </Animated.View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    position: 'absolute',
+    bottom: 48,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    pointerEvents: 'none',
+  },
+  container: {
+    width: '100%',
+    maxWidth: 640,
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    shadowColor: '#0b1220',
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+  },
+  title: { fontSize: 14, fontWeight: '600', color: '#F8FAFC' },
+  message: { fontSize: 14, color: '#E2E8F0' },
+  messageOnColored: { color: '#FFFFFF' },
+});

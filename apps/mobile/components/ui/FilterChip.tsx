@@ -1,7 +1,6 @@
 import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
 import { ReactNode } from 'react';
 
-import { cn } from '@/lib/utils';
 
 type FilterChipProps = PressableProps & {
   label: string;
@@ -26,30 +25,23 @@ export function FilterChip({
   return (
     <Pressable
       accessibilityRole="button"
-      className={cn(
-        'flex-row items-center gap-2 rounded-full border px-4 py-2',
-        selected ? 'border-primary bg-primary/15' : 'border-slate-700/70 bg-transparent',
-        selected ? 'active:bg-primary/25' : 'active:bg-slate-800/60',
-        className,
-      )}
       style={[
         styles.base,
         selected ? styles.selected : styles.unselected,
         props.style as any,
       ]}
       {...props}>
-      {leadingIcon ? <View className="h-4 w-4 items-center justify-center">{leadingIcon}</View> : null}
+      {leadingIcon ? <View style={{ height: 16, width: 16, alignItems: 'center', justifyContent: 'center' }}>{leadingIcon}</View> : null}
       <Text
-        className={cn('text-sm font-semibold', selected ? 'text-primary' : 'text-slate-200', labelClassName)}
         style={[styles.label, selected ? styles.labelSelected : styles.labelUnselected]}>
         {label}
       </Text>
       {badge !== undefined ? (
-        <View style={[styles.badge, selected && styles.badgeSelected]} className={cn('rounded-full bg-slate-700/60 px-2 py-0.5', selected && 'bg-primary/20')}>
-          <Text style={[styles.badgeText, selected && styles.labelSelected]} className={cn('text-xs font-semibold text-slate-200', selected && 'text-primary')}>{badge}</Text>
+        <View style={[styles.badge, selected && styles.badgeSelected]}>
+          <Text style={[styles.badgeText, selected && styles.labelSelected]}>{badge}</Text>
         </View>
       ) : null}
-      {trailingIcon ? <View className="h-4 w-4 items-center justify-center">{trailingIcon}</View> : null}
+      {trailingIcon ? <View style={{ height: 16, width: 16, alignItems: 'center', justifyContent: 'center' }}>{trailingIcon}</View> : null}
     </Pressable>
   );
 }

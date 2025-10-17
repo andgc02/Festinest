@@ -1,9 +1,9 @@
 ﻿import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, Tabs, Toast } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 import { fetchFestivalById } from '@/services/festivals';
 import { FestivalScheduleEntry } from '@/types/festival';
 
@@ -82,24 +82,23 @@ export function ScheduleBuilderScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-slate-950">
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#050914' }}>
         <ActivityIndicator size="large" color="#5A67D8" />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 pt-16">
-      <View className="flex-row items-center justify-between">
-        <Text className={typography.heading}>Your Schedule</Text>
+    <View style={styles.root}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={typographyRN.heading}>Your Schedule</Text>
         {days.length ? (
-          <Text className="text-sm text-slate-400">{selectedDay ?? 'All days'}</Text>
+          <Text style={{ fontSize: 12, color: '#94A3B8' }}>{selectedDay ?? 'All days'}</Text>
         ) : null}
       </View>
 
       {days.length ? (
         <Tabs
-          className="mt-4"
           value={selectedDay ?? 'all'}
           onChange={(key) => setSelectedDay(key === 'all' ? null : key)}
           items={[{ key: 'all', label: 'All' }, ...days.map((day) => ({ key: day, label: day }))]}
@@ -107,7 +106,7 @@ export function ScheduleBuilderScreen() {
         />
       ) : null}
 
-      {error ? <Text className="mt-4 text-sm text-error">{error}</Text> : null}
+      {error ? <Text style={{ marginTop: 16, fontSize: 12, color: '#E53E3E' }}>{error}</Text> : null}
 
       <FlatList
         data={filteredSchedule}
@@ -115,34 +114,42 @@ export function ScheduleBuilderScreen() {
         contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
         renderItem={({ item }) => (
           <View
-            className={`flex-row items-center justify-between rounded-2xl border px-4 py-3 ${
-              item.selected ? 'border-primary/60 bg-primary/10' : 'border-slate-800/60 bg-slate-900/70'
-            }`}>
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderRadius: 16,
+              borderWidth: 1,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderColor: item.selected ? 'rgba(90,103,216,0.60)' : 'rgba(30,41,59,0.60)',
+              backgroundColor: item.selected ? 'rgba(90,103,216,0.10)' : 'rgba(15,23,42,0.70)',
+            }}>
             <View>
-              <Text className="text-xs font-semibold uppercase tracking-wide text-slate-400">{item.day}</Text>
-              <Text className="text-base font-semibold text-slate-100">{item.artist}</Text>
-              <Text className="text-xs text-slate-400">
+              <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#94A3B8' }}>{item.day}</Text>
+              <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{item.artist}</Text>
+              <Text style={{ fontSize: 12, color: '#94A3B8' }}>
                 {`${item.time} at ${item.stage}`}
               </Text>
             </View>
             <Button
               variant={item.selected ? 'secondary' : 'primary'}
-              className="w-24"
+              style={{ width: 96 }}
               onPress={() => toggleSelection(item.id)}>
               {item.selected ? 'Keep' : 'Add'}
             </Button>
           </View>
         )}
         ListEmptyComponent={
-          <View className="items-center gap-2 pt-20">
-            <Text className="text-lg font-semibold text-slate-50">Nothing scheduled yet</Text>
-            <Text className={typography.body}>Come back once the festival releases the set times.</Text>
+          <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>Nothing scheduled yet</Text>
+            <Text style={typographyRN.body}>Come back once the festival releases the set times.</Text>
           </View>
         }
       />
 
       {filteredSchedule.length ? (
-        <Button className="mb-10 mt-auto" onPress={handleSave}>
+        <Button style={{ marginBottom: 40, marginTop: 'auto' }} onPress={handleSave}>
           Save Schedule
         </Button>
       ) : null}
@@ -156,6 +163,15 @@ export function ScheduleBuilderScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#050914',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+  },
+});
 
 
 

@@ -1,9 +1,9 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 import { useAuth } from '@/providers/AuthProvider';
 
 const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
@@ -59,10 +59,10 @@ export function LoginScreen() {
   };
 
   return (
-    <View className="flex-1 items-center justify-center bg-slate-950 px-6">
-      <Text className={typography.display}>Festinest</Text>
-      <View className="mt-8 w-full gap-6 rounded-3xl border border-slate-800/60 bg-slate-900/70 p-6">
-        <View className="gap-4">
+    <View style={styles.root}>
+      <Text style={typographyRN.display}>Festinest</Text>
+      <View style={styles.card}>
+        <View style={{ gap: 16 }}>
           <Input
             label="Email"
             keyboardType="email-address"
@@ -80,19 +80,19 @@ export function LoginScreen() {
             placeholder={'\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'}
           />
         </View>
-        <Button variant="primary" loading={isSubmitting} disabled={disabled} onPress={handleLogin} className="w-full">
+        <Button variant="primary" loading={isSubmitting} disabled={disabled} onPress={handleLogin} style={{ width: '100%' }}>
           Login
         </Button>
-        <View className="gap-3">
+        <View style={{ gap: 12 }}>
           <TouchableOpacity onPress={handleSignUp}>
-            <Text className="text-center text-sm font-medium text-primary">Sign Up</Text>
+            <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#5A67D8' }}>Sign Up</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleGoogle}>
-            <Text className="text-center text-sm font-medium text-accent">Continue with Google</Text>
+            <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#38B2AC' }}>Continue with Google</Text>
           </TouchableOpacity>
           {hasAdminDemo ? (
             <TouchableOpacity onPress={fillDemo}>
-              <Text className="text-center text-sm font-medium text-slate-300 underline">Use Admin Demo</Text>
+              <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#CBD5E1', textDecorationLine: 'underline' }}>Use Admin Demo</Text>
             </TouchableOpacity>
           ) : null}
         </View>
@@ -100,3 +100,23 @@ export function LoginScreen() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#050914',
+    paddingHorizontal: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  card: {
+    marginTop: 32,
+    width: '100%',
+    gap: 24,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(30,41,59,0.60)',
+    backgroundColor: 'rgba(15,23,42,0.70)',
+    padding: 24,
+  },
+});

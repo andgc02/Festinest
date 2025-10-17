@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 
 const MOCK_GROUP = {
   name: 'Coachella Squad',
@@ -33,10 +33,10 @@ export function GroupScreen() {
   );
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 pt-14" style={styles.root}>
-      <View className="gap-4">
-        <Text className={typography.display}>{MOCK_GROUP.name}</Text>
-        <View className="flex-row gap-2">
+    <View style={styles.root}>
+      <View style={{ gap: 16 }}>
+        <Text style={typographyRN.display}>{MOCK_GROUP.name}</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
           {headerChips.map((chip) => (
             <FilterChip key={chip.label} label={chip.label} selected={chip.selected} />
           ))}
@@ -44,7 +44,6 @@ export function GroupScreen() {
       </View>
 
       <Tabs
-        className="mt-6"
         value={selectedTab}
         onChange={(key) => setSelectedTab(key as TabKey)}
         items={[
@@ -59,40 +58,40 @@ export function GroupScreen() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
           renderItem={({ item }) => (
-            <View className="flex-row items-center justify-between rounded-2xl bg-slate-900/70 px-4 py-3">
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', paddingHorizontal: 16, paddingVertical: 12 }}>
               <View>
-                <Text className="text-base font-semibold text-slate-100">{item.artist}</Text>
-                <Text className="text-xs text-slate-400">
+                <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{item.artist}</Text>
+                <Text style={{ fontSize: 12, color: '#94A3B8' }}>
                   {item.time} {'\u2022'} {item.stage}
                 </Text>
               </View>
-              <View className="rounded-full bg-primary/20 px-3 py-1">
-                <Text className="text-xs font-semibold text-primary">{`${item.votes} votes`}</Text>
+              <View style={{ borderRadius: 9999, backgroundColor: 'rgba(90,103,216,0.20)', paddingHorizontal: 12, paddingVertical: 4 }}>
+                <Text style={{ fontSize: 12, fontWeight: '600', color: '#5A67D8' }}>{`${item.votes} votes`}</Text>
               </View>
             </View>
           )}
         />
       ) : (
-        <View className="flex-1 gap-3 py-6">
+        <View style={{ flex: 1, gap: 12, paddingVertical: 24 }}>
           {MOCK_GROUP.chat.map((message) => (
-            <View key={message.id} className="gap-1 rounded-2xl bg-slate-900/70 p-4">
-              <Text className="text-sm font-semibold text-slate-100">
+            <View key={message.id} style={{ gap: 4, borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', padding: 16 }}>
+              <Text style={{ fontSize: 14, fontWeight: '600', color: '#F1F5F9' }}>
                 {message.author}{' '}
-                <Text className="text-xs font-normal uppercase tracking-wide text-slate-500">
+                <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#64748B' }}>
                   {message.timestamp}
                 </Text>
               </Text>
-              <Text className={typography.body}>{message.message}</Text>
+              <Text style={typographyRN.body}>{message.message}</Text>
             </View>
           ))}
         </View>
       )}
 
-      <View className="mt-auto flex-row gap-3 pb-10">
-        <Button variant="secondary" className="flex-1" onPress={() => setToastVisible(true)}>
+      <View style={{ marginTop: 'auto', flexDirection: 'row', gap: 12, paddingBottom: 40 }}>
+        <Button variant="secondary" style={{ flex: 1 }} onPress={() => setToastVisible(true)}>
           Open Chat
         </Button>
-        <Button variant="outline" className="flex-1" onPress={() => setQrModalVisible(true)}>
+        <Button variant="outline" style={{ flex: 1 }} onPress={() => setQrModalVisible(true)}>
           Share QR
         </Button>
       </View>
@@ -121,8 +120,8 @@ export function GroupScreen() {
           variant: 'outline',
           onPress: () => setQrModalVisible(false),
         }}>
-        <View className="h-40 items-center justify-center rounded-2xl border border-dashed border-slate-700">
-          <Text className="text-sm text-slate-400">QR preview placeholder</Text>
+        <View style={{ height: 160, alignItems: 'center', justifyContent: 'center', borderRadius: 16, borderWidth: 1, borderStyle: 'dashed', borderColor: '#334155' }}>
+          <Text style={{ fontSize: 14, color: '#94A3B8' }}>QR preview placeholder</Text>
         </View>
       </Modal>
     </View>

@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, StyleSheet, TextStyle } from 'react-native';
 
 /**
  * Central design tokens that align with tailwind.config.js.
@@ -30,6 +30,20 @@ export const typography = {
   caption: 'text-xs text-slate-400',
   overline: 'text-[11px] uppercase tracking-[0.3em] text-slate-400',
 };
+
+/**
+ * React Native style equivalents for when NativeWind is disabled.
+ * Prefer these over class strings on Text.
+ */
+export const typographyRN: Record<keyof typeof typography, TextStyle> = StyleSheet.create({
+  display: { fontSize: 24, fontWeight: '600', color: '#F8FAFC' },
+  heading: { fontSize: 22, fontWeight: '600', color: '#F8FAFC' },
+  subheading: { fontSize: 18, fontWeight: '600', color: '#F1F5F9' },
+  body: { fontSize: 16, color: '#CBD5E1' },
+  bodyStrong: { fontSize: 16, color: '#F1F5F9', fontWeight: '600' },
+  caption: { fontSize: 12, color: '#94A3B8' },
+  overline: { fontSize: 11, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: 1.8 },
+});
 
 export const components = {
   card: 'rounded-2xl bg-slate-900/70 p-4 shadow-card',

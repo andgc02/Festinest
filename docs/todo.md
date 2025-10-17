@@ -9,7 +9,7 @@ Status legend (use one marker per task):
 ## Week 1 - Foundations (shipped)
 - `[DONE]` Expo Router layout with login gating
 - `[DONE]` Firebase auth integration with persistence helpers   
-- `[DONE]` NativeWind baseline with shared Tailwind tokens
+- `[DONE]` StyleSheet design system scaffolding (replaced NativeWind/Tailwind)
 - `[DONE]` Base UI primitives (Button, Input, SearchBar, Card)
 - `[DONE]` FilterChip, Tabs, Modal, Toast components
 - `[DONE]` Typography utilities and theme tokens in `constants/theme.ts`
@@ -60,7 +60,7 @@ Status legend (use one marker per task):
 - `[DONE]` README covers seeding instructions and local env
 - `[NEXT]` Clean mojibake in legacy diagrams (Festival card, schedule row)
 - `[NEXT]` Add Figma links and export references in layout section
-- `[NEXT]` Document theming and typography tokens for contributors
+- `[DONE]` Document StyleSheet design system (colors, typography, spacing)
 - `[NEXT]` Write onboarding guide for new engineers (auth, data, env)
 - `[NEXT]` Draft release checklist (QA sign-off, seeding, analytics verification)
 

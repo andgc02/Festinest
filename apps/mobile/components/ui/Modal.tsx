@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
-import { Modal as RNModal, Pressable, Text, View } from 'react-native';
+import { Modal as RNModal, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { cn } from '@/lib/utils';
 
 import { Button } from './Button';
 
@@ -39,24 +38,24 @@ export function Modal({
     <RNModal visible={visible} transparent animationType="fade" onRequestClose={onDismiss}>
       <Pressable
         accessibilityRole="button"
-        style={{ flex: 1 }}
-        className="items-center justify-center bg-slate-950/70 px-6"
+        style={[styles.overlay]
+        }
         onPress={dismissOnOverlayPress ? onDismiss : undefined}>
         <Pressable
           accessibilityRole="summary"
-          className={cn('w-full max-w-xl rounded-3xl bg-slate-900/95 p-6', className)}
+          style={styles.panel}
           onPress={(event) => event.stopPropagation()}>
-          {title ? <Text className="text-xl font-semibold text-slate-50">{title}</Text> : null}
-          {description ? <Text className="mt-2 text-base text-slate-300">{description}</Text> : null}
-          {children ? <View className="mt-4">{children}</View> : null}
+          {title ? <Text style={styles.title}>{title}</Text> : null}
+          {description ? <Text style={styles.description}>{description}</Text> : null}
+          {children ? <View style={{ marginTop: 16 }}>{children}</View> : null}
           {(primaryAction || secondaryAction) && (
-            <View className="mt-6 flex-row gap-3">
+            <View style={styles.actionsRow}>
               {secondaryAction ? (
                 <Button
                   variant={secondaryAction.variant ?? 'outline'}
                   onPress={secondaryAction.onPress}
                   loading={secondaryAction.loading}
-                  className="flex-1">
+                  style={{ flex: 1 }}>
                   {secondaryAction.label}
                 </Button>
               ) : null}
@@ -65,7 +64,7 @@ export function Modal({
                   variant={primaryAction.variant ?? 'primary'}
                   onPress={primaryAction.onPress}
                   loading={primaryAction.loading}
-                  className="flex-1">
+                  style={{ flex: 1 }}>
                   {primaryAction.label}
                 </Button>
               ) : null}
@@ -76,3 +75,23 @@ export function Modal({
     </RNModal>
   );
 }
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(2,6,23,0.70)',
+    paddingHorizontal: 24,
+  },
+  panel: {
+    width: '100%',
+    maxWidth: 640,
+    borderRadius: 24,
+    backgroundColor: 'rgba(15,23,42,0.95)',
+    padding: 24,
+  },
+  title: { fontSize: 20, fontWeight: '600', color: '#F8FAFC' },
+  description: { marginTop: 8, fontSize: 16, color: '#CBD5E1' },
+  actionsRow: { marginTop: 24, flexDirection: 'row', gap: 12 },
+});

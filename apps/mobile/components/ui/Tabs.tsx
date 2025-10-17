@@ -1,6 +1,5 @@
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { cn } from '@/lib/utils';
 
 export type TabItem = {
   key: string;
@@ -29,28 +28,28 @@ export function Tabs({
   tabClassName,
 }: TabsProps) {
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} className={cn('flex-none', className)}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContainer}>
       {items.map((item, index) => {
         const isActive = item.key === value;
         const disabled = item.disabled;
         const isLast = index === items.length - 1;
-        const pressableClasses =
+        const pressableStyle =
           variant === 'pill'
-            ? cn(
-                'mr-3 flex-row items-center gap-2 rounded-full border px-4 py-2',
-                isActive ? 'border-primary bg-primary/15' : 'border-slate-700/60 bg-transparent',
-                isActive ? 'active:bg-primary/25' : 'active:bg-slate-800/60',
-                disabled && 'opacity-50',
-                isLast && 'mr-0',
-                tabClassName,
-              )
-            : cn(
-                'mr-6 flex-row items-center gap-2 pb-2',
-                isActive ? 'border-b-2 border-primary' : 'border-b-2 border-transparent',
-                disabled && 'opacity-50',
-                isLast && 'mr-0',
-                tabClassName,
-              );
+            ? [
+                styles.pill,
+                isActive ? styles.pillActive : styles.pillInactive,
+                disabled && styles.disabled,
+                isLast && styles.last,
+              ]
+            : [
+                styles.underline,
+                isActive ? styles.underlineActive : styles.underlineInactive,
+                disabled && styles.disabled,
+                isLast && styles.last,
+              ];
 
         return (
           <Pressable
@@ -58,19 +57,19 @@ export function Tabs({
             accessibilityRole="button"
             hitSlop={8}
             disabled={disabled}
-            className={pressableClasses}
+            style={pressableStyle}
             onPress={() => onChange(item.key)}>
             <Text
-              className={cn(
-                'text-sm font-semibold',
-                isActive ? 'text-primary' : 'text-slate-300',
-                variant === 'underline' && 'text-base',
-              )}>
+              style={[
+                styles.label,
+                variant === 'underline' && styles.labelUnderline,
+                isActive ? styles.labelActive : styles.labelInactive,
+              ]}>
               {item.label}
             </Text>
             {item.count !== undefined ? (
-              <View className={cn('rounded-full bg-slate-800/70 px-2 py-0.5', isActive && 'bg-primary/20')}>
-                <Text className={cn('text-xs font-semibold text-slate-200', isActive && 'text-primary')}>
+              <View style={[styles.count, isActive ? styles.countActive : styles.countInactive]}>
+                <Text style={[styles.countText, isActive ? styles.countTextActive : styles.countTextInactive]}>
                   {item.count}
                 </Text>
               </View>
@@ -81,3 +80,41 @@ export function Tabs({
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContainer: { paddingHorizontal: 0 },
+  pill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 9999,
+    borderWidth: 1,
+    marginRight: 12,
+    gap: 8,
+  },
+  pillActive: { borderColor: '#5A67D8', backgroundColor: 'rgba(90,103,216,0.15)' },
+  pillInactive: { borderColor: 'rgba(51,65,85,0.60)', backgroundColor: 'transparent' },
+  underline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 8,
+    marginRight: 24,
+    gap: 8,
+    borderBottomWidth: 2,
+  },
+  underlineActive: { borderBottomColor: '#5A67D8' },
+  underlineInactive: { borderBottomColor: 'transparent' },
+  last: { marginRight: 0 },
+  disabled: { opacity: 0.5 },
+  label: { fontSize: 14, fontWeight: '600' },
+  labelUnderline: { fontSize: 16 },
+  labelActive: { color: '#5A67D8' },
+  labelInactive: { color: '#CBD5E1' },
+  count: { borderRadius: 9999, paddingHorizontal: 8, paddingVertical: 2 },
+  countActive: { backgroundColor: 'rgba(90,103,216,0.20)' },
+  countInactive: { backgroundColor: 'rgba(30,41,59,0.70)' },
+  countText: { fontSize: 12, fontWeight: '600' },
+  countTextActive: { color: '#5A67D8' },
+  countTextInactive: { color: '#E2E8F0' },
+});

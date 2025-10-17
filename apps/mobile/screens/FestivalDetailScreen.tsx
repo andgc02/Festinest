@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Toast } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 import { fetchFestivalById } from '@/services/festivals';
 import { Festival, FestivalLineupEntry } from '@/types/festival';
 
@@ -53,8 +53,8 @@ export function FestivalDetailScreen() {
   if (!festival) {
     return (
       <View style={styles.loader}>
-        <Text className="text-base text-error">{error ?? 'Festival not found.'}</Text>
-        <Button variant="outline" className="mt-6 w-48" onPress={() => router.back()}>
+        <Text style={{ fontSize: 16, color: '#E53E3E' }}>{error ?? 'Festival not found.'}</Text>
+        <Button variant="outline" style={{ marginTop: 24, width: 192 }} onPress={() => router.back()}>
           Go Back
         </Button>
       </View>
@@ -70,22 +70,22 @@ export function FestivalDetailScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950" style={styles.root}>
+    <View style={styles.root}>
       <ScrollView contentContainerStyle={styles.container}>
-        <View className="gap-6">
-          <View className="gap-4">
-            <Text className={typography.heading}>{festival.name}</Text>
-            <Text className={typography.body}>
+        <View style={{ gap: 24 }}>
+          <View style={{ gap: 16 }}>
+            <Text style={typographyRN.heading}>{festival.name}</Text>
+            <Text style={typographyRN.body}>
               {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
             </Text>
-            <View className="flex-row flex-wrap gap-2">
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
               {festival.artistsCount ? (
                 <FilterChip label={`${festival.artistsCount} artists`} />
               ) : null}
               {/* priceRange not present in type; omit for now */}
             </View>
-            <Button onPress={handleSave} className="w-full">
+            <Button onPress={handleSave} style={{ width: '100%' }}>
               Add to My Festivals
             </Button>
           </View>
@@ -93,16 +93,16 @@ export function FestivalDetailScreen() {
           {/* description not present in type; omit for now */}
 
           {lineupEntries.length ? (
-            <View className="gap-4">
-              <Text className={typography.subheading}>Lineup</Text>
-              <View className="gap-2 rounded-2xl bg-slate-900/70 p-4">
+            <View style={{ gap: 16 }}>
+              <Text style={typographyRN.subheading}>Lineup</Text>
+              <View style={{ gap: 8, borderRadius: 16, backgroundColor: 'rgba(15,23,42,0.70)', padding: 16 }}>
                 {lineupEntries.map((entry) => (
                   <View
                     key={`${entry.artist}-${entry.stage ?? 'stage'}`}
-                    className="flex-row items-center justify-between rounded-xl border border-slate-800/60 px-3 py-2">
-                    <View className="flex-1">
-                      <Text className="text-base font-semibold text-slate-100">{entry.artist}</Text>
-                      <Text className="text-xs text-slate-400">
+                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12, borderWidth: 1, borderColor: 'rgba(30,41,59,0.60)', paddingHorizontal: 12, paddingVertical: 8 }}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontSize: 16, fontWeight: '600', color: '#F1F5F9' }}>{entry.artist}</Text>
+                      <Text style={{ fontSize: 12, color: '#94A3B8' }}>
                         {entry.time ?? 'Time TBA'}
                         {entry.stage ? ` \u2022 ${entry.stage}` : ''}
                       </Text>
@@ -114,14 +114,14 @@ export function FestivalDetailScreen() {
           ) : null}
         </View>
 
-        <View className="mt-8 flex-row gap-3">
+        <View style={{ marginTop: 32, flexDirection: 'row', gap: 12 }}>
           <Button
             variant="secondary"
-            className="flex-1"
+            style={{ flex: 1 }}
             onPress={() => router.push({ pathname: '/schedule-builder', params: { festivalId: festival.id } })}>
             View Schedule
           </Button>
-          <Button variant="outline" className="flex-1" onPress={handleJoinGroup}>
+          <Button variant="outline" style={{ flex: 1 }} onPress={handleJoinGroup}>
             Join Group
           </Button>
         </View>
@@ -151,8 +151,8 @@ export function FestivalDetailScreen() {
           variant: 'outline',
           onPress: () => setGroupModalVisible(false),
         }}>
-        <View className="gap-3">
-          <Text className={typography.body}>Coming soon: chat previews, votes, and shared schedules.</Text>
+        <View style={{ gap: 12 }}>
+          <Text style={typographyRN.body}>Coming soon: chat previews, votes, and shared schedules.</Text>
         </View>
       </Modal>
     </View>

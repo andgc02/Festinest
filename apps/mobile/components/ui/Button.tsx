@@ -1,7 +1,6 @@
 import { ActivityIndicator, Pressable, PressableProps, StyleSheet, Text } from 'react-native';
 import { ReactNode } from 'react';
 
-import { cn } from '@/lib/utils';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline';
 type ButtonSize = 'md' | 'lg';
@@ -11,29 +10,11 @@ type ButtonProps = PressableProps & {
   size?: ButtonSize;
   loading?: boolean;
   children: ReactNode;
-  className?: string;
-  textClassName?: string;
+  className?: string; // kept for backwards compatibility; ignored
+  textClassName?: string; // kept for backwards compatibility; ignored
 };
 
-const variantClasses: Record<ButtonVariant, { container: string; text: string }> = {
-  primary: {
-    container: 'bg-primary',
-    text: 'text-white',
-  },
-  secondary: {
-    container: 'bg-accent/20 border border-accent/60',
-    text: 'text-accent',
-  },
-  outline: {
-    container: 'border border-slate-600 bg-transparent',
-    text: 'text-slate-100',
-  },
-};
-
-const sizeClasses: Record<ButtonSize, string> = {
-  md: 'h-12 px-5',
-  lg: 'h-14 px-6',
-};
+// Legacy NativeWind class maps removed in favor of StyleSheet styles.
 
 export function Button({
   variant = 'primary',
@@ -45,21 +26,10 @@ export function Button({
   textClassName,
   ...props
 }: ButtonProps) {
-  const variantClass = variantClasses[variant];
-  const sizeClass = sizeClasses[size];
-  const opacityClass = disabled || loading ? 'opacity-60' : 'active:opacity-80';
-
   return (
     <Pressable
       accessibilityRole="button"
       disabled={disabled || loading}
-      className={cn(
-        'flex-row items-center justify-center rounded-xl',
-        variantClass.container,
-        sizeClass,
-        opacityClass,
-        className,
-      )}
       style={[
         styles.base,
         size === 'md' ? styles.sizeMd : styles.sizeLg,
@@ -74,8 +44,12 @@ export function Button({
         <ActivityIndicator color={variant === 'secondary' ? '#38B2AC' : '#F8FAFC'} />
       ) : (
         <Text
-          className={cn('text-base font-semibold', variantClass.text, textClassName)}
-          style={[styles.text, variant === 'primary' && styles.textOnPrimary, variant === 'secondary' && styles.textOnSecondary, variant === 'outline' && styles.textOnOutline]}>
+          style={[
+            styles.text,
+            variant === 'primary' && styles.textOnPrimary,
+            variant === 'secondary' && styles.textOnSecondary,
+            variant === 'outline' && styles.textOnOutline,
+          ]}>
           {children}
         </Text>
       )}

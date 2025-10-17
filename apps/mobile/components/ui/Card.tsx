@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { View, ViewProps, StyleSheet } from 'react-native';
 
-import { cn } from '@/lib/utils';
 
 type CardProps = ViewProps & {
   children: ReactNode;
@@ -11,7 +10,6 @@ type CardProps = ViewProps & {
 export function Card({ children, className, style, ...props }: CardProps) {
   return (
     <View
-      className={cn('rounded-2xl bg-slate-900/70 p-4 shadow-card', className)}
       style={[styles.container, style]}
       {...props}>
       {children}

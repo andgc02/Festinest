@@ -4,9 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
 import { Card, FilterChip, SearchBar } from '@/components/ui';
-import { typography } from '@/constants/theme';
+import { typographyRN } from '@/constants/theme';
 import { fetchFestivals } from '@/services/festivals';
-import { cn } from '@/lib/utils';
 import { Festival } from '@/types/festival';
 
 type FilterKey = 'genre' | 'date' | 'location';
@@ -85,17 +84,17 @@ export function FestivalListScreen() {
 
     return (
       <Pressable
-        className="mb-4 active:opacity-90"
+        style={{ marginBottom: 16 }}
         accessibilityRole="button"
         onPress={() => router.push({ pathname: '/festival/[festivalId]', params: { festivalId: item.id } })}>
-        <Card className="flex-row items-center gap-4">
-          <View className="h-12 w-12 items-center justify-center rounded-2xl bg-primary/15">
+        <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <View style={{ height: 48, width: 48, alignItems: 'center', justifyContent: 'center', borderRadius: 16, backgroundColor: 'rgba(90,103,216,0.15)' }}>
             <Ionicons name="ticket-outline" size={22} color="#5A67D8" />
           </View>
-          <View className="flex-1 gap-1">
-            <Text className="text-lg font-semibold text-slate-50">{item.name}</Text>
-            <Text className="text-sm text-slate-300">{`${item.location} \u2022 ${dates}`}</Text>
-            <Text className="text-xs font-medium uppercase tracking-wide text-primary/80">
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>{item.name}</Text>
+            <Text style={{ fontSize: 14, color: '#CBD5E1' }}>{`${item.location} \u2022 ${dates}`}</Text>
+            <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: 'rgba(90,103,216,0.8)' }}>
               {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
             </Text>
           </View>
@@ -106,11 +105,11 @@ export function FestivalListScreen() {
   };
 
   return (
-    <View className="flex-1 bg-slate-950 px-5 pt-16" style={styles.root}>
-      <Text className={typography.display}>Discover Festivals</Text>
-      <View className="mt-6 gap-4">
+    <View style={styles.root}>
+      <Text style={typographyRN.display}>Discover Festivals</Text>
+      <View style={{ marginTop: 24, gap: 16 }}>
         <SearchBar placeholder="Search festivals" value={query} onChangeText={setQuery} />
-        <View className="flex-row gap-3">
+        <View style={{ flexDirection: 'row', gap: 12 }}>
           {FILTER_OPTIONS.map((filter) => (
             <FilterChip
               key={filter.key}
@@ -122,7 +121,7 @@ export function FestivalListScreen() {
         </View>
       </View>
       {loading ? (
-        <View className="flex-1 items-center justify-center">
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <ActivityIndicator size="large" color="#5A67D8" />
         </View>
       ) : (
@@ -133,16 +132,18 @@ export function FestivalListScreen() {
           contentContainerStyle={styles.list}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} tintColor="#5A67D8" />}
           ListEmptyComponent={
-            <View className="items-center gap-2 pt-20">
-              <Text className="text-lg font-semibold text-slate-50">No festivals found</Text>
-              <Text className={cn('text-center', typography.body)}>
+            <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
+              <Text style={{ fontSize: 18, fontWeight: '600', color: '#F8FAFC' }}>No festivals found</Text>
+              <Text style={{ fontSize: 16, color: '#CBD5E1', textAlign: 'center' }}>
                 Try adjusting your filters or check back later.
               </Text>
             </View>
           }
         />
       )}
-      {error ? <Text className="mt-3 text-center text-sm text-error">{error}</Text> : null}
+      {error ? (
+        <Text style={{ marginTop: 12, textAlign: 'center', fontSize: 12, color: '#E53E3E' }}>{error}</Text>
+      ) : null}
     </View>
   );
 }
