@@ -3,6 +3,8 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 
 const MOCK_GROUP = {
   name: 'Coachella Squad',
@@ -131,8 +133,8 @@ export function GroupScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 20,
+    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing.screenPadding,
     paddingTop: 14,
   },
 });

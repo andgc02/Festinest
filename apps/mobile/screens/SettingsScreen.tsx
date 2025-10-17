@@ -3,6 +3,8 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 import { useAuth } from '@/providers/AuthProvider';
 
 export function SettingsScreen() {
@@ -55,15 +57,15 @@ function ProfileRow({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: '#050914', paddingHorizontal: 24, paddingTop: 16 },
+  root: { flex: 1, backgroundColor: Colors.background, paddingHorizontal: Spacing.screenPadding, paddingTop: 16 },
   card: {
     marginTop: 24,
     gap: 16,
     borderRadius: 24,
-    backgroundColor: 'rgba(15,23,42,0.70)',
+    backgroundColor: Colors.surface,
     padding: 20,
   },
-  list: { marginTop: 24, borderRadius: 24, backgroundColor: 'rgba(15,23,42,0.70)' },
+  list: { marginTop: 24, borderRadius: 24, backgroundColor: Colors.surface },
   listItem: { paddingHorizontal: 20, paddingVertical: 16 },
   listDivider: { borderBottomWidth: 1, borderBottomColor: 'rgba(30,41,59,0.60)' },
 });

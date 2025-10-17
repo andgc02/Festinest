@@ -16,7 +16,7 @@ Status legend:
 ## Completed to Date
 - `[DONE]` Expo Router stack with login gating (`apps/mobile/app/_layout.tsx` and tabs layout)
 - `[DONE]` Firebase Auth integration with persistent sessions and admin seeding script
-- `[DONE]` NativeWind/Tailwind design system scaffolding with shared tokens
+- `[DONE]` StyleSheet-based design system (colors/typography/spacing) replacing NativeWind
 - `[DONE]` Base UI primitives (Button, Input, SearchBar, Card) and supporting utilities
 - `[DONE]` Week 1 UI polish: FilterChip, Tabs, Modal, Toast, typography utilities
 - `[DONE]` Festival list, detail, and schedule builder placeholders wired to seed data
@@ -26,7 +26,7 @@ Status legend:
 - `[ACTIVE]` Festival detail lineup accordion and saved festivals CTA wiring
 - `[ACTIVE]` Schedule builder day tabs plus conflict detection research
 - `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
-- `[ACTIVE]` Theming cleanup on legacy screens; remove remaining mojibake
+- `[ACTIVE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
 - `[NEXT]` Avatar and AvatarGroup components for profile and group views
 - `[NEXT]` Saved festivals state management shared across tabs
 
@@ -55,7 +55,7 @@ Status legend:
 - `[LATER]` Deep link support for invites and saved festivals
 
 ### Theming and Design System
-- `[DONE]` Central theme tokens in `constants/theme.ts` and `tailwind.config.js`
+- `[DONE]` Central StyleSheet tokens in `apps/mobile/styles/*` and `constants/theme.ts`
 - `[ACTIVE]` Apply typography tokens across legacy screens and providers
 - `[NEXT]` Light theme passes; define palettes per component
 - `[NEXT]` Align Figma tokens (spacing, radii, gradients) with implementation

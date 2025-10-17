@@ -79,6 +79,8 @@ Join our community of developers creating universal apps.
    - Start Metro: `npm run start`.
    - When the app boots, `lib/firebase.ts` initializes Firebase using the env vars. If any value is missing, the app throws an error immediately so you can fix the configuration.
 
-## Project roadmap
+## Project docs
 
-- See `../docs/roadmap.md` for the current implementation plan, component library checklist, and weekly milestones.
+- Design system (StyleSheet): `../docs/design-system.md`
+- Roadmap: `../docs/roadmap.md`
+- TODOs: `../docs/todo.md`

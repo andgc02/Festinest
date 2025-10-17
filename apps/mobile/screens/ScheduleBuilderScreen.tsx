@@ -4,6 +4,8 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-nativ
 
 import { Button, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 import { fetchFestivalById } from '@/services/festivals';
 import { FestivalScheduleEntry } from '@/types/festival';
 
@@ -82,7 +84,7 @@ export function ScheduleBuilderScreen() {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#050914' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: Colors.background }}>
         <ActivityIndicator size="large" color="#5A67D8" />
       </View>
     );
@@ -167,8 +169,8 @@ export function ScheduleBuilderScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 20,
+    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing.screenPadding,
     paddingTop: 16,
   },
 });

@@ -4,6 +4,8 @@ import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-nat
 
 import { Button, FilterChip, Modal, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 import { fetchFestivalById } from '@/services/festivals';
 import { Festival, FestivalLineupEntry } from '@/types/festival';
 
@@ -178,16 +180,16 @@ function formatDateRange(startDate: string, endDate: string) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#050914',
+    backgroundColor: Colors.background,
   },
   container: {
-    padding: 24,
+    padding: Spacing.sectionGap,
     paddingBottom: 120,
     gap: 24,
   },
   loader: {
     flex: 1,
-    backgroundColor: '#050914',
+    backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 24,

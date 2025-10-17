@@ -4,6 +4,8 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 import { useAuth } from '@/providers/AuthProvider';
 
 const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
@@ -104,8 +106,8 @@ export function LoginScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 24,
+    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing.screenPadding,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -115,8 +117,8 @@ const styles = StyleSheet.create({
     gap: 24,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: 'rgba(30,41,59,0.60)',
-    backgroundColor: 'rgba(15,23,42,0.70)',
+    borderColor: '#E2E8F0',
+    backgroundColor: Colors.surface,
     padding: 24,
   },
 });

@@ -5,6 +5,8 @@ import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Tex
 
 import { Card, FilterChip, SearchBar } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
+import { Spacing } from '@/styles/spacing';
 import { fetchFestivals } from '@/services/festivals';
 import { Festival } from '@/types/festival';
 
@@ -107,7 +109,7 @@ export function FestivalListScreen() {
   return (
     <View style={styles.root}>
       <Text style={typographyRN.display}>Discover Festivals</Text>
-      <View style={{ marginTop: 24, gap: 16 }}>
+      <View style={{ marginTop: Spacing.sectionGap, gap: 16 }}>
         <SearchBar placeholder="Search festivals" value={query} onChangeText={setQuery} />
         <View style={{ flexDirection: 'row', gap: 12 }}>
           {FILTER_OPTIONS.map((filter) => (
@@ -167,8 +169,8 @@ function formatDateRange(startDate: string, endDate: string) {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#050914',
-    paddingHorizontal: 20,
+    backgroundColor: Colors.background,
+    paddingHorizontal: Spacing.screenPadding,
     paddingTop: 16,
   },
   list: {
