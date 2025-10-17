@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Animated, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
-import { Avatar, Card, FilterChip, SearchBar } from '@/components/ui';
+import { Avatar, Button, Card, FilterChip, Modal, SearchBar } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
@@ -15,6 +15,7 @@ export function ArtistListScreen() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [query, setQuery] = useState('');
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [genreModalVisible, setGenreModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +37,7 @@ export function ArtistListScreen() {
     void loadArtists();
   }, [loadArtists]);
 
-  const genreChips = useMemo(() => {
+  const genreOptions = useMemo(() => {
     if (!artists.length) {
       return [];
     }
@@ -50,6 +51,14 @@ export function ArtistListScreen() {
     });
     return Array.from(unique).sort((a, b) => a.localeCompare(b));
   }, [artists]);
+
+  const selectedGenresLabel = useMemo(() => {
+    if (!selectedGenres.length) {
+      return 'All genres';
+    }
+    const count = selectedGenres.length;
+    return `${count} genre${count > 1 ? 's' : ''} selected`;
+  }, [selectedGenres]);
 
   const filteredArtists = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -72,6 +81,10 @@ export function ArtistListScreen() {
     setSelectedGenres((prev) =>
       prev.includes(genre) ? prev.filter((item) => item !== genre) : [...prev, genre],
     );
+  }, []);
+
+  const handleClearGenres = useCallback(() => {
+    setSelectedGenres([]);
   }, []);
 
   const handleRefresh = useCallback(() => {
@@ -105,17 +118,19 @@ export function ArtistListScreen() {
       <View style={{ marginTop: Spacing.sectionGap, gap: 16 }}>
         <SearchBar placeholder="Search artists" value={query} onChangeText={setQuery} />
 
-        {genreChips.length ? (
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-            {genreChips.map((genre, index) => (
-              <FilterChip
-                key={genre}
-                label={genre}
-                selected={selectedGenres.includes(genre)}
-                onPress={() => toggleGenre(genre)}
-                animationDelay={index * 50}
-              />
-            ))}
+        {genreOptions.length ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Button
+              variant="outline"
+              style={styles.genreButton}
+              onPress={() => setGenreModalVisible(true)}>
+              {selectedGenresLabel}
+            </Button>
+            {selectedGenres.length ? (
+              <Pressable onPress={handleClearGenres} accessibilityRole="button">
+                <Text style={styles.clearGenresText}>Clear</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : null}
       </View>
@@ -141,6 +156,37 @@ export function ArtistListScreen() {
           </View>
         }
       />
+
+      <Modal
+        visible={genreModalVisible}
+        onDismiss={() => setGenreModalVisible(false)}
+        title="Filter by Genre"
+        description="Select one or more genres to refine the artist list."
+        primaryAction={{
+          label: 'Apply',
+          onPress: () => setGenreModalVisible(false),
+        }}
+        secondaryAction={{
+          label: selectedGenres.length ? 'Clear' : 'Cancel',
+          variant: 'outline',
+          onPress: () => {
+            if (selectedGenres.length) {
+              handleClearGenres();
+            }
+            setGenreModalVisible(false);
+          },
+        }}>
+        <View style={styles.genreChipGrid}>
+          {genreOptions.map((genre) => (
+            <FilterChip
+              key={genre}
+              label={genre}
+              selected={selectedGenres.includes(genre)}
+              onPress={() => toggleGenre(genre)}
+            />
+          ))}
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -162,6 +208,19 @@ const styles = StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 40,
     gap: 16,
+  },
+  genreButton: {
+    paddingHorizontal: 16,
+  },
+  clearGenresText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.primary,
+  },
+  genreChipGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
   },
 });
 
@@ -189,7 +248,7 @@ function ArtistListItem({ artist, index, onPress }: ArtistListItemProps) {
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{artist.name}</Text>
             {artist.genres?.length ? (
-              <Text style={{ fontSize: 13, color: '#475569' }}>{artist.genres.join(' · ')}</Text>
+              <Text style={{ fontSize: 13, color: '#475569' }}>{artist.genres.join(' / ')}</Text>
             ) : (
               <Text style={{ fontSize: 13, color: '#94A3B8' }}>Genres coming soon</Text>
             )}

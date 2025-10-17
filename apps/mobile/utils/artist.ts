@@ -33,6 +33,6 @@ export function formatArtistGenres(artist?: Artist | null): string | undefined {
     return undefined;
   }
 
-  return artist.genres.join(' · ');
+  return artist.genres.join(' / ');
 }
 
