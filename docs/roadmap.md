@@ -10,6 +10,7 @@ Status legend:
 ## Snapshot Summary
 - `[DONE]` Week 1 foundation work (routing, auth, theming, core components)
 - `[ACTIVE]` Week 2 feature polish across Festival Detail, Schedule Builder, and Group
+- `[NEXT]` Week 2.5 Expo Go demo readiness (internal shareable build)
 - `[NEXT]` Social collaboration (votes, invites) plus auth/settings depth for Weeks 3-4
 - `[LATER]` Analytics, growth, premium upsell, offline support, partnerships
 
@@ -100,6 +101,18 @@ Status legend:
 - `[NEXT]` Release checklist (QA sign-off, seeding, analytics verification)
 - `[LATER]` Customer support playbook (FAQ, issue triage)
 
+### Week 2.5 – Expo Go Internal Demo
+- Goal: deliver a sharable Expo Go experience with core flows functioning.
+- Requirements:
+  - Festival list with working search/filters (Week 2 polish).
+  - Festival detail with save toggle (local persistence complete; Firestore sync optional).
+  - Auth (email/password) working end-to-end; logout tested.
+  - Basic profile read/edit surface (minimal viable screen).
+  - Schedule builder accessible with read-only preview.
+  - Navigation polish: consistent tabs, safe areas, light theme.
+  - Saved festivals accessible (local storage today, Firestore later in Week 4).
+  - Exclude group chat/social features until post-demo.
+
 ### QA, Tooling, Dev Experience
 - `[NEXT]` Storybook or Expo sandbox for rapid component QA
 - `[NEXT]` Unit tests for data services (`fetchFestivals`, schedule transforms)
@@ -119,6 +132,7 @@ Status legend:
 ## Timeline at a Glance
 - **Week 1 (complete):** foundation scaffolding, auth, theming, base components
 - **Week 2 (in flight):** screen polish, state management, avatars, save flows
+- **Week 2.5 (up next):** Expo Go internal demo (stabilize core flows, share QR)
 - **Week 3 (next):** collaboration feature set (votes, chat preview, invites, notifications)
 - **Week 4 (next):** deep auth/settings, onboarding, premium preview, QA automation
 - **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
