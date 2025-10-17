@@ -1,8 +1,8 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { getAuth, initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// Note: For simplicity, use default auth without custom persistence.
+import { Platform } from 'react-native';
 
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY ?? '',
@@ -29,5 +29,18 @@ if (missingConfigKeys.length > 0) {
 // Avoid re-initializing when Fast Refresh runs.
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
+let authInstance;
+if (Platform.OS === 'web') {
+  authInstance = getAuth(app);
+} else {
+  try {
+    authInstance = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+  } catch (error) {
+    authInstance = getAuth(app);
+  }
+}
+
 export const db = getFirestore(app);
-export const auth = getAuth(app);
+export const auth = authInstance;

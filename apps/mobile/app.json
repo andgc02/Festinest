@@ -18,8 +18,14 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "edgeToEdgeEnabled": false,
+      "predictiveBackGestureEnabled": false,
+      "navigationBar": {
+        "barStyle": "dark-content",
+        "backgroundColor": "#FFFFFF",
+        "visible": "sticky-immersive"
+      },
+      "package": "com.anonymous.mobile"
     },
     "web": {
       "output": "static",

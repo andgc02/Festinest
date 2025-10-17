@@ -1,23 +1,35 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
+import { useEffect } from 'react';
+import { Platform } from 'react-native';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { Colors } from '@/styles/colors';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
+import { SavedFestivalsProvider } from '@/providers/SavedFestivalsProvider';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  useEffect(() => {
+    void SystemUI.setBackgroundColorAsync(Colors.background);
+    // Navigation bar styling requires a dev build when edge-to-edge is enabled in Expo Go.
+  }, []);
+
   return (
     <AuthProvider>
-      <SafeAreaProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <RootNavigator />
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </SafeAreaProvider>
+      <SavedFestivalsProvider>
+        <SafeAreaProvider>
+          <ThemeProvider value={DefaultTheme}>
+            <RootNavigator />
+            <StatusBar style="dark" backgroundColor={Colors.background} translucent={false} />
+          </ThemeProvider>
+        </SafeAreaProvider>
+      </SavedFestivalsProvider>
     </AuthProvider>
   );
 }
@@ -52,16 +64,16 @@ function RootNavigator() {
         name="schedule-builder"
         options={{
           title: 'Build Schedule',
-          headerStyle: { backgroundColor: '#050914' },
-          headerTintColor: '#f8fafc',
+          headerStyle: { backgroundColor: Colors.surface },
+          headerTintColor: Colors.text,
         }}
       />
       <Stack.Screen
         name="group/[groupId]"
         options={{
           title: 'Group',
-          headerStyle: { backgroundColor: '#050914' },
-          headerTintColor: '#f8fafc',
+          headerStyle: { backgroundColor: Colors.surface },
+          headerTintColor: Colors.text,
         }}
       />
     </Stack>

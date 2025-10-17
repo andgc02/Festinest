@@ -108,7 +108,7 @@ export function LoginScreen() {
           </TouchableOpacity>
           {hasAdminDemo ? (
             <TouchableOpacity onPress={fillDemo}>
-              <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#CBD5E1', textDecorationLine: 'underline' }}>Use Admin Demo</Text>
+              <Text style={{ textAlign: 'center', fontSize: 14, fontWeight: '500', color: '#475569', textDecorationLine: 'underline' }}>Use Admin Demo</Text>
             </TouchableOpacity>
           ) : null}
         </View>

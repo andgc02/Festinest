@@ -1,6 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -8,6 +8,7 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { fetchFestivalById } from '@/services/festivals';
 import { Festival, FestivalLineupEntry } from '@/types/festival';
+import { useSavedFestivals } from '@/providers/SavedFestivalsProvider';
 
 export function FestivalDetailScreen() {
   const { festivalId } = useLocalSearchParams<{ festivalId?: string }>();
@@ -16,7 +17,9 @@ export function FestivalDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
   const [groupModalVisible, setGroupModalVisible] = useState(false);
+  const { isSaved, toggle, loading: savedLoading } = useSavedFestivals();
 
   useEffect(() => {
     if (!festivalId) {
@@ -43,6 +46,16 @@ export function FestivalDetailScreen() {
   }, [festivalId]);
 
   const lineupEntries: FestivalLineupEntry[] = useMemo(() => festival?.lineup ?? [], [festival]);
+  const lineupSections = useMemo(() => groupLineup(lineupEntries), [lineupEntries]);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (lineupSections.length) {
+      setOpenSection(lineupSections[0].key);
+    } else {
+      setOpenSection(null);
+    }
+  }, [lineupSections.length]);
 
   if (loading) {
     return (
@@ -63,7 +76,16 @@ export function FestivalDetailScreen() {
     );
   }
 
-  const handleSave = () => {
+  const saved = isSaved(festival.id);
+
+  const handleSaveToggle = () => {
+    const nextSaved = !saved;
+    toggle(festival.id);
+    setToastMessage(
+      nextSaved
+        ? `${festival.name} added to your saved festivals.`
+        : `${festival.name} removed from your saved festivals.`,
+    );
     setToastVisible(true);
   };
 

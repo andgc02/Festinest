@@ -1,11 +1,12 @@
 ﻿import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Animated, FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
+import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { fetchFestivalById } from '@/services/festivals';
 import { FestivalScheduleEntry } from '@/types/festival';
 
@@ -114,33 +115,8 @@ export function ScheduleBuilderScreen() {
         data={filteredSchedule}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderRadius: 16,
-              borderWidth: 1,
-              paddingHorizontal: 16,
-              paddingVertical: 12,
-              borderColor: item.selected ? 'rgba(90,103,216,0.60)' : '#E2E8F0',
-              backgroundColor: item.selected ? 'rgba(90,103,216,0.10)' : Colors.surface,
-            }}>
-            <View>
-              <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#94A3B8' }}>{item.day}</Text>
-              <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
-              <Text style={{ fontSize: 12, color: '#64748B' }}>
-                {`${item.time} at ${item.stage}`}
-              </Text>
-            </View>
-            <Button
-              variant={item.selected ? 'secondary' : 'primary'}
-              style={{ width: 96 }}
-              onPress={() => toggleSelection(item.id)}>
-              {item.selected ? 'Keep' : 'Add'}
-            </Button>
-          </View>
+        renderItem={({ item, index }) => (
+          <ScheduleListItem item={item} index={index} toggleSelection={toggleSelection} />
         )}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', gap: 8, paddingTop: 80 }}>
@@ -174,6 +150,46 @@ const styles = StyleSheet.create({
     paddingTop: 16,
   },
 });
+
+type ScheduleListItemProps = {
+  item: ScheduleItem;
+  index: number;
+  toggleSelection: (id: string) => void;
+};
+
+function ScheduleListItem({ item, index, toggleSelection }: ScheduleListItemProps) {
+  const animatedStyle = useFadeInUp({ delay: index * 70 });
+
+  return (
+    <Animated.View
+      style={[
+        animatedStyle,
+        {
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderRadius: 16,
+          borderWidth: 1,
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderColor: item.selected ? 'rgba(90,103,216,0.60)' : '#E2E8F0',
+          backgroundColor: item.selected ? 'rgba(90,103,216,0.10)' : Colors.surface,
+        },
+      ]}>
+      <View>
+        <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>{item.day}</Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
+        <Text style={{ fontSize: 12, color: '#475569' }}>{`${item.time} at ${item.stage}`}</Text>
+      </View>
+      <Button
+        variant={item.selected ? 'secondary' : 'primary'}
+        style={{ width: 96 }}
+        onPress={() => toggleSelection(item.id)}>
+        {item.selected ? 'Keep' : 'Add'}
+      </Button>
+    </Animated.View>
+  );
+}
 
 
 

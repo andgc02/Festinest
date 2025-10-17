@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors } from '@/styles/colors';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useAuth } from '@/providers/AuthProvider';
 
@@ -23,10 +23,18 @@ export default function TabLayout() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={['top', 'bottom']}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+          tabBarActiveTintColor: '#5A67D8',
+          tabBarInactiveTintColor: '#94A3B8',
+          tabBarStyle: {
+            backgroundColor: Colors.surface,
+            borderTopColor: '#E2E8F0',
+            height: 64,
+            paddingBottom: 8,
+            paddingTop: 8,
+          },
           headerShown: false,
           tabBarButton: HapticTab,
         }}>

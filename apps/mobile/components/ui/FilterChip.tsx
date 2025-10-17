@@ -1,5 +1,7 @@
-import { Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
+import { Animated, Pressable, PressableProps, StyleSheet, Text, View } from 'react-native';
 import { ReactNode } from 'react';
+
+import { useFadeInUp } from '@/hooks/useFadeInUp';
 
 
 type FilterChipProps = PressableProps & {
@@ -10,7 +12,11 @@ type FilterChipProps = PressableProps & {
   badge?: string | number;
   className?: string;
   labelClassName?: string;
+  animationDelay?: number;
+  disableAnimation?: boolean;
 };
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function FilterChip({
   label,
@@ -20,14 +26,19 @@ export function FilterChip({
   badge,
   className,
   labelClassName,
+  animationDelay = 0,
+  disableAnimation,
   ...props
 }: FilterChipProps) {
+  const animatedStyle = useFadeInUp({ delay: animationDelay, enabled: !disableAnimation });
+
   return (
-    <Pressable
+    <AnimatedPressable
       accessibilityRole="button"
       style={[
         styles.base,
         selected ? styles.selected : styles.unselected,
+        animatedStyle,
         props.style as any,
       ]}
       {...props}>
@@ -42,7 +53,7 @@ export function FilterChip({
         </View>
       ) : null}
       {trailingIcon ? <View style={{ height: 16, width: 16, alignItems: 'center', justifyContent: 'center' }}>{trailingIcon}</View> : null}
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 

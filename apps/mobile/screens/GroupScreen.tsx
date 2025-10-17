@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Animated, FlatList, StyleSheet, Text, View } from 'react-native';
 
 import { Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
+import { useFadeInUp } from '@/hooks/useFadeInUp';
 
 const MOCK_GROUP = {
   name: 'Coachella Squad',
@@ -39,8 +40,8 @@ export function GroupScreen() {
       <View style={{ gap: 16 }}>
         <Text style={typographyRN.display}>{MOCK_GROUP.name}</Text>
         <View style={{ flexDirection: 'row', gap: 8 }}>
-          {headerChips.map((chip) => (
-            <FilterChip key={chip.label} label={chip.label} selected={chip.selected} />
+          {headerChips.map((chip, index) => (
+            <FilterChip key={chip.label} label={chip.label} selected={chip.selected} animationDelay={index * 80} />
           ))}
         </View>
       </View>
@@ -59,32 +60,12 @@ export function GroupScreen() {
           data={MOCK_GROUP.schedule}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingVertical: 20, gap: 12 }}
-          renderItem={({ item }) => (
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 16, backgroundColor: Colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
-              <View>
-                <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
-                <Text style={{ fontSize: 12, color: '#64748B' }}>
-                  {item.time} {'\u2022'} {item.stage}
-                </Text>
-              </View>
-              <View style={{ borderRadius: 9999, backgroundColor: 'rgba(90,103,216,0.20)', paddingHorizontal: 12, paddingVertical: 4 }}>
-                <Text style={{ fontSize: 12, fontWeight: '600', color: '#5A67D8' }}>{`${item.votes} votes`}</Text>
-              </View>
-            </View>
-          )}
+          renderItem={({ item, index }) => <ScheduleRow item={item} index={index} />}
         />
       ) : (
         <View style={{ flex: 1, gap: 12, paddingVertical: 24 }}>
-          {MOCK_GROUP.chat.map((message) => (
-            <View key={message.id} style={{ gap: 4, borderRadius: 16, backgroundColor: Colors.surface, padding: 16 }}>
-              <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
-                {message.author}{' '}
-                <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#64748B' }}>
-                  {message.timestamp}
-                </Text>
-              </Text>
-              <Text style={typographyRN.body}>{message.message}</Text>
-            </View>
+          {MOCK_GROUP.chat.map((message, index) => (
+            <ChatPreview key={message.id} message={message} index={index} />
           ))}
         </View>
       )}
@@ -138,3 +119,49 @@ const styles = StyleSheet.create({
     paddingTop: 14,
   },
 });
+
+type ScheduleRowProps = {
+  item: typeof MOCK_GROUP.schedule[number];
+  index: number;
+};
+
+function ScheduleRow({ item, index }: ScheduleRowProps) {
+  const animatedStyle = useFadeInUp({ delay: index * 70 });
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 16, backgroundColor: Colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
+        <View>
+          <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artist}</Text>
+          <Text style={{ fontSize: 12, color: '#475569' }}>
+            {item.time} {'\u2022'} {item.stage}
+          </Text>
+        </View>
+        <View style={{ borderRadius: 9999, backgroundColor: '#E2E8F0', paddingHorizontal: 12, paddingVertical: 4 }}>
+          <Text style={{ fontSize: 12, fontWeight: '600', color: '#1A202C' }}>{`${item.votes} votes`}</Text>
+        </View>
+      </View>
+    </Animated.View>
+  );
+}
+
+type ChatPreviewProps = {
+  message: typeof MOCK_GROUP.chat[number];
+  index: number;
+};
+
+function ChatPreview({ message, index }: ChatPreviewProps) {
+  const animatedStyle = useFadeInUp({ delay: index * 80 });
+
+  return (
+    <Animated.View style={[{ borderRadius: 16, backgroundColor: Colors.surface, padding: 16, gap: 4 }, animatedStyle]}>
+      <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
+        {message.author}{' '}
+        <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>
+          {message.timestamp}
+        </Text>
+      </Text>
+      <Text style={typographyRN.body}>{message.message}</Text>
+    </Animated.View>
+  );
+}

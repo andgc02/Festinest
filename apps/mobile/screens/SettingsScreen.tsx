@@ -50,8 +50,8 @@ export function SettingsScreen() {
 function ProfileRow({ label, value }: { label: string; value: string }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-      <Text style={{ fontSize: 14, color: '#94A3B8' }}>{label}</Text>
-      <Text style={{ fontSize: 14, fontWeight: '600', color: '#F1F5F9' }}>{value}</Text>
+      <Text style={{ fontSize: 14, color: '#64748B' }}>{label}</Text>
+      <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>{value}</Text>
     </View>
   );
 }
@@ -67,5 +67,5 @@ const styles = StyleSheet.create({
   },
   list: { marginTop: 24, borderRadius: 24, backgroundColor: Colors.surface },
   listItem: { paddingHorizontal: 20, paddingVertical: 16 },
-  listDivider: { borderBottomWidth: 1, borderBottomColor: 'rgba(30,41,59,0.60)' },
+  listDivider: { borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
 });

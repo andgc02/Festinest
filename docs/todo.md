@@ -16,6 +16,7 @@ Status legend (use one marker per task):
 - `[DONE]` Festival list filters wired to seeded data
 
 ## Week 2 - Core Screens
+- `[DONE]` Light theme polish + entrance animations (Festival list, chips, Group, Schedule)
 - `[ACTIVE]` Festival detail lineup accordion plus save CTA wiring
 - `[ACTIVE]` Schedule builder day tabs with conflict detection logic
 - `[NEXT]` Avatar and AvatarGroup components shared across screens

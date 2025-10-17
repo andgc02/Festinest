@@ -20,13 +20,14 @@ Status legend:
 - `[DONE]` Base UI primitives (Button, Input, SearchBar, Card) and supporting utilities
 - `[DONE]` Week 1 UI polish: FilterChip, Tabs, Modal, Toast, typography utilities
 - `[DONE]` Festival list, detail, and schedule builder placeholders wired to seed data
+- `[DONE]` Light theme polish with entrance animations (Festival list, Group, Schedule, chips)
 - `[DONE]` Settings screen logout flow and docs directory setup
 
 ## In Flight (Week 2 Focus)
 - `[ACTIVE]` Festival detail lineup accordion and saved festivals CTA wiring
 - `[ACTIVE]` Schedule builder day tabs plus conflict detection research
 - `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
-- `[ACTIVE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
+- `[DONE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
 - `[NEXT]` Avatar and AvatarGroup components for profile and group views
 - `[NEXT]` Saved festivals state management shared across tabs
 
@@ -35,10 +36,10 @@ Status legend:
 ### Core MVP Screens
 | Screen | Status | Next Actions | Notes |
 | --- | --- | --- | --- |
-| Festival List | `[ACTIVE]` | Debounce search, extend filter logic, add loading skeletons | Uses FilterChip + SearchBar |
+| Festival List | `[ACTIVE]` | Debounce search, extend filter logic, add loading skeletons | Entrance animation + light theme pass done |
 | Festival Detail | `[ACTIVE]` | Save CTA to Firestore favorites, lineup accordion polish | Add travel tips block |
 | Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
-| Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | Toast and modal placeholders exist |
+| Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | UI polished with animated rows + light surfaces |
 | Settings | `[NEXT]` | Profile edit, preferences, saved festivals list | Prepare for premium toggle |
 | Login/Onboarding | `[NEXT]` | Social auth entry points, copy and logging polish | Demo credentials prefilled |
 
@@ -56,7 +57,7 @@ Status legend:
 
 ### Theming and Design System
 - `[DONE]` Central StyleSheet tokens in `apps/mobile/styles/*` and `constants/theme.ts`
-- `[ACTIVE]` Apply typography tokens across legacy screens and providers
+- `[DONE]` Apply typography tokens across legacy screens and providers
 - `[NEXT]` Light theme passes; define palettes per component
 - `[NEXT]` Align Figma tokens (spacing, radii, gradients) with implementation
 - `[LATER]` Theme switcher surfaced in Settings
@@ -121,7 +122,7 @@ Status legend:
 - **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
 
 ## Recommended Cleanups and Follow-ups
-1. `[ACTIVE]` Sweep for remaining mojibake characters across docs and code comments
+1. `[NEXT]` Sweep for remaining mojibake characters across docs and code comments
 2. `[NEXT]` Align README, roadmap, and todo status markers (reuse legend)
 3. `[NEXT]` Add Figma links or static exports for key layouts (Festival Card, Schedule Row, Group Bubble, AvatarGroup)
 4. `[NEXT]` Draft a `scripts/validateFestivals.ts` utility before live seeding
@@ -131,7 +132,7 @@ Status legend:
 
 ## Appendix: Key References
 - Components: `apps/mobile/components/ui`
-- Theming: `apps/mobile/constants/theme.ts`, `tailwind.config.js`
+- Theming: `apps/mobile/styles/*`, `apps/mobile/constants/theme.ts`
 - Data seeding: `data/festivals.json`, `tools/seedFestivals.js`
 - Auth provider: `apps/mobile/providers/AuthProvider.tsx`
 - Screens to revisit during polish: FestivalDetail, ScheduleBuilder, Group, Settings
