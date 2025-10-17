@@ -30,7 +30,7 @@ Status legend:
 - `[ACTIVE]` Schedule builder day tabs plus conflict detection research
 - `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
 - `[DONE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
-- `[NEXT]` Avatar and AvatarGroup components for profile and group views
+- `[DONE]` Avatar and AvatarGroup components for profile and group views
 - `[DONE]` Saved festivals state management shared across tabs
 
 ## Roadmap by Theme
@@ -42,7 +42,7 @@ Status legend:
 | Festival Detail | `[ACTIVE]` | Persist saved festivals to Firestore, add travel tips block | Local persistence + accordion shipped |
 | Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
 | Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | UI polished with animated rows + light surfaces |
-| Settings | `[NEXT]` | Profile edit, preferences, saved festivals list | Prepare for premium toggle |
+| Settings | `[ACTIVE]` | Profile edit flow and premium toggle prep (saved list + genre prefs shipped) | Prepare for premium toggle |
 | Login/Onboarding | `[NEXT]` | Social auth entry points, copy and logging polish | Demo credentials prefilled |
 
 ### Reusable Component Library

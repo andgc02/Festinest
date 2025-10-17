@@ -1,21 +1,14 @@
-﻿{
-    "endDate":  "2025-06-22",
-    "id":  "electric-forest-2025",
-    "startDate":  "2025-06-19",
-    "schedule":  [
-
-                 ],
-    "status":  "confirmed",
-    "name":  "Electric Forest 2025",
-    "lineup":  [
-
-               ],
-    "location":  "Rothbury, MI",
-    "website":  "https://electricforest.com",
-    "genres":  [
-                   "EDM",
-                   "Jam",
-                   "Psychedelic"
-               ],
-    "lastUpdated":  "2025-10-17T00:00:00.000Z"
+{
+  "id": "electric-forest-2025",
+  "name": "Electric Forest 2025",
+  "location": "Rothbury, MI",
+  "startDate": "2025-06-19",
+  "endDate": "2025-06-22",
+  "genres": ["EDM", "Jam", "Psychedelic"],
+  "website": "https://electricforest.com",
+  "status": "confirmed",
+  "lineup": [],
+  "schedule": [],
+  "lastUpdated": "2025-10-17T00:00:00.000Z"
 }
+

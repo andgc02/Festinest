@@ -1,14 +1,19 @@
 export type FestivalLineupEntry = {
-  artist: string;
-  time?: string;
+  artistId?: string;
+  artist?: string;
+  artistName?: string;
   stage?: string;
+  day?: string;
+  time?: string;
 };
 
 export type FestivalScheduleEntry = {
   day: string;
-  artist: string;
   time: string;
   stage: string;
+  artistId?: string;
+  artist?: string;
+  artistName?: string;
 };
 
 export type Festival = {

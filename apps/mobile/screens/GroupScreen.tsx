@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Animated, FlatList, StyleSheet, Text, View } from 'react-native';
 
-import { Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
+import { Avatar, AvatarGroup, Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
@@ -9,14 +9,20 @@ import { useFadeInUp } from '@/hooks/useFadeInUp';
 
 const MOCK_GROUP = {
   name: 'Coachella Squad',
-  members: ['You', 'Alex', 'Sam'],
+  members: [
+    { id: 'self', name: 'You' },
+    { id: 'alex', name: 'Alex' },
+    { id: 'sam', name: 'Sam' },
+    { id: 'riley', name: 'Riley' },
+    { id: 'casey', name: 'Casey' },
+  ],
   schedule: [
     { id: 'fred', time: '1:00 PM', artist: 'Fred again..', votes: 3, stage: 'Main' },
     { id: 'peggy', time: '2:30 PM', artist: 'Peggy Gou', votes: 1, stage: 'Sahara' },
   ],
   chat: [
-    { id: '1', author: 'Alex', message: 'Meet at the main gate at noon?', timestamp: '11:45 AM' },
-    { id: '2', author: 'Sam', message: 'Bring water and sunscreen!', timestamp: '11:47 AM' },
+    { id: '1', authorId: 'alex', authorName: 'Alex', message: 'Meet at the main gate at noon?', timestamp: '11:45 AM' },
+    { id: '2', authorId: 'sam', authorName: 'Sam', message: 'Bring water and sunscreen!', timestamp: '11:47 AM' },
   ],
 };
 
@@ -35,10 +41,16 @@ export function GroupScreen() {
     [],
   );
 
+  const memberMap = useMemo(
+    () => new Map(MOCK_GROUP.members.map((member) => [member.id, member] as const)),
+    [],
+  );
+
   return (
     <View style={styles.root}>
       <View style={{ gap: 16 }}>
         <Text style={typographyRN.display}>{MOCK_GROUP.name}</Text>
+        <AvatarGroup avatars={MOCK_GROUP.members} maxVisible={4} size={40} />
         <View style={{ flexDirection: 'row', gap: 8 }}>
           {headerChips.map((chip, index) => (
             <FilterChip key={chip.label} label={chip.label} selected={chip.selected} animationDelay={index * 80} />
@@ -65,7 +77,7 @@ export function GroupScreen() {
       ) : (
         <View style={{ flex: 1, gap: 12, paddingVertical: 24 }}>
           {MOCK_GROUP.chat.map((message, index) => (
-            <ChatPreview key={message.id} message={message} index={index} />
+            <ChatPreview key={message.id} message={message} member={memberMap.get(message.authorId)} index={index} />
           ))}
         </View>
       )}
@@ -118,6 +130,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.screenPadding,
     paddingTop: 14,
   },
+  chatCard: {
+    borderRadius: 16,
+    backgroundColor: Colors.surface,
+    padding: 16,
+    gap: 8,
+  },
 });
 
 type ScheduleRowProps = {
@@ -147,21 +165,29 @@ function ScheduleRow({ item, index }: ScheduleRowProps) {
 
 type ChatPreviewProps = {
   message: typeof MOCK_GROUP.chat[number];
+  member: typeof MOCK_GROUP.members[number] | undefined;
   index: number;
 };
 
-function ChatPreview({ message, index }: ChatPreviewProps) {
+function ChatPreview({ message, member, index }: ChatPreviewProps) {
   const animatedStyle = useFadeInUp({ delay: index * 80 });
+  const displayName = member?.name ?? message.authorName;
 
   return (
-    <Animated.View style={[{ borderRadius: 16, backgroundColor: Colors.surface, padding: 16, gap: 4 }, animatedStyle]}>
-      <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
-        {message.author}{' '}
-        <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>
-          {message.timestamp}
-        </Text>
-      </Text>
-      <Text style={typographyRN.body}>{message.message}</Text>
+    <Animated.View style={[styles.chatCard, animatedStyle]}>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
+        <Avatar name={displayName} size={36} />
+        <View style={{ flex: 1, gap: 4 }}>
+          <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
+            {displayName}{' '}
+            <Text
+              style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>
+              {message.timestamp}
+            </Text>
+          </Text>
+          <Text style={typographyRN.body}>{message.message}</Text>
+        </View>
+      </View>
     </Animated.View>
   );
 }

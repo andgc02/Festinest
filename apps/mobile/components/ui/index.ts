@@ -1,5 +1,7 @@
 export * from './Button';
 export * from './Card';
+export * from './Avatar';
+export * from './AvatarGroup';
 export * from './FilterChip';
 export * from './Input';
 export * from './Modal';

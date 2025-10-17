@@ -1,6 +1,8 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, FilterChip, Modal, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -57,22 +59,28 @@ export function FestivalDetailScreen() {
     }
   }, [lineupSections]);
 
+  const safeAreaEdges = ['top', 'bottom'] as const;
+
   if (loading) {
     return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#5A67D8" />
-      </View>
+      <SafeAreaView style={styles.safeArea} edges={safeAreaEdges}>
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="#5A67D8" />
+        </View>
+      </SafeAreaView>
     );
   }
 
   if (!festival) {
     return (
-      <View style={styles.loader}>
-        <Text style={{ fontSize: 16, color: '#E53E3E' }}>{error ?? 'Festival not found.'}</Text>
-        <Button variant="outline" style={{ marginTop: 24, width: 192 }} onPress={() => router.back()}>
-          Go Back
-        </Button>
-      </View>
+      <SafeAreaView style={styles.safeArea} edges={safeAreaEdges}>
+        <View style={styles.loader}>
+          <Text style={{ fontSize: 16, color: '#E53E3E' }}>{error ?? 'Festival not found.'}</Text>
+          <Button variant="outline" style={{ marginTop: 24, width: 192 }} onPress={() => router.back()}>
+            Go Back
+          </Button>
+        </View>
+      </SafeAreaView>
     );
   }
 
@@ -94,7 +102,7 @@ export function FestivalDetailScreen() {
   };
 
   return (
-    <View style={styles.root}>
+    <SafeAreaView style={styles.safeArea} edges={safeAreaEdges}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ gap: 24 }}>
           <View style={{ gap: 16 }}>
@@ -166,7 +174,7 @@ export function FestivalDetailScreen() {
           <Text style={typographyRN.body}>Coming soon: chat previews, votes, and shared schedules.</Text>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -276,7 +284,7 @@ function formatDateRange(startDate: string, endDate: string) {
 }
 
 const styles = StyleSheet.create({
-  root: {
+  safeArea: {
     flex: 1,
     backgroundColor: Colors.background,
   },

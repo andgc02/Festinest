@@ -20,9 +20,9 @@ Status legend (use one marker per task):
 - `[DONE]` Festival detail lineup accordion plus save CTA wiring
 - `[DONE]` Saved festivals state management shared across screens
 - `[ACTIVE]` Schedule builder day tabs with conflict detection logic
-- `[NEXT]` Avatar and AvatarGroup components shared across screens
+- `[DONE]` Avatar and AvatarGroup components shared across screens
 - `[NEXT]` Group screen vote persistence (Firestore) and empty states
-- `[NEXT]` Settings screen saved festivals list and genre preferences form
+- `[DONE]` Settings screen saved festivals list and genre preferences form
 - `[NEXT]` Optimistic loading states and skeletons for list and detail views
 
 ## Week 2.5 - Expo Go Internal Demo
