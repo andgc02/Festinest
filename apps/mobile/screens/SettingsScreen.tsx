@@ -11,6 +11,7 @@ import { useSavedFestivals } from '@/providers/SavedFestivalsProvider';
 import { fetchFestivals } from '@/services/festivals';
 import { Festival } from '@/types/festival';
 import { useGenrePreferences } from '@/hooks/useGenrePreferences';
+import { useProfileDetails } from '@/hooks/useProfileDetails';
 
 export function SettingsScreen() {
   const { signOut, user } = useAuth();
@@ -21,6 +22,7 @@ export function SettingsScreen() {
   const [loadingFestivals, setLoadingFestivals] = useState(true);
   const [festivalsError, setFestivalsError] = useState<string | null>(null);
   const { genres: preferredGenres, toggleGenre, loading: preferencesLoading } = useGenrePreferences();
+  const { profile, loading: profileLoading } = useProfileDetails();
 
   useEffect(() => {
     const load = async () => {
@@ -85,12 +87,33 @@ export function SettingsScreen() {
       <Text style={typographyRN.heading}>Settings</Text>
 
       <View style={styles.card}>
-        <Text style={typographyRN.subheading}>Profile</Text>
-        <ProfileRow label="Name" value="Admin Dev" />
+        <View style={styles.cardHeader}>
+          <Text style={typographyRN.subheading}>Profile</Text>
+          <TouchableOpacity
+            onPress={() => router.push('/profile/edit')}
+            accessibilityRole="button"
+            style={styles.editLinkWrapper}>
+            <Text style={styles.editLink}>Edit</Text>
+          </TouchableOpacity>
+        </View>
+        <ProfileRow
+          label="Name"
+          value={profile.displayName}
+          placeholder="Add your name"
+          loading={profileLoading}
+        />
         <ProfileRow label="Email" value={email} />
         <ProfileRow
+          label="Home Base"
+          value={profile.homeBase}
+          placeholder="Add your city"
+          loading={profileLoading}
+        />
+        <ProfileRow
           label="Preferred Genres"
-          value={preferredGenres.length ? preferredGenres.join(', ') : 'Select your favorites below'}
+          value={preferredGenres.length ? preferredGenres.join(', ') : ''}
+          placeholder="Select your favourites below"
+          loading={preferencesLoading || loadingFestivals}
         />
       </View>
 
@@ -154,11 +177,30 @@ export function SettingsScreen() {
   );
 }
 
-function ProfileRow({ label, value }: { label: string; value: string }) {
+function ProfileRow({
+  label,
+  value,
+  placeholder = '—',
+  loading = false,
+}: {
+  label: string;
+  value?: string;
+  placeholder?: string;
+  loading?: boolean;
+}) {
+  const displayValue = loading ? 'Loading…' : value?.trim().length ? value : placeholder;
+  const isPlaceholder = !loading && (!value || !value.trim().length);
+
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <Text style={{ fontSize: 14, color: '#64748B' }}>{label}</Text>
-      <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>{value}</Text>
+      <Text
+        style={[
+          { fontSize: 14, fontWeight: '600', color: Colors.text },
+          isPlaceholder && styles.placeholderText,
+        ]}>
+        {displayValue}
+      </Text>
     </View>
   );
 }
@@ -177,6 +219,17 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     padding: 20,
   },
+  cardHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  editLinkWrapper: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+  editLink: { fontSize: 13, fontWeight: '600', color: '#5A67D8' },
   section: {
     gap: 12,
     borderRadius: 24,
@@ -200,6 +253,7 @@ const styles = StyleSheet.create({
   list: { borderRadius: 24, backgroundColor: Colors.surface },
   listItem: { paddingHorizontal: 20, paddingVertical: 16 },
   listDivider: { borderBottomWidth: 1, borderBottomColor: '#E2E8F0' },
+  placeholderText: { color: '#94A3B8', fontWeight: '500' },
 });
 
 type SavedFestivalItemProps = {
