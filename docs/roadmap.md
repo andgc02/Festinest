@@ -10,7 +10,7 @@ Status legend:
 ## Snapshot Summary
 - `[DONE]` Week 1 foundation work (routing, auth, theming, core components)
 - `[ACTIVE]` Week 2 feature polish across Festival Detail, Schedule Builder, and Group
-- `[NEXT]` Week 2.5 Expo Go demo readiness (internal shareable build)
+- `[NEXT]` Premium upsell foundations (profile sync, schedule preview, conflict solver)
 - `[NEXT]` Social collaboration (votes, invites) plus auth/settings depth for Weeks 3-4
 - `[LATER]` Analytics, growth, premium upsell, offline support, partnerships
 
@@ -108,18 +108,16 @@ Status legend:
 - `[NEXT]` Release checklist (QA sign-off, seeding, analytics verification)
 - `[LATER]` Customer support playbook (FAQ, issue triage)
 
-### Week 2.5 - Expo Go Internal Demo
-- Goal: deliver a sharable Expo Go experience with core flows functioning.
-- Requirements:
-  - Festival list with working search/filters (Week 2 polish).
-  - Festival detail with save toggle (local persistence complete; Firestore sync optional).
-  - Auth (email/password) working end-to-end; logout tested.
-  - Basic profile read/edit surface (minimal viable screen).
-  - Schedule builder accessible with read-only preview.
-  - Navigation polish: consistent tabs, safe areas, light theme.
-  - Saved festivals accessible (local storage today, Firestore later in Week 4).
-  - Exclude group chat/social features until post-demo.
-- ✅ Shareable Expo Go build + QA checklist documented (`docs/expo-go-share-checklist.md`).
+### Premium Foundations & Preview Work
+- Goal: defer the Expo Go demo until premium-ready foundations are in place.
+- Focus areas:
+  - Harden festival list search/filters with richer defaults (done)
+  - Ship a local-only profile edit screen ahead of Firestore sync (done)
+  - Build schedule builder preview mode (read-only) prior to share links
+  - QA navigation and theming (tabs, safe areas, status bar)
+  - Promote saved festivals persistence to Firestore
+  - Prep premium-gated utilities (lightning polls, leader tools, companion mode lite)
+- Outcome: postpone the Expo Go share build until these pieces are production-ready.
 
 ### QA, Tooling, Dev Experience
 - `[NEXT]` Storybook or Expo sandbox for rapid component QA
@@ -152,7 +150,7 @@ Status legend:
 ## Timeline at a Glance
 - **Week 1 (complete):** foundation scaffolding, auth, theming, base components
 - **Week 2 (in flight):** screen polish, state management, avatars, save flows
-- **Week 2.5 (up next):** Expo Go internal demo (stabilize core flows, share QR)
+- **Premium foundations (current):** Search hardening, profile placeholder, schedule preview, Firestore prep
 - **Week 3 (next):** collaboration feature set (votes, chat preview, invites, notifications)
 - **Week 4 (next):** deep auth/settings, onboarding, premium preview, QA automation
 - **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
@@ -172,3 +170,8 @@ Status legend:
 - Data seeding: `data/festivals/*`, `data/artists/*`, `tools/seedFestivals.js`
 - Auth provider: `apps/mobile/providers/AuthProvider.tsx`
 - Screens to revisit during polish: FestivalDetail, ScheduleBuilder, Group, Settings
+
+
+
+
+

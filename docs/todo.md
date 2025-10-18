@@ -28,14 +28,13 @@ Status legend (use one marker per task):
 - `[DONE]` Optimistic loading states and skeletons for list and detail views
 - `[DONE]` Group detail delete & leave controls for owner and members
 
-## Week 2.5 - Expo Go Internal Demo
-- `[DONE]` Prep Expo Go share build (documentation + QA checklist)
-- `[DONE]` Harden festival list search & filters for demo (tokenized search, stronger default filters)
-- `[NEXT]` Add minimal profile read/edit view for demo
-- `[NEXT]` Ensure schedule builder read-only preview works end-to-end
-- `[NEXT]` QA navigation + theming consistency (tabs, status bar)
-- `[LATER]` (Post-demo) layer in Firestore persistence for saved festivals
-- `[-]` Exclude group chat/social features from demo scope
+## Premium Foundations Track
+- `[ARCHIVED]` Prep Expo Go share build (documentation + QA checklist)
+- `[DONE]` Harden festival list search & filters (tokenized search, richer defaults)
+- `[DONE]` Local-only profile edit screen (placeholder until Firestore sync)
+- `[NEXT]` Schedule builder preview mode (non-editable view, ahead of share links)
+- `[NEXT]` QA navigation + theming consistency (tabs, status bar, safe areas)
+- `[NEXT]` Saved festivals persistence in Firestore (promote from local only)
 
 ## Week 3 - Social Features
 - `[NEXT]` Firestore group schema (members, votes, chat preview)
