@@ -80,6 +80,7 @@ Status legend:
 - `[LATER]` Additional datasets (artists, vendors, travel guides)
 
 ### Collaboration and Social
+- `[DONE]` Group home screen with multi-group management and owner-driven IDs
 - `[NEXT]` Firestore group schema (members, votes, chat preview content)
 - `[NEXT]` Real-time vote tally broadcast to all group members
 - `[NEXT]` QR invite modal with `react-native-qrcode-svg` and share sheet

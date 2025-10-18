@@ -209,7 +209,7 @@ export function GroupHomeScreen() {
             editable={!submitting}
           />
           <Text style={{ fontSize: 12, color: '#64748B' }}>
-            Group IDs are generated as `{username}-{slugified-name}`. Avoid special characters for the cleanest link.
+            {'Group IDs are generated as `{username}-{slugified-name}`. Avoid special characters for the cleanest link.'}
           </Text>
           <Text style={{ fontSize: 12, color: '#94A3B8' }}>
             {groups.length}/{GroupVoteUtils.MAX_GROUPS_PER_USER} active groups
