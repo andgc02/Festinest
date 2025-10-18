@@ -1,9 +1,9 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Animated, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { Animated, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 
-import { Card, FilterChip, SearchBar } from '@/components/ui';
+import { Card, FilterChip, SearchBar, Skeleton } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
@@ -90,6 +90,8 @@ export function FestivalListScreen() {
     />
   );
 
+  const showSkeleton = loading && !refreshing;
+
   return (
     <View style={styles.root}>
       <Text style={typographyRN.display}>Discover Festivals</Text>
@@ -107,10 +109,8 @@ export function FestivalListScreen() {
           ))}
         </View>
       </View>
-      {loading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size="large" color="#5A67D8" />
-        </View>
+      {showSkeleton ? (
+        <FestivalListSkeleton />
       ) : (
         <FlatList
           data={filteredFestivals}
@@ -204,3 +204,26 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 });
+
+function FestivalListSkeleton() {
+  const placeholders = Array.from({ length: 6 });
+
+  return (
+    <View style={[styles.list, { gap: 16 }]}>
+      {placeholders.map((_, index) => (
+        <Card key={index} style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <Skeleton width={48} height={48} borderRadius={16} />
+          <View style={{ flex: 1, gap: 10 }}>
+            <Skeleton height={18} width="70%" />
+            <Skeleton height={14} width="55%" />
+            <Skeleton height={12} width="40%" />
+          </View>
+          <View style={{ alignItems: 'flex-end', gap: 8 }}>
+            <Skeleton height={24} width={64} borderRadius={9999} />
+            <Skeleton height={18} width={18} borderRadius={12} />
+          </View>
+        </Card>
+      ))}
+    </View>
+  );
+}

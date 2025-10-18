@@ -1,10 +1,10 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Button, FilterChip, Modal, Toast } from '@/components/ui';
+import { Button, FilterChip, Modal, Skeleton, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
@@ -68,9 +68,52 @@ export function FestivalDetailScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.safeArea} edges={safeAreaEdges}>
-        <View style={styles.loader}>
-          <ActivityIndicator size="large" color="#5A67D8" />
-        </View>
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={{ gap: 24 }}>
+            <View style={{ gap: 12 }}>
+              <Skeleton height={28} width="70%" />
+              <Skeleton height={16} width="50%" />
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <Skeleton height={28} width={96} borderRadius={9999} />
+                <Skeleton height={28} width={112} borderRadius={9999} />
+              </View>
+              <Skeleton height={44} borderRadius={12} />
+            </View>
+
+            <View style={{ gap: 16 }}>
+              <Skeleton height={20} width="40%" />
+              {Array.from({ length: 3 }).map((_, index) => (
+                <View key={index} style={{ gap: 12 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: 16,
+                      borderRadius: 12,
+                      backgroundColor: '#FFFFFF',
+                      borderWidth: 1,
+                      borderColor: '#E2E8F0',
+                    }}>
+                    <View style={{ gap: 8 }}>
+                      <Skeleton height={16} width={140} />
+                      <Skeleton height={12} width={100} />
+                    </View>
+                    <Skeleton height={20} width={32} borderRadius={9999} />
+                  </View>
+                  <View style={{ gap: 12, paddingHorizontal: 8 }}>
+                    {Array.from({ length: 2 }).map((__, rowIndex) => (
+                      <View key={rowIndex} style={{ gap: 6 }}>
+                        <Skeleton height={14} width="80%" />
+                        <Skeleton height={12} width="60%" />
+                      </View>
+                    ))}
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
       </SafeAreaView>
     );
   }
