@@ -34,7 +34,7 @@ Status legend (use one marker per task):
 - `[DONE]` Local-only profile edit screen (placeholder until Firestore sync)
 - `[NEXT]` Schedule builder preview mode (non-editable view, ahead of share links)
 - `[NEXT]` QA navigation + theming consistency (tabs, status bar, safe areas)
-- `[NEXT]` Saved festivals persistence in Firestore (promote from local only)
+- `[DONE]` Saved festivals persistence in Firestore (promote from local only)
 
 ## Week 3 - Social Features
 - `[NEXT]` Firestore group schema (members, votes, chat preview)
