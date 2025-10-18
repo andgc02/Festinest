@@ -1,0 +1,13 @@
+{
+  "id": "luke-combs",
+  "name": "Luke Combs",
+  "genres": [
+    "Country"
+  ],
+  "photoUrl": "https://example.com/luke-combs.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/718COspgdWOnwOFpJHRZHS",
+    "instagram": "https://instagram.com/lukecombs"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

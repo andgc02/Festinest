@@ -1,0 +1,1574 @@
+{
+  "id": "lollapalooza-2025",
+  "name": "Lollapalooza 2025",
+  "location": "Chicago, IL",
+  "startDate": "2025-07-31",
+  "endDate": "2025-08-03",
+  "genres": [
+    "Pop",
+    "Hip-Hop",
+    "Rock",
+    "Electronic"
+  ],
+  "status": "confirmed",
+  "website": "https://www.lollapalooza.com",
+  "ticketUrl": "https://www.lollapalooza.com/tickets",
+  "lastUpdated": "2025-10-17T00:00:00.000Z",
+  "sources": [
+    {
+      "name": "Official Lineup Announcement",
+      "url": "https://www.lollapalooza.com/lineup",
+      "notes": "2025 daily schedule and stage times"
+    }
+  ],
+  "lineup": [
+    {
+      "artistId": "nourished-by-time",
+      "artistName": "Nourished by Time",
+      "stage": "T-Mobile Stage",
+      "day": "Thursday",
+      "time": "1:15-2:00"
+    },
+    {
+      "artistId": "durand-bernarr",
+      "artistName": "Durand Bernarr",
+      "stage": "T-Mobile Stage",
+      "day": "Thursday",
+      "time": "3:00-4:00"
+    },
+    {
+      "artistId": "barry-cant-swim",
+      "artistName": "Barry Can't Swim",
+      "stage": "T-Mobile Stage",
+      "day": "Thursday",
+      "time": "5:00-6:00"
+    },
+    {
+      "artistId": "gracie-abrams",
+      "artistName": "Gracie Abrams",
+      "stage": "T-Mobile Stage",
+      "day": "Thursday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "tyler-the-creator",
+      "artistName": "Tyler, the Creator",
+      "stage": "T-Mobile Stage",
+      "day": "Thursday",
+      "time": "9:00 PM"
+    },
+    {
+      "artistId": "dj-heather",
+      "artistName": "DJ Heather",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "12:00-12:45"
+    },
+    {
+      "artistId": "torrens-foot-b2b-airwolf-paradise",
+      "artistName": "Torrens Foot b2b Airwolf Paradise",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "12:55-1:50"
+    },
+    {
+      "artistId": "azzecca",
+      "artistName": "Azzecca",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "2:00-3:00"
+    },
+    {
+      "artistId": "prospa",
+      "artistName": "Prospa",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "3:10-4:10"
+    },
+    {
+      "artistId": "the-blessed-madonna",
+      "artistName": "The Blessed Madonna",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "4:20-5:20"
+    },
+    {
+      "artistId": "cloonee",
+      "artistName": "Cloonee",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "5:50-6:50"
+    },
+    {
+      "artistId": "mau-p",
+      "artistName": "Mau P",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "dom-dolla",
+      "artistName": "Dom Dolla",
+      "stage": "DollaPalooza Stage",
+      "day": "Thursday",
+      "time": "8:30-9:45"
+    },
+    {
+      "artistId": "the-symposium",
+      "artistName": "The Symposium",
+      "stage": "Lakeshore Stage",
+      "day": "Thursday",
+      "time": "12:30-1:15"
+    },
+    {
+      "artistId": "julie",
+      "artistName": "Julie",
+      "stage": "Lakeshore Stage",
+      "day": "Thursday",
+      "time": "2:00-3:00"
+    },
+    {
+      "artistId": "matt-champion",
+      "artistName": "Matt Champion",
+      "stage": "Lakeshore Stage",
+      "day": "Thursday",
+      "time": "4:00-5:00"
+    },
+    {
+      "artistId": "magdalena-bay",
+      "artistName": "Magdalena Bay",
+      "stage": "Lakeshore Stage",
+      "day": "Thursday",
+      "time": "6:00-7:00"
+    },
+    {
+      "artistId": "royel-otis",
+      "artistName": "Royel Otis",
+      "stage": "Lakeshore Stage",
+      "day": "Thursday",
+      "time": "8:00-9:00"
+    },
+    {
+      "artistId": "alex-warren-davis-burleson",
+      "artistName": "Alex Warren & Davis Burleson",
+      "stage": "Bonus Tracks",
+      "day": "Thursday",
+      "time": "3:15-3:45"
+    },
+    {
+      "artistId": "how-long-gone-with-the-dare",
+      "artistName": "How Long Gone with The Dare",
+      "stage": "Bonus Tracks",
+      "day": "Thursday",
+      "time": "5:00-5:30"
+    },
+    {
+      "artistId": "bobs-dance-shop",
+      "artistName": "Bob's Dance Shop",
+      "stage": "Bonus Tracks",
+      "day": "Thursday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "23-skidoo-the-secret-agency",
+      "artistName": "23 Skidoo & The Secret Agency",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Thursday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "school-of-rock",
+      "artistName": "School of Rock",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Thursday",
+      "time": "1:30-2:00"
+    },
+    {
+      "artistId": "michael-the-rockness-monsters",
+      "artistName": "Michael & the Rockness Monsters",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Thursday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "justin-roberts-not-ready-for-naptime-players",
+      "artistName": "Justin Roberts & the Not Ready for Naptime Players",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Thursday",
+      "time": "5:15-5:45"
+    },
+    {
+      "artistId": "girl-tones",
+      "artistName": "Girl Tones",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "1:00-1:40"
+    },
+    {
+      "artistId": "alexsucks",
+      "artistName": "Alexsucks",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "2:10-2:50"
+    },
+    {
+      "artistId": "yana",
+      "artistName": "Yana",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "3:20-4:00"
+    },
+    {
+      "artistId": "bo-stalock",
+      "artistName": "Bo Stalock",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "4:30-5:10"
+    },
+    {
+      "artistId": "colby-acuff",
+      "artistName": "Colby Acuff",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "5:40-6:20"
+    },
+    {
+      "artistId": "xaviersobased",
+      "artistName": "Xaviersobased",
+      "stage": "BMI Stage",
+      "day": "Thursday",
+      "time": "6:50-7:30"
+    },
+    {
+      "artistId": "silly-goose",
+      "artistName": "Silly Goose",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "the-droptines",
+      "artistName": "The Droptines",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "12:50-1:30"
+    },
+    {
+      "artistId": "black-party",
+      "artistName": "Black Party",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "1:50-2:30"
+    },
+    {
+      "artistId": "sunami",
+      "artistName": "Sunami",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "2:50-3:30"
+    },
+    {
+      "artistId": "fcukers",
+      "artistName": "FCukers",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "4:00-4:45"
+    },
+    {
+      "artistId": "glass-beams",
+      "artistName": "Glass Beams",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "5:15-6:00"
+    },
+    {
+      "artistId": "overmono",
+      "artistName": "Overmono",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "6:30-7:15"
+    },
+    {
+      "artistId": "2hollis",
+      "artistName": "2hollis",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "7:45-8:30"
+    },
+    {
+      "artistId": "xdinary-heroes",
+      "artistName": "Xdinary Heroes",
+      "stage": "The Grove",
+      "day": "Thursday",
+      "time": "9:00-10:00"
+    },
+    {
+      "artistId": "jade-lemac",
+      "artistName": "Jade LeMac",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Thursday",
+      "time": "12:45-1:30"
+    },
+    {
+      "artistId": "chicago-made",
+      "artistName": "Chicago Made",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Thursday",
+      "time": "2:15-3:00"
+    },
+    {
+      "artistId": "half-alive",
+      "artistName": "Half-Alive",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Thursday",
+      "time": "3:45-4:45"
+    },
+    {
+      "artistId": "role-model",
+      "artistName": "Role Model",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Thursday",
+      "time": "5:45-6:45"
+    },
+    {
+      "artistId": "alex-warren",
+      "artistName": "Alex Warren",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Thursday",
+      "time": "7:45-8:30"
+    },
+    {
+      "artistId": "ratboys",
+      "artistName": "Ratboys",
+      "stage": "Bud Light Stage",
+      "day": "Thursday",
+      "time": "1:30-2:15"
+    },
+    {
+      "artistId": "mark-ambor",
+      "artistName": "Mark Ambor",
+      "stage": "Bud Light Stage",
+      "day": "Thursday",
+      "time": "3:00-3:45"
+    },
+    {
+      "artistId": "sierra-ferrell",
+      "artistName": "Sierra Ferrell",
+      "stage": "Bud Light Stage",
+      "day": "Thursday",
+      "time": "4:45-5:45"
+    },
+    {
+      "artistId": "cage-the-elephant",
+      "artistName": "Cage the Elephant",
+      "stage": "Bud Light Stage",
+      "day": "Thursday",
+      "time": "6:45-7:45"
+    },
+    {
+      "artistId": "luke-combs",
+      "artistName": "Luke Combs",
+      "stage": "Bud Light Stage",
+      "day": "Thursday",
+      "time": "8:30-10:00"
+    },
+    {
+      "artistId": "bo-stalock-den",
+      "artistName": "Bo Stalock",
+      "stage": "Toyota Music Den",
+      "day": "Thursday",
+      "time": "2:00-2:30"
+    },
+    {
+      "artistId": "girl-tones-den",
+      "artistName": "Girl Tones",
+      "stage": "Toyota Music Den",
+      "day": "Thursday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "sofia-camara",
+      "artistName": "Sofia Camara",
+      "stage": "Toyota Music Den",
+      "day": "Thursday",
+      "time": "4:00-4:30"
+    },
+    {
+      "artistId": "jade-lemac-den",
+      "artistName": "Jade LeMac",
+      "stage": "Toyota Music Den",
+      "day": "Thursday",
+      "time": "5:00-5:30"
+    },
+    {
+      "artistId": "yana-den",
+      "artistName": "Yana",
+      "stage": "Toyota Music Den",
+      "day": "Thursday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "mr-shaw",
+      "artistName": "Mr. Shaw",
+      "stage": "Bud Light Backyard",
+      "day": "Thursday",
+      "time": "3:00-4:30"
+    },
+    {
+      "artistId": "mark-ambor-backyard",
+      "artistName": "Mark Ambor",
+      "stage": "Bud Light Backyard",
+      "day": "Thursday",
+      "time": "5:00-5:35"
+    },
+    {
+      "artistId": "deroza",
+      "artistName": "Deroza",
+      "stage": "Bud Light Backyard",
+      "day": "Thursday",
+      "time": "5:30-7:00"
+    },
+    {
+      "artistId": "tanner-adell",
+      "artistName": "Tanner Adell",
+      "stage": "T-Mobile Stage",
+      "day": "Friday",
+      "time": "1:15-2:00"
+    },
+    {
+      "artistId": "gigi-perez",
+      "artistName": "Gigi Perez",
+      "stage": "T-Mobile Stage",
+      "day": "Friday",
+      "time": "2:45-3:40"
+    },
+    {
+      "artistId": "foster-the-people",
+      "artistName": "Foster the People",
+      "stage": "T-Mobile Stage",
+      "day": "Friday",
+      "time": "4:40-5:40"
+    },
+    {
+      "artistId": "djo",
+      "artistName": "Djo",
+      "stage": "T-Mobile Stage",
+      "day": "Friday",
+      "time": "6:40-7:40"
+    },
+    {
+      "artistId": "olivia-rodrigo",
+      "artistName": "Olivia Rodrigo",
+      "stage": "T-Mobile Stage",
+      "day": "Friday",
+      "time": "8:40 PM"
+    },
+    {
+      "artistId": "mary-droppinz",
+      "artistName": "Mary Droppinz",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "12:00-12:35"
+    },
+    {
+      "artistId": "hex-cougar",
+      "artistName": "Hex Cougar",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "12:40-1:15"
+    },
+    {
+      "artistId": "viperactive",
+      "artistName": "Viperactive",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "1:25-2:10"
+    },
+    {
+      "artistId": "murda-beatz",
+      "artistName": "Murda Beatz",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "2:20-3:05"
+    },
+    {
+      "artistId": "alleycvrt",
+      "artistName": "Alleycvrt",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "3:15-4:00"
+    },
+    {
+      "artistId": "bunt",
+      "artistName": "BUNT.",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "4:15-5:15"
+    },
+    {
+      "artistId": "tape-b",
+      "artistName": "Tape B",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "5:45-6:45"
+    },
+    {
+      "artistId": "isoxo",
+      "artistName": "ISOxo",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "knock2",
+      "artistName": "Knock2",
+      "stage": "Perry's Stage",
+      "day": "Friday",
+      "time": "8:30-9:45"
+    },
+    {
+      "artistId": "dogpark",
+      "artistName": "Dogpark",
+      "stage": "Lakeshore Stage",
+      "day": "Friday",
+      "time": "12:30-1:15"
+    },
+    {
+      "artistId": "isabel-larosa",
+      "artistName": "Isabel LaRosa",
+      "stage": "Lakeshore Stage",
+      "day": "Friday",
+      "time": "2:00-2:45"
+    },
+    {
+      "artistId": "ravyn-lenae",
+      "artistName": "Ravyn Lenae",
+      "stage": "Lakeshore Stage",
+      "day": "Friday",
+      "time": "3:40-4:40"
+    },
+    {
+      "artistId": "amaarae",
+      "artistName": "Amaarae",
+      "stage": "Lakeshore Stage",
+      "day": "Friday",
+      "time": "5:40-6:40"
+    },
+    {
+      "artistId": "wallows",
+      "artistName": "Wallows",
+      "stage": "Lakeshore Stage",
+      "day": "Friday",
+      "time": "7:40-8:40"
+    },
+    {
+      "artistId": "the-bingo-go-go",
+      "artistName": "The Bingo-Go Go",
+      "stage": "Bonus Tracks",
+      "day": "Friday",
+      "time": "3:15-3:45"
+    },
+    {
+      "artistId": "gigi-perez-tatiano-miranda",
+      "artistName": "Gigi Perez x Tatiano Miranda",
+      "stage": "Bonus Tracks",
+      "day": "Friday",
+      "time": "4:30-4:50"
+    },
+    {
+      "artistId": "how-long-gone-corey-hendrix",
+      "artistName": "How Long Gone w/ Corey Hendrix",
+      "stage": "Bonus Tracks",
+      "day": "Friday",
+      "time": "6:15-6:45"
+    },
+    {
+      "artistId": "bobs-dance-shop-friday",
+      "artistName": "Bob's Dance Shop",
+      "stage": "Bonus Tracks",
+      "day": "Friday",
+      "time": "6:45-7:15"
+    },
+    {
+      "artistId": "michael-the-rockness-monsters-friday",
+      "artistName": "Michael & the Rockness Monsters",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Friday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "23-skidoo-secret-agency-friday",
+      "artistName": "23 Skidoo & The Secret Agency",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Friday",
+      "time": "1:30-2:00"
+    },
+    {
+      "artistId": "justin-roberts-naptime-friday",
+      "artistName": "Justin Roberts & The Not Ready for Naptime Players",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Friday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "school-of-rock-friday",
+      "artistName": "School of Rock",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Friday",
+      "time": "5:15-5:45"
+    },
+    {
+      "artistId": "winyah",
+      "artistName": "Winyah",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "1:00-1:40"
+    },
+    {
+      "artistId": "cassandra-coleman",
+      "artistName": "Cassandra Coleman",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "2:10-2:50"
+    },
+    {
+      "artistId": "caroline-kingsbury",
+      "artistName": "Caroline Kingsbury",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "3:20-4:00"
+    },
+    {
+      "artistId": "midnight-generation",
+      "artistName": "Midnight Generation",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "4:30-5:10"
+    },
+    {
+      "artistId": "carol-ades",
+      "artistName": "Carol Ades",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "5:40-6:20"
+    },
+    {
+      "artistId": "star-bandz",
+      "artistName": "Star Bandz",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "6:50-7:30"
+    },
+    {
+      "artistId": "mary-droppinz-bmi",
+      "artistName": "Mary Droppinz",
+      "stage": "BMI Stage",
+      "day": "Friday",
+      "time": "7:30-8:30"
+    },
+    {
+      "artistId": "jesse-detor",
+      "artistName": "Jesse Detor",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "old-mervs",
+      "artistName": "Old Mervs",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "12:50-1:30"
+    },
+    {
+      "artistId": "hey-nothing",
+      "artistName": "Hey, Nothing",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "1:30-2:30"
+    },
+    {
+      "artistId": "zindalphia",
+      "artistName": "ZindalphiA",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "2:50-3:30"
+    },
+    {
+      "artistId": "orla-gartland",
+      "artistName": "Orla Gartland",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "4:00-4:45"
+    },
+    {
+      "artistId": "the-dare",
+      "artistName": "The Dare",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "5:15-6:00"
+    },
+    {
+      "artistId": "ocean-alley",
+      "artistName": "Ocean Alley",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "6:30-7:15"
+    },
+    {
+      "artistId": "wyatt-flores",
+      "artistName": "Wyatt Flores",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "7:45-8:30"
+    },
+    {
+      "artistId": "bladee",
+      "artistName": "Bladee",
+      "stage": "The Grove",
+      "day": "Friday",
+      "time": "9:00-10:00"
+    },
+    {
+      "artistId": "alemeda",
+      "artistName": "Alemeda",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Friday",
+      "time": "12:00-12:45"
+    },
+    {
+      "artistId": "kenny-mason",
+      "artistName": "Kenny Mason",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Friday",
+      "time": "1:30-2:30"
+    },
+    {
+      "artistId": "del-water-gap",
+      "artistName": "Del Water Gap",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Friday",
+      "time": "3:30-4:30"
+    },
+    {
+      "artistId": "flipturn",
+      "artistName": "Flipturn",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Friday",
+      "time": "5:30-6:30"
+    },
+    {
+      "artistId": "mary-droppinz-titos",
+      "artistName": "Mary Droppinz",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Friday",
+      "time": "7:30-8:30"
+    },
+    {
+      "artistId": "jane-remover",
+      "artistName": "Jane Remover",
+      "stage": "Bud Light Stage",
+      "day": "Friday",
+      "time": "12:45-1:30"
+    },
+    {
+      "artistId": "otoboke-beaver",
+      "artistName": "Otoboke Beaver",
+      "stage": "Bud Light Stage",
+      "day": "Friday",
+      "time": "2:30-3:30"
+    },
+    {
+      "artistId": "t-pain",
+      "artistName": "T-Pain",
+      "stage": "Bud Light Stage",
+      "day": "Friday",
+      "time": "4:30-5:30"
+    },
+    {
+      "artistId": "bleachers",
+      "artistName": "Bleachers",
+      "stage": "Bud Light Stage",
+      "day": "Friday",
+      "time": "6:30-7:30"
+    },
+    {
+      "artistId": "korn",
+      "artistName": "Korn",
+      "stage": "Bud Light Stage",
+      "day": "Friday",
+      "time": "8:30-10:00"
+    },
+    {
+      "artistId": "carol-ades-den",
+      "artistName": "Carol Ades",
+      "stage": "Toyota Music Den",
+      "day": "Friday",
+      "time": "2:00-2:30"
+    },
+    {
+      "artistId": "old-mervs-den",
+      "artistName": "Old Mervs",
+      "stage": "Toyota Music Den",
+      "day": "Friday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "hey-nothing-den",
+      "artistName": "Hey, Nothing",
+      "stage": "Toyota Music Den",
+      "day": "Friday",
+      "time": "4:00-4:30"
+    },
+    {
+      "artistId": "caroline-kingsbury-den",
+      "artistName": "Caroline Kingsbury",
+      "stage": "Toyota Music Den",
+      "day": "Friday",
+      "time": "5:00-5:30"
+    },
+    {
+      "artistId": "midnight-generation-den",
+      "artistName": "Midnight Generation",
+      "stage": "Toyota Music Den",
+      "day": "Friday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "lucky-lou",
+      "artistName": "Lucky Lou",
+      "stage": "Bud Light Backyard",
+      "day": "Friday",
+      "time": "4:00-5:30"
+    },
+    {
+      "artistId": "zindalphia-backyard",
+      "artistName": "ZindalphiA",
+      "stage": "Bud Light Backyard",
+      "day": "Friday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "kupyd-dj-set",
+      "artistName": "Kupyd (DJ Set)",
+      "stage": "Bud Light Backyard",
+      "day": "Friday",
+      "time": "6:30-8:00"
+    },
+    {
+      "artistId": "sam-austins",
+      "artistName": "Sam Austins",
+      "stage": "T-Mobile Stage",
+      "day": "Saturday",
+      "time": "1:10-1:55"
+    },
+    {
+      "artistId": "max-mcnown",
+      "artistName": "Max McNown",
+      "stage": "T-Mobile Stage",
+      "day": "Saturday",
+      "time": "2:55-3:55"
+    },
+    {
+      "artistId": "marina",
+      "artistName": "Marina",
+      "stage": "T-Mobile Stage",
+      "day": "Saturday",
+      "time": "4:55-5:55"
+    },
+    {
+      "artistId": "doechii",
+      "artistName": "Doechii",
+      "stage": "T-Mobile Stage",
+      "day": "Saturday",
+      "time": "6:55-7:45"
+    },
+    {
+      "artistId": "rufus-du-sol",
+      "artistName": "RUFUS DU SOL",
+      "stage": "T-Mobile Stage",
+      "day": "Saturday",
+      "time": "8:45 PM"
+    },
+    {
+      "artistId": "tessla",
+      "artistName": "Tessla",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "12:00-12:35"
+    },
+    {
+      "artistId": "jev",
+      "artistName": "Jev",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "12:40-1:20"
+    },
+    {
+      "artistId": "daniel-allan",
+      "artistName": "Daniel Allan",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "1:30-2:15"
+    },
+    {
+      "artistId": "layz",
+      "artistName": "Layz",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "2:30-3:15"
+    },
+    {
+      "artistId": "flux-pavilion",
+      "artistName": "Flux Pavilion",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "3:30-4:30"
+    },
+    {
+      "artistId": "dr-fresch",
+      "artistName": "Dr. Fresch",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "4:45-5:45"
+    },
+    {
+      "artistId": "levity",
+      "artistName": "Levity",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "6:15-7:15"
+    },
+    {
+      "artistId": "chase-status",
+      "artistName": "Chase & Status",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "7:30-8:30"
+    },
+    {
+      "artistId": "two-friends",
+      "artistName": "Two Friends",
+      "stage": "Perry's Stage",
+      "day": "Saturday",
+      "time": "8:45-9:45"
+    },
+    {
+      "artistId": "winnetka-bowling-league",
+      "artistName": "Winnetka Bowling League",
+      "stage": "Lakeshore Stage",
+      "day": "Saturday",
+      "time": "12:25-1:10"
+    },
+    {
+      "artistId": "charlotte-lawrence",
+      "artistName": "Charlotte Lawrence",
+      "stage": "Lakeshore Stage",
+      "day": "Saturday",
+      "time": "1:55-2:55"
+    },
+    {
+      "artistId": "bossman-dlow",
+      "artistName": "Bossman Dlow",
+      "stage": "Lakeshore Stage",
+      "day": "Saturday",
+      "time": "3:55-4:55"
+    },
+    {
+      "artistId": "ca7riel-paco-amoroso",
+      "artistName": "Cazriel & Paco Amoroso",
+      "stage": "Lakeshore Stage",
+      "day": "Saturday",
+      "time": "5:55-6:55"
+    },
+    {
+      "artistId": "jpegmafia",
+      "artistName": "JPEGMAFIA",
+      "stage": "Lakeshore Stage",
+      "day": "Saturday",
+      "time": "7:45-8:45"
+    },
+    {
+      "artistId": "the-bingo-go-go-sat",
+      "artistName": "The Bingo-Go Go",
+      "stage": "Bonus Tracks",
+      "day": "Saturday",
+      "time": "3:15-3:45"
+    },
+    {
+      "artistId": "damiano-david-tatiana-miranda",
+      "artistName": "Damiano David X Tatiana Miranda",
+      "stage": "Bonus Tracks",
+      "day": "Saturday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "birds-of-a-feather",
+      "artistName": "Birds of a Feather",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Saturday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "fyutch-aura-v",
+      "artistName": "Fyutch & Aura V",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Saturday",
+      "time": "1:30-2:00"
+    },
+    {
+      "artistId": "divinity-roxx-kids",
+      "artistName": "The Divinity Roxx and Div Roxx Kids",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Saturday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "happiness-club",
+      "artistName": "Special Guests: The Happiness Club",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Saturday",
+      "time": "4:00-4:30"
+    },
+    {
+      "artistId": "q-brothers",
+      "artistName": "Q Brothers",
+      "stage": "Kidzapalooza Presented by Lifeway Kefir",
+      "day": "Saturday",
+      "time": "5:15-5:45"
+    },
+    {
+      "artistId": "eddie-and-the-getaway",
+      "artistName": "Eddie and the Getaway",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "1:00-1:40"
+    },
+    {
+      "artistId": "carter-vail",
+      "artistName": "Carter Vail",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "2:10-2:50"
+    },
+    {
+      "artistId": "rachel-grae",
+      "artistName": "Rachel Grae",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "3:20-4:00"
+    },
+    {
+      "artistId": "junior-varsity",
+      "artistName": "Junior Varsity",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "4:30-5:10"
+    },
+    {
+      "artistId": "zoe-ko",
+      "artistName": "Zoe Ko",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "5:40-6:20"
+    },
+    {
+      "artistId": "people-r-ugly",
+      "artistName": "People R Ugly",
+      "stage": "BMI Stage",
+      "day": "Saturday",
+      "time": "6:50-7:30"
+    },
+    {
+      "artistId": "landon-conrath",
+      "artistName": "Landon Conrath",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "dua-saleh",
+      "artistName": "Dua Saleh",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "12:50-1:30"
+    },
+    {
+      "artistId": "salute",
+      "artistName": "Salute",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "1:50-2:30"
+    },
+    {
+      "artistId": "ole-go",
+      "artistName": "Ole Go",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "2:50-3:30"
+    },
+    {
+      "artistId": "naomi-scott",
+      "artistName": "Naomi Scott",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "4:00-4:45"
+    },
+    {
+      "artistId": "orion-sun",
+      "artistName": "Orion Sun",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "5:15-6:00"
+    },
+    {
+      "artistId": "bilmuri",
+      "artistName": "Bilmuri",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "6:30-7:15"
+    },
+    {
+      "artistId": "damiano-david",
+      "artistName": "Damiano David",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "7:45-9:30"
+    },
+    {
+      "artistId": "mkgee",
+      "artistName": "Mk.gee",
+      "stage": "The Grove",
+      "day": "Saturday",
+      "time": "9:00-10:00"
+    },
+    {
+      "artistId": "newdad",
+      "artistName": "Newdad",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Saturday",
+      "time": "12:15-1:00"
+    },
+    {
+      "artistId": "wasia-project",
+      "artistName": "Wasia Project",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Saturday",
+      "time": "1:45-2:30"
+    },
+    {
+      "artistId": "montell-fish",
+      "artistName": "Montell Fish",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Saturday",
+      "time": "3:30-4:30"
+    },
+    {
+      "artistId": "fujii-kaze",
+      "artistName": "Fujii Kaze",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Saturday",
+      "time": "5:30-6:30"
+    },
+    {
+      "artistId": "chicago-youth-symphony",
+      "artistName": "Chicago Youth Symphony",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Saturday",
+      "time": "7:30-8:30"
+    },
+    {
+      "artistId": "kickflip",
+      "artistName": "Kickflip",
+      "stage": "Bud Light Stage",
+      "day": "Saturday",
+      "time": "1:00-1:45"
+    },
+    {
+      "artistId": "boa",
+      "artistName": "Boa",
+      "stage": "Bud Light Stage",
+      "day": "Saturday",
+      "time": "2:30-3:30"
+    },
+    {
+      "artistId": "young-miko",
+      "artistName": "Young Miko",
+      "stage": "Bud Light Stage",
+      "day": "Saturday",
+      "time": "4:30-5:30"
+    },
+    {
+      "artistId": "clairo",
+      "artistName": "Clairo",
+      "stage": "Bud Light Stage",
+      "day": "Saturday",
+      "time": "6:30-7:30"
+    },
+    {
+      "artistId": "twice",
+      "artistName": "TWICE",
+      "stage": "Bud Light Stage",
+      "day": "Saturday",
+      "time": "8:30-10:00"
+    },
+    {
+      "artistId": "landon-conrath-den",
+      "artistName": "Landon Conrath",
+      "stage": "Toyota Music Den",
+      "day": "Saturday",
+      "time": "2:00-2:30"
+    },
+    {
+      "artistId": "newdad-den",
+      "artistName": "Newdad",
+      "stage": "Toyota Music Den",
+      "day": "Saturday",
+      "time": "3:00-3:30"
+    },
+    {
+      "artistId": "winnetka-bowling-league-den",
+      "artistName": "Winnetka Bowling League",
+      "stage": "Toyota Music Den",
+      "day": "Saturday",
+      "time": "4:00-4:30"
+    },
+    {
+      "artistId": "rachel-grae-den",
+      "artistName": "Rachel Grae",
+      "stage": "Toyota Music Den",
+      "day": "Saturday",
+      "time": "5:00-5:30"
+    },
+    {
+      "artistId": "junior-varsity-den",
+      "artistName": "Junior Varsity",
+      "stage": "Toyota Music Den",
+      "day": "Saturday",
+      "time": "6:00-6:30"
+    },
+    {
+      "artistId": "heavy",
+      "artistName": "Heavy",
+      "stage": "Bud Light Backyard DJ Sets",
+      "day": "Saturday",
+      "time": "4:00-5:30"
+    },
+    {
+      "artistId": "max-mcnown-backyard",
+      "artistName": "Max McNown",
+      "stage": "Bud Light Backyard DJ Sets",
+      "day": "Saturday",
+      "time": "5:30-6:00"
+    },
+    {
+      "artistId": "zillion",
+      "artistName": "Zillion",
+      "stage": "Bud Light Backyard DJ Sets",
+      "day": "Saturday",
+      "time": "6:00-7:30"
+    },
+    {
+      "artistId": "laila",
+      "artistName": "Laila!",
+      "stage": "T-Mobile Stage",
+      "day": "Sunday",
+      "time": "1:30-2:15"
+    },
+    {
+      "artistId": "katseye",
+      "artistName": "Katseye",
+      "stage": "T-Mobile Stage",
+      "day": "Sunday",
+      "time": "3:15-4:00"
+    },
+    {
+      "artistId": "isaiah-rashad",
+      "artistName": "Isaiah Rashad",
+      "stage": "T-Mobile Stage",
+      "day": "Sunday",
+      "time": "5:00-6:00"
+    },
+    {
+      "artistId": "dominic-fike",
+      "artistName": "Dominic Fike",
+      "stage": "T-Mobile Stage",
+      "day": "Sunday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "sabrina-carpenter",
+      "artistName": "Sabrina Carpenter",
+      "stage": "T-Mobile Stage",
+      "day": "Sunday",
+      "time": "10:00 PM"
+    },
+    {
+      "artistId": "raecola",
+      "artistName": "RaeCola",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "jigitz",
+      "artistName": "Jigitz",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "12:45-1:30"
+    },
+    {
+      "artistId": "nimino",
+      "artistName": "Nimino",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "1:45-2:45"
+    },
+    {
+      "artistId": "rebecca-black",
+      "artistName": "Rebecca Black",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "3:00-4:00"
+    },
+    {
+      "artistId": "marlon-hoffstadt",
+      "artistName": "Marlon Hoffstadt",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "4:15-5:15"
+    },
+    {
+      "artistId": "sammy-virji",
+      "artistName": "Sammy Virji",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "5:45-6:45"
+    },
+    {
+      "artistId": "gryffin",
+      "artistName": "Gryffin",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "martin-garrix",
+      "artistName": "Martin Garrix",
+      "stage": "Perry's Stage",
+      "day": "Sunday",
+      "time": "8:30-9:45"
+    },
+    {
+      "artistId": "joe-p",
+      "artistName": "Joe P",
+      "stage": "Lakeshore Stage",
+      "day": "Sunday",
+      "time": "12:45-1:30"
+    },
+    {
+      "artistId": "boynextdoor",
+      "artistName": "BOYNEXTDOOR",
+      "stage": "Lakeshore Stage",
+      "day": "Sunday",
+      "time": "2:15-3:15"
+    },
+    {
+      "artistId": "mariah-the-scientist",
+      "artistName": "Mariah The Scientist",
+      "stage": "Lakeshore Stage",
+      "day": "Sunday",
+      "time": "4:00-5:00"
+    },
+    {
+      "artistId": "finneas",
+      "artistName": "Finneas",
+      "stage": "Lakeshore Stage",
+      "day": "Sunday",
+      "time": "6:00-7:00"
+    },
+    {
+      "artistId": "still-woozy",
+      "artistName": "Still Woozy",
+      "stage": "Lakeshore Stage",
+      "day": "Sunday",
+      "time": "8:00-9:00"
+    },
+    {
+      "artistId": "benches",
+      "artistName": "Benches",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "1:00-1:40"
+    },
+    {
+      "artistId": "lekan",
+      "artistName": "Lekan",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "2:10-2:50"
+    },
+    {
+      "artistId": "sofia-camara-bmi",
+      "artistName": "Sofia Camara",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "3:20-4:00"
+    },
+    {
+      "artistId": "aliyahs-interlude",
+      "artistName": "Aliyah's Interlude",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "4:30-5:10"
+    },
+    {
+      "artistId": "blk-odyssy",
+      "artistName": "Blk Odyssy",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "5:40-6:20"
+    },
+    {
+      "artistId": "graham-barham",
+      "artistName": "Graham Barham",
+      "stage": "BMI Stage",
+      "day": "Sunday",
+      "time": "6:50-7:30"
+    },
+    {
+      "artistId": "kaicrewsade",
+      "artistName": "Kaicreswade",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "12:00-12:30"
+    },
+    {
+      "artistId": "the-criticals",
+      "artistName": "The Criticals",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "12:50-1:30"
+    },
+    {
+      "artistId": "vincent-lima",
+      "artistName": "Vincent Lima",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "1:50-2:30"
+    },
+    {
+      "artistId": "willow-avalon",
+      "artistName": "Willow Avalon",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "2:50-3:30"
+    },
+    {
+      "artistId": "la-femme",
+      "artistName": "La Femme",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "4:00-4:45"
+    },
+    {
+      "artistId": "joey-valence-brae",
+      "artistName": "Joey Valence & Brae",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "5:15-6:00"
+    },
+    {
+      "artistId": "maribou-state",
+      "artistName": "Maribou State",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "6:30-7:15"
+    },
+    {
+      "artistId": "artemas",
+      "artistName": "Artemas",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "7:45-8:30"
+    },
+    {
+      "artistId": "latin-mafia",
+      "artistName": "Latin Mafia",
+      "stage": "The Grove",
+      "day": "Sunday",
+      "time": "9:00-10:00"
+    },
+    {
+      "artistId": "landon-barker",
+      "artistName": "Landon Barker",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Sunday",
+      "time": "12:30-1:15"
+    },
+    {
+      "artistId": "wunderhorse",
+      "artistName": "Wunderhorse",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Sunday",
+      "time": "2:00-3:00"
+    },
+    {
+      "artistId": "wave-to-earth",
+      "artistName": "Wave to Earth",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Sunday",
+      "time": "4:00-5:00"
+    },
+    {
+      "artistId": "ian",
+      "artistName": "Ian",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Sunday",
+      "time": "6:00-7:00"
+    },
+    {
+      "artistId": "rebecca-black-titos",
+      "artistName": "Rebecca Black",
+      "stage": "Tito's Handmade Vodka Stage",
+      "day": "Sunday",
+      "time": "8:00-8:45"
+    },
+    {
+      "artistId": "flowerovlove",
+      "artistName": "Flowerovlove",
+      "stage": "Bud Light Stage",
+      "day": "Sunday",
+      "time": "1:15-2:00"
+    },
+    {
+      "artistId": "wild-rivers",
+      "artistName": "Wild Rivers",
+      "stage": "Bud Light Stage",
+      "day": "Sunday",
+      "time": "3:00-4:00"
+    },
+    {
+      "artistId": "remi-wolf",
+      "artistName": "Remi Wolf",
+      "stage": "Bud Light Stage",
+      "day": "Sunday",
+      "time": "5:00-6:00"
+    },
+    {
+      "artistId": "the-marias",
+      "artistName": "The Marias",
+      "stage": "Bud Light Stage",
+      "day": "Sunday",
+      "time": "7:00-8:00"
+    },
+    {
+      "artistId": "asap-rocky",
+      "artistName": "A$AP Rocky",
+      "stage": "Bud Light Stage",
+      "day": "Sunday",
+      "time": "8:45-10:00"
+    }
+  ],
+  "schedule": []
+}

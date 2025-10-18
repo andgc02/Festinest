@@ -1,0 +1,17 @@
+{
+  "id": "asap-rocky",
+  "name": "A$AP Rocky",
+  "genres": [
+    "East Coast Hip Hop",
+    "Psychedelic Rap",
+    "Experimental Hip Hop",
+    "Alternative Hip Hop",
+    "Cloud Rap"
+  ],
+  "photoUrl": "https://example.com/asap-rocky.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/13ubrt8QOOCPljQ2FL1Kca",
+    "instagram": "https://instagram.com/asaprocky"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

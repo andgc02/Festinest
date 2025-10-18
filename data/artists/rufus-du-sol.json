@@ -1,0 +1,16 @@
+{
+  "id": "rufus-du-sol",
+  "name": "RUFUS DU SOL",
+  "genres": [
+    "Deep House",
+    "Alternative Dance",
+    "Electronica",
+    "House"
+  ],
+  "photoUrl": "https://example.com/rufus-du-sol.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/5Pb27ujIyYb33zBqVysBkj",
+    "instagram": "https://instagram.com/rufusdusol"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

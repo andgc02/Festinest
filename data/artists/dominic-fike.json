@@ -1,0 +1,18 @@
+{
+  "id": "dominic-fike",
+  "name": "Dominic Fike",
+  "genres": [
+    "Alternative Hip Hop",
+    "Rap Rock",
+    "Pop Rock",
+    "Alternative Rock",
+    "Indie Pop",
+    "Indie Rock"
+  ],
+  "photoUrl": "https://example.com/dominic-fike.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/6USv9qhCn6zfxlBQIYJ9qs",
+    "instagram": "https://instagram.com/dominicfike"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

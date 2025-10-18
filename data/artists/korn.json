@@ -1,0 +1,14 @@
+{
+  "id": "korn",
+  "name": "Korn",
+  "genres": [
+    "Nu Metal",
+    "Alternative Metal"
+  ],
+  "photoUrl": "https://example.com/korn.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/3RNrq3jvMZxD9ZyoOZbQOD",
+    "instagram": "https://instagram.com/korn_official"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

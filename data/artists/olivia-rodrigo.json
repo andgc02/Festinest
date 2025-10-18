@@ -1,0 +1,17 @@
+{
+  "id": "olivia-rodrigo",
+  "name": "Olivia Rodrigo",
+  "genres": [
+    "Pop Rock",
+    "Alt-Pop",
+    "Pop-Punk",
+    "Power Pop",
+    "Alternative Rock"
+  ],
+  "photoUrl": "https://example.com/olivia-rodrigo.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/1McMsnEElThX1knmY4oliG",
+    "instagram": "https://instagram.com/oliviarodrigo"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

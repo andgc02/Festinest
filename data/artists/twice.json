@@ -1,0 +1,14 @@
+{
+  "id": "twice",
+  "name": "TWICE",
+  "genres": [
+    "K-Pop",
+    "J-Pop"
+  ],
+  "photoUrl": "https://example.com/twice.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/7n2Ycct7Beij7Dj7meI4X0",
+    "instagram": "https://instagram.com/twicetagram"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

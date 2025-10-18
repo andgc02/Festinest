@@ -1,0 +1,15 @@
+{
+  "id": "gracie-abrams",
+  "name": "Gracie Abrams",
+  "genres": [
+    "Pop",
+    "Indie",
+    "Folk-Pop"
+  ],
+  "photoUrl": "https://example.com/gracie-abrams.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/4tuJ0bMpJh08umKkEXKUI5",
+    "instagram": "https://instagram.com/gracieabrams"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

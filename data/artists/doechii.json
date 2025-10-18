@@ -1,0 +1,15 @@
+{
+  "id": "doechii",
+  "name": "Doechii",
+  "genres": [
+    "Hip Hop",
+    "Pop Rap",
+    "Pop"
+  ],
+  "photoUrl": "https://example.com/doechii.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/4E2rKHVDssGJm2SCDOMMJB",
+    "instagram": "https://instagram.com/doechii"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

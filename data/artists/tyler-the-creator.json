@@ -1,0 +1,18 @@
+{
+  "id": "tyler-the-creator",
+  "name": "Tyler, the Creator",
+  "genres": [
+    "Alternative Hip Hop",
+    "Neo Soul",
+    "West Coast Hip Hop",
+    "Jazz Rap",
+    "Hardcore Hip Hop",
+    "Horrorcore"
+  ],
+  "photoUrl": "https://example.com/tyler-the-creator.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/4V8LLVI7PbaPR0K2TGSxFF",
+    "instagram": "https://instagram.com/feliciathegoat"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

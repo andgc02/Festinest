@@ -1,0 +1,15 @@
+{
+  "id": "t-pain",
+  "name": "T-Pain",
+  "genres": [
+    "R&B",
+    "Pop Rap",
+    "Southern Hip Hop"
+  ],
+  "photoUrl": "https://example.com/t-pain.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/1AbSkaG6LnN4eaK2zKxZ5n",
+    "instagram": "https://instagram.com/tpain"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

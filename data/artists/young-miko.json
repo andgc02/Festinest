@@ -1,0 +1,15 @@
+{
+  "id": "young-miko",
+  "name": "Young Miko",
+  "genres": [
+    "Latin Trap",
+    "Latin R&B",
+    "Reggaeton"
+  ],
+  "photoUrl": "https://example.com/young-miko.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/3qsKSpcV3ncke3hw52JSMB",
+    "instagram": "https://instagram.com/itsyoungmiko"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

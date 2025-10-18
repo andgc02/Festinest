@@ -1,0 +1,17 @@
+{
+  "id": "bleachers",
+  "name": "Bleachers",
+  "genres": [
+    "Indie Pop",
+    "New Wave",
+    "Rock",
+    "Alternative Rock",
+    "Synth-Pop"
+  ],
+  "photoUrl": "https://example.com/bleachers.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/2eam0iDomRHGBypaDQLwWI",
+    "instagram": "https://instagram.com/bleachersmusic"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "clairo",
+  "name": "Clairo",
+  "genres": [
+    "Soft Rock",
+    "Lo-Fi",
+    "Indie Rock",
+    "Indie Pop",
+    "Folk"
+  ],
+  "photoUrl": "https://example.com/clairo.jpg",
+  "socials": {
+    "spotify": "https://open.spotify.com/artist/3l0CmX0FuQjFxr8SK7Vqag",
+    "instagram": "https://instagram.com/clairo"
+  },
+  "updatedAt": "2025-10-17T00:00:00.000Z"
+}
