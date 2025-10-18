@@ -8,7 +8,7 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { useAuth } from '@/providers/AuthProvider';
-import { fetchGroupById, toggleGroupVote, GroupVoteUtils, deleteGroup, leaveGroup } from '@/services/groups';
+import { fetchGroupById, toggleGroupVote, GroupVoteUtils, deleteGroup, leaveGroup, listenToGroup } from '@/services/groups';
 import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
 
 type TabKey = 'schedule' | 'chat';
@@ -45,8 +45,21 @@ export function GroupScreen() {
   }, [resolvedGroupId]);
 
   useEffect(() => {
-    void loadGroup();
-  }, [loadGroup]);
+    setLoading(true);
+    const unsubscribe = listenToGroup(
+      resolvedGroupId,
+      (nextGroup) => {
+        setGroup(nextGroup);
+        setLoading(false);
+        setError(nextGroup ? null : 'Group not found or removed.');
+      },
+      (err) => {
+        setError(err.message);
+        setLoading(false);
+      },
+    );
+    return unsubscribe;
+  }, [resolvedGroupId]);
 
   const headerChips = useMemo(() => {
     const membersCount = group?.members.length ?? 0;

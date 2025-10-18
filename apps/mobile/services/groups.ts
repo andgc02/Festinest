@@ -5,12 +5,14 @@ import {
   getDoc,
   getDocs,
   limit,
+  onSnapshot,
   query,
   runTransaction,
   setDoc,
   where,
   type DocumentData,
   type DocumentSnapshot,
+  Unsubscribe,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
@@ -410,4 +412,22 @@ export async function deleteGroup(groupId: string): Promise<void> {
     console.warn(`Failed to delete group ${groupId}`, error);
     throw error;
   }
+}
+
+export function listenToGroup(groupId: string, onChange: (group: Group | null) => void, onError?: (error: Error) => void): Unsubscribe {
+  const reference = doc(db, COLLECTION_NAME, groupId);
+  return onSnapshot(
+    reference,
+    (snapshot) => {
+      if (!snapshot.exists()) {
+        onChange(null);
+        return;
+      }
+      onChange(mapGroup(snapshot));
+    },
+    (error) => {
+      console.warn(`Realtime group listener error for ${groupId}`, error);
+      onError?.(error);
+    },
+  );
 }
