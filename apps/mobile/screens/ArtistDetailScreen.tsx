@@ -289,7 +289,7 @@ function formatDateRange(startDate?: string, endDate?: string) {
   }
 
   const formatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
-  return `${formatter.format(start)} – ${formatter.format(end)}`;
+  return `${formatter.format(start)} - ${formatter.format(end)}`;
 }
 
 function openLink(url: string) {

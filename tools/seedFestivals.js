@@ -105,7 +105,7 @@ function validateFestival(festival, filename, knownArtistIds) {
     }
 
     entries.forEach((entry, index) => {
-      const context = `${filename} → ${bucket}[${index}]`;
+      const context = `${filename} -> ${bucket}[${index}]`;
 
       if (!entry.artistId) {
         issues.push(`${context}: missing artistId (artist "${entry.artist ?? entry.artistName ?? "Unknown"}")`);
@@ -196,7 +196,7 @@ function loadAttendance(knownArtistIds, knownFestivalIds) {
 
       const entries = Array.isArray(data.entries) ? data.entries : [];
       entries.forEach((entry, index) => {
-        const context = `${filename} → entries[${index}]`;
+        const context = `${filename} -> entries[${index}]`;
         const artistId = entry.artistId;
 
         if (!artistId) {
@@ -367,4 +367,3 @@ run().catch((error) => {
   console.error("Failed to seed data:", error);
   process.exit(1);
 });
-

@@ -72,7 +72,7 @@ Status legend:
 - `[DONE]` Stand up `artists` collection (`data/artists/*`) and reference `lineup[].artistId`
 - `[DONE]` Normalize Coachella 2026 lineup JSON to use artist references
 - `[DONE]` Seeder validation for missing artist references + batched writes
-- `[ACTIVE]` Seed festival attendee aggregates (`data/attendance/*` → `festivalAttendees`)
+- `[ACTIVE]` Seed festival attendee aggregates (`data/attendance/*` -> `festivalAttendees`)
 - `[NEXT]` Secure service account injection (`FIREBASE_SERVICE_ACCOUNT_PATH`)
 - `[NEXT]` Seed production collections and add validation checklist
 - `[NEXT]` Monthly update SOP (staging collection, review, promote)
@@ -107,7 +107,7 @@ Status legend:
 - `[NEXT]` Release checklist (QA sign-off, seeding, analytics verification)
 - `[LATER]` Customer support playbook (FAQ, issue triage)
 
-### Week 2.5 – Expo Go Internal Demo
+### Week 2.5 - Expo Go Internal Demo
 - Goal: deliver a sharable Expo Go experience with core flows functioning.
 - Requirements:
   - Festival list with working search/filters (Week 2 polish).

@@ -56,7 +56,7 @@ Join our community of developers creating universal apps.
    - Enable Authentication, Firestore Database, and Storage (optional for later uploads).
 
 2. **Register a web app**
-   - In the Firebase console, open **Project settings → General → Your apps**.
+   - In the Firebase console, open **Project settings -> General -> Your apps**.
    - Add a new **Web** app and copy the generated `firebaseConfig` snippet:
 
      ```js
@@ -95,7 +95,7 @@ Join our community of developers creating universal apps.
   npm run seed:festivals
   ```
   The script loads artists first, then festivals, and upserts each document by `id`.
-- Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields—everything is merged when seeding.
+- Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields - everything is merged when seeding.
 - After seeding, spot-check Firestore to ensure every `festival.lineup[].artistId` has a matching artist document.
 - The seeder now batches writes and will warn if a festival lineup or schedule references an unknown artist or omits required slot metadata (day, stage, time).
 - Use `npm run seed:festivals -- --dry-run` to preview writes or `--validate` to fail CI on validation warnings without mutating Firestore.

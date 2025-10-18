@@ -45,7 +45,7 @@ import { Typography } from '@/styles/typography';
 
 ## 3. Reusable Component Styles
 
-Buttons — `apps/mobile/styles/components/Button.ts`
+Buttons - `apps/mobile/styles/components/Button.ts`
 
 ```
 export const ButtonStyles = StyleSheet.create({
@@ -56,7 +56,7 @@ export const ButtonStyles = StyleSheet.create({
 });
 ```
 
-Cards — `apps/mobile/styles/components/Card.ts`
+Cards - `apps/mobile/styles/components/Card.ts`
 
 ```
 export const CardStyles = StyleSheet.create({
@@ -74,7 +74,7 @@ export const CardStyles = StyleSheet.create({
 });
 ```
 
-Chips — `apps/mobile/styles/components/Chip.ts`
+Chips - `apps/mobile/styles/components/Chip.ts`
 
 ```
 export const ChipStyles = StyleSheet.create({

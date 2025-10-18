@@ -22,7 +22,7 @@
     {
       "name": "Reddit",
       "url": "https://www.reddit.com",
-      "notes": "Rumored Anyma ÆDEN stage production"
+      "notes": "Rumored Anyma AEDEN stage production"
     }
   ],
   "lineup": [
@@ -315,7 +315,7 @@
     },
     {
       "artistId": "chloe-caillet-x-rossi",
-      "artistName": "Chloé Caillet x Rossi.",
+      "artistName": "Chloe Caillet x Rossi.",
       "stage": "TBA",
       "day": "Friday",
       "time": "TBA"
@@ -539,7 +539,7 @@
     },
     {
       "artistId": "luisa-sonza",
-      "artistName": "Luísa Sonza",
+      "artistName": "Luisa Sonza",
       "stage": "TBA",
       "day": "Saturday",
       "time": "TBA"
@@ -686,7 +686,7 @@
     },
     {
       "artistId": "anyma-presents-aeden",
-      "artistName": "Anyma presents ÆDEN",
+      "artistName": "Anyma presents AEDEN",
       "stage": "TBA",
       "day": "Sunday",
       "time": "Headliner"
@@ -791,7 +791,7 @@
     },
     {
       "artistId": "armin-van-buuren-adam-beyer",
-      "artistName": "Armin van Buuren × Adam Beyer",
+      "artistName": "Armin van Buuren x Adam Beyer",
       "stage": "TBA",
       "day": "Sunday",
       "time": "TBA"
@@ -854,7 +854,7 @@
     },
     {
       "artistId": "royksopp",
-      "artistName": "Röyksopp",
+      "artistName": "Royksopp",
       "stage": "TBA",
       "day": "Sunday",
       "time": "TBA"
@@ -910,7 +910,7 @@
     },
     {
       "artistId": "rz",
-      "artistName": "RØZ",
+      "artistName": "ROZ",
       "stage": "TBA",
       "day": "Sunday",
       "time": "TBA"
@@ -931,7 +931,7 @@
     },
     {
       "artistId": "mestiza",
-      "artistName": "Mëstiza",
+      "artistName": "Mestiza",
       "stage": "TBA",
       "day": "Sunday",
       "time": "TBA"
@@ -1039,11 +1039,11 @@
     },
     {
       "day": "Sunday Weekend 1",
-      "artist": "Anyma presents ÆDEN",
+      "artist": "Anyma presents AEDEN",
       "time": "23:30",
       "stage": "Mojave",
       "artistId": "anyma-presents-aeden",
-      "artistName": "Anyma presents ÆDEN"
+      "artistName": "Anyma presents AEDEN"
     },
     {
       "day": "Sunday Weekend 2",

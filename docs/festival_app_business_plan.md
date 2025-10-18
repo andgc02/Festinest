@@ -4,9 +4,9 @@
 
 ### **1. Executive Summary**
 
-**Product:** Festinest is a mobile-first platform that helps users discover music festivals, build personalized artist schedules, and coordinate with friend groups. The app provides aggregated festival data, smart artist/event recommendations, and private group planning tools—all in one place.
+**Product:** Festinest is a mobile-first platform that helps users discover music festivals, build personalized artist schedules, and coordinate with friend groups. The app provides aggregated festival data, smart artist/event recommendations, and private group planning tools-all in one place.
 
-**Target Market:** U.S.-based casual and hardcore music festival attendees aged 18–34.
+**Target Market:** U.S.-based casual and hardcore music festival attendees aged 18-34.
 
 **Key Features:**
 - Festival discovery (filter by location, genre, dates, size)
@@ -27,7 +27,7 @@
 ### **2. Market Opportunity**
 
 - 800+ festivals annually in the U.S.
-- 54% of U.S. adults have attended a festival; highest engagement among ages 18–34
+- 54% of U.S. adults have attended a festival; highest engagement among ages 18-34
 - Fragmented experience currently (siloed festival apps, spreadsheets, group chats)
 - Direct competitors (Festival Dust, FestPlan, Woov) each cover a narrow slice
 
@@ -93,20 +93,20 @@
 
 ```
 Festinest/
-├── apps/
-│   ├── mobile/ (React Native Expo app)
-│   └── web/ (Next.js web version)
-├── backend/
-│   ├── functions/ (Firebase or Node cloud functions)
-│   └── db/ (schema, migration scripts if using SQL)
-├── assets/ (icons, splash, mockups)
-├── docs/
-│   ├── BusinessPlan.md
-│   ├── Roadmap.md
-│   ├── Research.md
-│   └── PitchDeck.pptx
-├── tools/ (CLI tools, data scraping, sync scripts)
-├── .env, .gitignore, README.md
++-- apps/
+|   +-- mobile/ (React Native Expo app)
+|   +-- web/ (Next.js web version)
++-- backend/
+|   +-- functions/ (Firebase or Node cloud functions)
+|   +-- db/ (schema, migration scripts if using SQL)
++-- assets/ (icons, splash, mockups)
++-- docs/
+|   +-- BusinessPlan.md
+|   +-- Roadmap.md
+|   +-- Research.md
+|   +-- PitchDeck.pptx
++-- tools/ (CLI tools, data scraping, sync scripts)
++-- .env, .gitignore, README.md
 ```
 
 ---
@@ -124,21 +124,21 @@ Festinest/
 
 **Web App:**
 - Host on **Vercel** or **Firebase Hosting**
-- Share with early testers who don’t want to install apps
+- Share with early testers who don't want to install apps
 
 ---
 
-### **8. Revenue Model (Year 1–2)**
+### **8. Revenue Model (Year 1-2)**
 
-- **Affiliate Ticket Links:** primary source during MVP (~$0.50–$3 per ticket)
-- **Ad Revenue:** sponsored event placement ($50–$200 per festival)
-- **Premium Tier:** $1.99/month or $9.99/year (target 3–5% conversion)
+- **Affiliate Ticket Links:** primary source during MVP (~$0.50-$3 per ticket)
+- **Ad Revenue:** sponsored event placement ($50-$200 per festival)
+- **Premium Tier:** $1.99/month or $9.99/year (target 3-5% conversion)
 
 ---
 
 ### **9. Risk & Mitigation**
 
-- **App fatigue** (users don’t want another app): mitigate by making it essential for group coordination
+- **App fatigue** (users don't want another app): mitigate by making it essential for group coordination
 - **Apple dev/publishing barriers:** delay full launch, focus on Android/web to start
 - **Festival data maintenance:** automate + allow user submissions with moderation
 
