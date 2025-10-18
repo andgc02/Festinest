@@ -118,6 +118,7 @@ Status legend:
   - Navigation polish: consistent tabs, safe areas, light theme.
   - Saved festivals accessible (local storage today, Firestore later in Week 4).
   - Exclude group chat/social features until post-demo.
+- ✅ Shareable Expo Go build + QA checklist documented (`docs/expo-go-share-checklist.md`).
 
 ### QA, Tooling, Dev Experience
 - `[NEXT]` Storybook or Expo sandbox for rapid component QA

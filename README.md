@@ -5,6 +5,7 @@
 
 ## Docs & Data
 - docs/festival_app_business_plan.md
+- docs/expo-go-share-checklist.md
 - docs/roadmap.md
 - docs/todo.md
 - data/festivals.json (curated festival list)
