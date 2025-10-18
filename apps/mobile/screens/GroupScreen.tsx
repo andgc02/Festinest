@@ -1,6 +1,19 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Alert, Animated, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  Animated,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import type { ListRenderItemInfo } from 'react-native';
 
 import { Avatar, AvatarGroup, Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -8,7 +21,16 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { useAuth } from '@/providers/AuthProvider';
-import { fetchGroupById, toggleGroupVote, GroupVoteUtils, deleteGroup, leaveGroup, listenToGroup } from '@/services/groups';
+import {
+  fetchGroupById,
+  toggleGroupVote,
+  GroupVoteUtils,
+  deleteGroup,
+  leaveGroup,
+  listenToGroup,
+  listenToGroupChat,
+  sendGroupChatMessage,
+} from '@/services/groups';
 import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
 
 type TabKey = 'schedule' | 'chat';
@@ -31,6 +53,13 @@ export function GroupScreen() {
   const [deleteBusy, setDeleteBusy] = useState(false);
   const [leaveBusy, setLeaveBusy] = useState(false);
 
+  const [chatMessages, setChatMessages] = useState<GroupChatMessage[]>([]);
+  const [chatLoading, setChatLoading] = useState(true);
+  const [chatError, setChatError] = useState<string | null>(null);
+  const [chatDraft, setChatDraft] = useState('');
+  const [sendingChat, setSendingChat] = useState(false);
+  const chatListRef = useRef<FlatList<GroupChatMessage> | null>(null);
+
   const loadGroup = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -46,7 +75,8 @@ export function GroupScreen() {
 
   useEffect(() => {
     setLoading(true);
-    const unsubscribe = listenToGroup(
+    setChatLoading(true);
+    const unsubscribeGroup = listenToGroup(
       resolvedGroupId,
       (nextGroup) => {
         setGroup(nextGroup);
@@ -58,7 +88,26 @@ export function GroupScreen() {
         setLoading(false);
       },
     );
-    return unsubscribe;
+
+    const unsubscribeChat = listenToGroupChat(
+      resolvedGroupId,
+      (messages) => {
+        setChatMessages(messages);
+        setChatError(null);
+        setChatLoading(false);
+        requestAnimationFrame(() => chatListRef.current?.scrollToEnd({ animated: true }));
+      },
+      (err) => {
+        setChatError(err.message);
+        setChatLoading(false);
+      },
+      { limit: 200 },
+    );
+
+    return () => {
+      unsubscribeGroup();
+      unsubscribeChat();
+    };
   }, [resolvedGroupId]);
 
   const headerChips = useMemo(() => {
@@ -118,9 +167,32 @@ export function GroupScreen() {
     [group, user, showToast],
   );
 
-  const handleOpenChat = useCallback(() => {
-    showToast('Group chat launch is coming soon.');
-  }, [showToast]);
+  const handleSendChatMessage = useCallback(async () => {
+    const trimmed = chatDraft.trim();
+    if (!trimmed) {
+      return;
+    }
+    if (!group || !user) {
+      showToast('Sign in to chat with your group.', 'error');
+      return;
+    }
+
+    setSendingChat(true);
+    try {
+      await sendGroupChatMessage({
+        groupId: group.id,
+        authorId: user.uid,
+        authorName: deriveUsername(user),
+        message: trimmed,
+      });
+      setChatDraft('');
+    } catch (err) {
+      console.warn('Failed to send chat message', err);
+      showToast('Could not send your message. Please try again.', 'error');
+    } finally {
+      setSendingChat(false);
+    }
+  }, [chatDraft, group, user, showToast]);
 
   const handleCloseToast = useCallback(() => {
     setToastVisible(false);
@@ -140,7 +212,10 @@ export function GroupScreen() {
     }
     Alert.alert('Delete group?', `This will remove ${group.name} for everyone.`, [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive', onPress: async () => {
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
           setDeleteBusy(true);
           try {
             await deleteGroup(group.id);
@@ -151,7 +226,7 @@ export function GroupScreen() {
           } finally {
             setDeleteBusy(false);
           }
-        }
+        },
       },
     ]);
   }, [deleteBusy, group, user, showToast, router]);
@@ -170,7 +245,10 @@ export function GroupScreen() {
     }
     Alert.alert('Leave group?', 'You will lose access to the shared schedule votes.', [
       { text: 'Stay', style: 'cancel' },
-      { text: 'Leave', style: 'destructive', onPress: async () => {
+      {
+        text: 'Leave',
+        style: 'destructive',
+        onPress: async () => {
           setLeaveBusy(true);
           try {
             await leaveGroup(group.id, user.uid);
@@ -181,10 +259,46 @@ export function GroupScreen() {
           } finally {
             setLeaveBusy(false);
           }
-        }
+        },
       },
     ]);
   }, [leaveBusy, group, user, showToast, router]);
+
+  const renderScheduleItem = useCallback(
+    ({ item, index }: ListRenderItemInfo<GroupScheduleVote>) => (
+      <ScheduleRow
+        key={item.id}
+        item={item}
+        index={index}
+        currentUserId={user?.uid}
+        onToggleVote={handleToggleVote}
+        busy={voteBusy[item.id]}
+      />
+    ),
+    [handleToggleVote, user?.uid, voteBusy],
+  );
+
+  const renderChatItem = useCallback(
+    ({ item }: ListRenderItemInfo<GroupChatMessage>) => {
+      const isCurrentUser = item.authorId === user?.uid;
+      return (
+        <View
+          key={item.id}
+          style={[
+            styles.chatBubble,
+            isCurrentUser ? styles.chatBubbleOwn : styles.chatBubbleOther,
+          ]}>
+          <Text style={[styles.chatAuthor, isCurrentUser && styles.chatAuthorOwn]}>{item.authorName}</Text>
+          <Text style={styles.chatText}>{item.message}</Text>
+          <Text style={styles.chatTimestamp}>{formatTimestamp(item.timestamp)}</Text>
+        </View>
+      );
+    },
+    [user?.uid],
+  );
+
+  const headerFade = useFadeInUp({ distance: 12 });
+  const chipFade = useFadeInUp({ delay: 120 });
 
   if (loading) {
     return (
@@ -211,140 +325,135 @@ export function GroupScreen() {
   const currentUsername = deriveUsername(user);
   const ownerDisplay =
     group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
-  const isOwner = Boolean(user && user.uid === group.ownerId);
-  const isMember = Boolean(user && group.memberIds.includes(user.uid));
+
+  const scheduleContent = (
+    <Animated.FlatList
+      data={group.scheduleVotes}
+      keyExtractor={(item) => item.id}
+      renderItem={renderScheduleItem}
+      contentContainerStyle={{ gap: 12 }}
+      ListEmptyComponent={
+        <EmptyState
+          title="No schedule votes yet"
+          description="Add artists while you plan and your group can vote here."
+        />
+      }
+    />
+  );
+
+  const chatContent = (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+      <View style={styles.chatContainer}>
+        {chatLoading ? (
+          <View style={styles.chatLoading}>
+            <ActivityIndicator color={Colors.primary} />
+            <Text style={styles.chatLoadingText}>Loading messages…</Text>
+          </View>
+        ) : chatError ? (
+          <View style={styles.chatLoading}>
+            <Text style={styles.chatErrorText}>{chatError}</Text>
+            <Button variant="outline" onPress={() => setChatLoading(true)}>
+              Retry
+            </Button>
+          </View>
+        ) : (
+          <FlatList
+            ref={chatListRef}
+            data={chatMessages}
+            keyExtractor={(item) => item.id}
+            renderItem={renderChatItem}
+            contentContainerStyle={styles.chatListContent}
+          />
+        )}
+        <View style={styles.chatInputRow}>
+          <TextInput
+            value={chatDraft}
+            onChangeText={setChatDraft}
+            placeholder="Share a plan or drop a link"
+            placeholderTextColor="#94A3B8"
+            style={styles.chatInput}
+            multiline
+          />
+          <Button
+            size="md"
+            style={styles.chatSendButton}
+            onPress={handleSendChatMessage}
+            disabled={sendingChat || !chatDraft.trim().length}
+            loading={sendingChat}>
+            Send
+          </Button>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
+  );
 
   return (
     <View style={styles.root}>
-      <View style={{ gap: 16 }}>
-        <Text style={typographyRN.display}>{group.name}</Text>
-        <View style={{ gap: 4 }}>
-          <Text style={{ fontSize: 14, color: '#475569' }}>Owned by {ownerDisplay}</Text>
-          <Text style={{ fontSize: 12, color: '#64748B' }}>
-            {group.members.length} member{group.members.length === 1 ? '' : 's'}
-          </Text>
+      <Animated.View style={[styles.header, headerFade]}>
+        <View style={styles.titleRow}>
+          <Text style={typographyRN.displaySm}>{group.name}</Text>
+          <FilterChip label="Group" selected animationDelay={0} />
         </View>
-        <AvatarGroup avatars={group.members} maxVisible={4} size={40} />
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          {headerChips.map((chip, index) => (
-            <FilterChip key={`${chip.label}-${index}`} label={chip.label} selected={chip.selected} animationDelay={index * 80} />
-          ))}
-        </View>
-        <View style={{ gap: 12 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>Members</Text>
-          <View style={{ gap: 8 }}>
-            {group.members.map((member) => (
-              <Text key={member.id} style={{ fontSize: 13, color: '#475569' }}>
-                {member.name}
-                {member.id === group.ownerId ? ' (owner)' : ''}
-              </Text>
-            ))}
+        <View style={styles.metaRow}>
+          <AvatarGroup
+            names={group.members.map((member) => member.name)}
+            size={36}
+            total={group.members.length}
+            maxVisible={3}
+          />
+          <View style={{ gap: 4 }}>
+            <Text style={{ fontSize: 13, color: '#475569' }}>
+              Owned by {ownerDisplay.replace(/(^\w{1})|(\s+\w{1})/g, (match) => match.toUpperCase())}
+            </Text>
+            <Text style={{ fontSize: 13, color: '#475569' }}>
+              {group.members.length} member{group.members.length === 1 ? '' : 's'}
+            </Text>
           </View>
         </View>
-        <View style={{ marginTop: 4 }}>
-          {isOwner ? (
-            <Pressable
-              onPress={handleDeletePress}
-              disabled={deleteBusy}
-              style={{ alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 8 }}>
-              <Text style={{ fontSize: 12, fontWeight: '600', color: '#DC2626' }}>{deleteBusy ? 'Deleting...' : 'Delete Group'}</Text>
-            </Pressable>
-          ) : isMember ? (
-            <Pressable
-              onPress={handleLeavePress}
-              disabled={leaveBusy}
-              style={{ alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 8 }}>
-              <Text style={{ fontSize: 12, fontWeight: '600', color: '#DC2626' }}>{leaveBusy ? 'Leaving...' : 'Leave Group'}</Text>
-            </Pressable>
-          ) : null}
+        <Animated.View style={[styles.chipRow, chipFade]}>
+          {headerChips.map((chip, index) => (
+            <FilterChip key={chip.label} label={chip.label} selected={chip.selected} animationDelay={index * 80} />
+          ))}
+        </Animated.View>
+        <View style={styles.actionsRow}>
+          <Button variant="secondary" onPress={() => setQrModalVisible(true)}>
+            Invite Friends
+          </Button>
+          <Button variant="outline" onPress={handleLeavePress} disabled={leaveBusy}>
+            Leave Group
+          </Button>
+          <Button variant="outline" onPress={handleDeletePress} disabled={deleteBusy}>
+            Delete Group
+          </Button>
         </View>
-      </View>
+      </Animated.View>
 
       <Tabs
         value={selectedTab}
         onChange={(key) => setSelectedTab(key as TabKey)}
         items={[
-          { key: 'schedule', label: 'Schedule Votes', count: group.scheduleVotes.length },
-          { key: 'chat', label: 'Group Chat', count: group.chatPreview.length },
+          { key: 'schedule', label: 'Shared Schedule' },
+          { key: 'chat', label: 'Chat' },
         ]}
+        variant="underline"
       />
 
-      {selectedTab === 'schedule' ? (
-        <FlatList
-          data={group.scheduleVotes}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingVertical: 20, gap: 12, flexGrow: 1 }}
-          renderItem={({ item, index }) => (
-            <ScheduleRow
-              item={item}
-              index={index}
-              currentUserId={user?.uid}
-              onToggleVote={handleToggleVote}
-              busy={Boolean(voteBusy[item.id])}
-            />
-          )}
-          ListEmptyComponent={
-            <EmptyState
-              title="No votes yet"
-              description="Once your crew starts voting on sets, the top picks will land here."
-            />
-          }
-        />
-      ) : (
-        <View style={{ flex: 1, gap: 12, paddingVertical: 24 }}>
-          {group.chatPreview.length === 0 ? (
-            <EmptyState
-              title="Chat is quiet"
-              description="Share the QR invite to get friends talking. Chat history will appear here."
-            />
-          ) : (
-            group.chatPreview.map((message, index) => (
-              <ChatPreview key={message.id} message={message} member={memberMap.get(message.authorId)} index={index} />
-            ))
-          )}
-        </View>
-      )}
-
-      <View style={{ marginTop: 'auto', flexDirection: 'row', gap: 12, paddingBottom: 40 }}>
-        <Button variant="secondary" style={{ flex: 1 }} onPress={handleOpenChat}>
-          Open Chat
-        </Button>
-        <Button variant="outline" style={{ flex: 1 }} onPress={() => setQrModalVisible(true)}>
-          Share QR
-        </Button>
-      </View>
+      <View style={styles.body}>{selectedTab === 'schedule' ? scheduleContent : chatContent}</View>
 
       <Toast visible={toastVisible} message={toastMessage} type={toastType} onHide={handleCloseToast} />
 
-      <Modal
-        visible={qrModalVisible}
-        onDismiss={() => setQrModalVisible(false)}
-        title="Share Group QR"
-        description="Show this QR code to invite new friends to the squad."
-        primaryAction={{
-          label: 'Copy Link',
-          onPress: () => {
-            setQrModalVisible(false);
-            showToast('Invite link copied (coming soon).', 'info');
-          },
-        }}
-        secondaryAction={{
-          label: 'Close',
-          variant: 'outline',
-          onPress: () => setQrModalVisible(false),
-        }}>
-        <View
-          style={{
-            height: 160,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 16,
-            borderWidth: 1,
-            borderStyle: 'dashed',
-            borderColor: '#334155',
-          }}>
-          <Text style={{ fontSize: 14, color: '#94A3B8' }}>QR preview placeholder</Text>
+      <Modal visible={qrModalVisible} onClose={() => setQrModalVisible(false)} title="Invite to this group">
+        <Text style={{ fontSize: 14, color: '#475569', lineHeight: 20 }}>
+          Share this QR code or link with friends you trust. We’ll add permissions and temporary invites in an upcoming
+          release.
+        </Text>
+        <View style={styles.qrPlaceholder}>
+          <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>QR preview coming soon</Text>
         </View>
+        <Button onPress={() => setQrModalVisible(false)}>Close</Button>
       </Modal>
     </View>
   );
@@ -355,18 +464,113 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     paddingHorizontal: Spacing.screenPadding,
-    paddingTop: 14,
+    paddingTop: 16,
   },
   loadingState: {
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 12,
   },
-  chatCard: {
-    borderRadius: 16,
+  header: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  actionsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  body: {
+    flex: 1,
+  },
+  card: {
+    borderRadius: 20,
     backgroundColor: Colors.surface,
     padding: 16,
-    gap: 8,
+  },
+  qrPlaceholder: {
+    marginVertical: 24,
+    borderRadius: 16,
+    backgroundColor: '#F8FAFC',
+    padding: 32,
+    alignItems: 'center',
+  },
+  chatContainer: {
+    flex: 1,
+    borderRadius: 24,
+    backgroundColor: Colors.surface,
+    padding: 16,
+    gap: 12,
+  },
+  chatLoading: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12 },
+  chatLoadingText: { fontSize: 13, color: '#475569' },
+  chatErrorText: { fontSize: 13, color: Colors.error, textAlign: 'center' },
+  chatListContent: { gap: 12, paddingBottom: 12 },
+  chatBubble: {
+    borderRadius: 16,
+    padding: 12,
+    maxWidth: '85%',
+    backgroundColor: '#F1F5F9',
+  },
+  chatBubbleOwn: {
+    alignSelf: 'flex-end',
+    backgroundColor: '#E0E7FF',
+  },
+  chatBubbleOther: {
+    alignSelf: 'flex-start',
+  },
+  chatAuthor: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#64748B',
+    marginBottom: 4,
+  },
+  chatAuthorOwn: {
+    color: '#4338CA',
+  },
+  chatText: {
+    fontSize: 14,
+    color: Colors.text,
+  },
+  chatTimestamp: {
+    marginTop: 6,
+    fontSize: 10,
+    color: '#94A3B8',
+  },
+  chatInputRow: {
+    borderTopWidth: 1,
+    borderTopColor: '#E2E8F0',
+    paddingTop: 12,
+    gap: 12,
+  },
+  chatInput: {
+    minHeight: 44,
+    maxHeight: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: Colors.text,
+  },
+  chatSendButton: {
+    alignSelf: 'flex-end',
   },
 });
 
@@ -387,7 +591,7 @@ function ScheduleRow({ item, index, currentUserId, onToggleVote, busy = false }:
   return (
     <Animated.View style={animatedStyle}>
       <Pressable
-        accessibilityRole='button'
+        accessibilityRole="button"
         accessibilityState={{ selected: hasVoted, busy }}
         onPress={() => onToggleVote(item.id)}
         disabled={busy}
@@ -425,34 +629,6 @@ function ScheduleRow({ item, index, currentUserId, onToggleVote, busy = false }:
   );
 }
 
-type ChatPreviewProps = {
-  message: GroupChatMessage;
-  member: Group['members'][number] | undefined;
-  index: number;
-};
-
-function ChatPreview({ message, member, index }: ChatPreviewProps) {
-  const animatedStyle = useFadeInUp({ delay: index * 80 });
-  const displayName = member?.name ?? message.authorName;
-
-  return (
-    <Animated.View style={[styles.chatCard, animatedStyle]}>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
-        <Avatar name={displayName} size={36} />
-        <View style={{ flex: 1, gap: 4 }}>
-          <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>
-            {displayName}{' '}
-            <Text style={{ fontSize: 12, fontWeight: '400', textTransform: 'uppercase', letterSpacing: 0.6, color: '#475569' }}>
-              {message.timestamp}
-            </Text>
-          </Text>
-          <Text style={typographyRN.body}>{message.message}</Text>
-        </View>
-      </View>
-    </Animated.View>
-  );
-}
-
 type EmptyStateProps = {
   title: string;
   description: string;
@@ -465,6 +641,27 @@ function EmptyState({ title, description }: EmptyStateProps) {
       <Text style={{ fontSize: 14, color: '#64748B', textAlign: 'center' }}>{description}</Text>
     </View>
   );
+}
+
+function formatTimestamp(timestamp: string) {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
+    return timestamp;
+  }
+  const now = new Date();
+  const isToday = date.toDateString() === now.toDateString();
+  const timeFormatter = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+  if (isToday) {
+    return timeFormatter.format(date);
+  }
+  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+  });
+  return `${dateFormatter.format(date)} · ${timeFormatter.format(date)}`;
 }
 
 function deriveUsername(user?: { uid: string; displayName: string | null; email: string | null }) {
@@ -485,9 +682,11 @@ function deriveUsername(user?: { uid: string; displayName: string | null; email:
 }
 
 function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 24) || 'user';
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 24) || 'user'
+  );
 }

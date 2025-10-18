@@ -1,4 +1,5 @@
 import {
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -6,18 +7,22 @@ import {
   getDocs,
   limit,
   onSnapshot,
+  orderBy,
   query,
   runTransaction,
+  serverTimestamp,
   setDoc,
   where,
   type DocumentData,
   type DocumentSnapshot,
+  type QueryDocumentSnapshot,
+  type Timestamp,
   Unsubscribe,
 } from 'firebase/firestore';
 
 import { db } from '@/lib/firebase';
 import { getMockGroup } from '@/data/mockGroups';
-import { Group, GroupScheduleVote } from '@/types/group';
+import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
 
 const COLLECTION_NAME = 'groups';
 const MAX_GROUPS_PER_USER = 5;
@@ -256,7 +261,7 @@ export async function createGroup({
   }
 
   const slug = slugify(normalizedName);
-  const baseId = `${ownerUsername}-${slug || 'group'}`;
+  const baseId = `${ownerId}-${slug || 'group'}`;
   const groupId = baseId.toLowerCase();
   const reference = doc(db, COLLECTION_NAME, groupId);
 
@@ -430,4 +435,83 @@ export function listenToGroup(groupId: string, onChange: (group: Group | null) =
       onError?.(error);
     },
   );
+}
+
+function mapChatMessage(snapshot: QueryDocumentSnapshot<DocumentData>): GroupChatMessage | null {
+  const data = snapshot.data();
+  const authorId = typeof data.authorId === 'string' ? data.authorId : null;
+  const authorName = typeof data.authorName === 'string' ? data.authorName : null;
+  const message = typeof data.message === 'string' ? data.message : null;
+  const timestampValue = data.timestamp as Timestamp | undefined;
+
+  if (!authorId || !authorName || !message) {
+    return null;
+  }
+
+  let timestamp = new Date().toISOString();
+  if (timestampValue?.toDate) {
+    timestamp = timestampValue.toDate().toISOString();
+  } else if (typeof data.timestamp === 'string') {
+    timestamp = data.timestamp;
+  }
+
+  return {
+    id: snapshot.id,
+    authorId,
+    authorName,
+    message,
+    timestamp,
+  };
+}
+
+export function listenToGroupChat(
+  groupId: string,
+  onChange: (messages: GroupChatMessage[]) => void,
+  onError?: (error: Error) => void,
+  options: { limit?: number } = {},
+): Unsubscribe {
+  const { limit: messageLimit = 100 } = options;
+  const chatQuery = query(
+    collection(db, COLLECTION_NAME, groupId, 'chat'),
+    orderBy('timestamp', 'asc'),
+    limit(messageLimit),
+  );
+
+  return onSnapshot(
+    chatQuery,
+    (snapshot) => {
+      const messages = snapshot.docs
+        .map((docSnapshot) => mapChatMessage(docSnapshot))
+        .filter((item): item is GroupChatMessage => Boolean(item));
+      onChange(messages);
+    },
+    (error) => {
+      console.warn(`Realtime chat listener error for ${groupId}`, error);
+      onError?.(error);
+    },
+  );
+}
+
+export async function sendGroupChatMessage(params: {
+  groupId: string;
+  authorId: string;
+  authorName: string;
+  message: string;
+}): Promise<void> {
+  const trimmed = params.message.trim();
+  if (!trimmed.length) {
+    throw new Error('Cannot send an empty message.');
+  }
+
+  try {
+    await addDoc(collection(db, COLLECTION_NAME, params.groupId, 'chat'), {
+      authorId: params.authorId,
+      authorName: params.authorName,
+      message: trimmed,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.warn(`Failed to send chat message for group ${params.groupId}`, error);
+    throw error;
+  }
 }

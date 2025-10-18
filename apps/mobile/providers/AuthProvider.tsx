@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
+  updateProfile,
 } from 'firebase/auth';
 import { FirebaseError } from 'firebase/app';
 
@@ -14,7 +15,7 @@ type AuthContextValue = {
   user: User | null;
   initializing: boolean;
   signIn: (email: string, password: string) => Promise<User | null>;
-  signUp: (email: string, password: string) => Promise<User | null>;
+  signUp: (email: string, password: string, options?: { displayName?: string }) => Promise<User | null>;
   signOut: () => Promise<void>;
 };
 
@@ -80,8 +81,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(credential.user);
         return credential.user;
       },
-      async signUp(email: string, password: string) {
+      async signUp(email: string, password: string, options?: { displayName?: string }) {
         const credential = await createUserWithEmailAndPassword(auth, email, password);
+        if (options?.displayName) {
+          try {
+            await updateProfile(credential.user, { displayName: options.displayName });
+            credential.user = auth.currentUser as User;
+          } catch (error) {
+            console.warn('Failed to update profile display name', error);
+          }
+        }
         setUser(credential.user);
         return credential.user;
       },
