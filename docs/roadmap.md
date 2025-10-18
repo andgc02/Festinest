@@ -81,8 +81,8 @@ Status legend:
 
 ### Collaboration and Social
 - `[DONE]` Group home & detail controls with multi-group management, automatic IDs, delete + leave actions
-- `[NEXT]` Firestore group schema (members, votes, chat preview content)
-- `[NEXT]` Real-time vote tally broadcast to all group members
+- `[DONE]` Firestore group schema (members, votes, chat preview content)
+- `[DONE]` Real-time vote tally broadcast to all group members
 - `[NEXT]` QR invite modal with `react-native-qrcode-svg` and share sheet
 - `[LATER]` Full chat experience (push notifications, unread state)
 - `[BLOCKED]` Moderation policy with product and operations
@@ -170,6 +170,7 @@ Status legend:
 - Data seeding: `data/festivals/*`, `data/artists/*`, `tools/seedFestivals.js`
 - Auth provider: `apps/mobile/providers/AuthProvider.tsx`
 - Screens to revisit during polish: FestivalDetail, ScheduleBuilder, Group, Settings
+
 
 
 

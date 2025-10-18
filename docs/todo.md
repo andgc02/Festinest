@@ -37,8 +37,8 @@ Status legend (use one marker per task):
 - `[DONE]` Saved festivals persistence in Firestore (promote from local only)
 
 ## Week 3 - Social Features
-- `[NEXT]` Firestore group schema (members, votes, chat preview)
-- `[NEXT]` Real-time schedule voting integration
+- `[DONE]` Firestore group schema (members, votes, chat preview)
+- `[DONE]` Real-time schedule voting integration
 - `[NEXT]` QR invite modal using `react-native-qrcode-svg`
 - `[NEXT]` Notification preferences plumbing (Expo push)
 - `[NEXT]` Group chat placeholder promoted to Firestore-backed preview
@@ -107,3 +107,5 @@ Status legend (use one marker per task):
 - `[LATER]` Artist streak tracker insights for premium recap
 - `[LATER]` Daily recap generator and shareable premium cards
 - `[LATER]` Live set tracker instrumentation for premium history
+
+
