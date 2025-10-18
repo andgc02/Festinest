@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -357,3 +358,13 @@ export const GroupVoteUtils = {
   applyVoteState,
   MAX_GROUPS_PER_USER,
 };
+
+export async function deleteGroup(groupId: string): Promise<void> {
+  try {
+    const reference = doc(db, COLLECTION_NAME, groupId);
+    await deleteDoc(reference);
+  } catch (error) {
+    console.warn(`Failed to delete group ${groupId}`, error);
+    throw error;
+  }
+}

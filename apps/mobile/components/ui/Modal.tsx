@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Modal as RNModal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal as RNModal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 
 
 import { Button } from './Button';
@@ -9,6 +9,7 @@ type ModalAction = {
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline';
   loading?: boolean;
+  disabled?: boolean;
 };
 
 type ModalProps = {
@@ -36,42 +37,48 @@ export function Modal({
 }: ModalProps) {
   return (
     <RNModal visible={visible} transparent animationType="fade" onRequestClose={onDismiss}>
-      <Pressable
-        accessibilityRole="button"
-        style={[styles.overlay]
-        }
-        onPress={dismissOnOverlayPress ? onDismiss : undefined}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
         <Pressable
-          accessibilityRole="summary"
-          style={styles.panel}
-          onPress={(event) => event.stopPropagation()}>
-          {title ? <Text style={styles.title}>{title}</Text> : null}
-          {description ? <Text style={styles.description}>{description}</Text> : null}
-          {children ? <View style={{ marginTop: 16 }}>{children}</View> : null}
-          {(primaryAction || secondaryAction) && (
-            <View style={styles.actionsRow}>
-              {secondaryAction ? (
-                <Button
-                  variant={secondaryAction.variant ?? 'outline'}
-                  onPress={secondaryAction.onPress}
-                  loading={secondaryAction.loading}
-                  style={{ flex: 1 }}>
-                  {secondaryAction.label}
-                </Button>
-              ) : null}
-              {primaryAction ? (
-                <Button
-                  variant={primaryAction.variant ?? 'primary'}
-                  onPress={primaryAction.onPress}
-                  loading={primaryAction.loading}
-                  style={{ flex: 1 }}>
-                  {primaryAction.label}
-                </Button>
-              ) : null}
-            </View>
-          )}
+          accessibilityRole="button"
+          style={styles.overlay}
+          onPress={dismissOnOverlayPress ? onDismiss : undefined}>
+          <Pressable
+            accessibilityRole="summary"
+            style={styles.panel}
+            onPress={(event) => event.stopPropagation()}>
+            {title ? <Text style={styles.title}>{title}</Text> : null}
+            {description ? <Text style={styles.description}>{description}</Text> : null}
+            {children ? <View style={{ marginTop: 16 }}>{children}</View> : null}
+            {(primaryAction || secondaryAction) && (
+              <View style={styles.actionsRow}>
+                {secondaryAction ? (
+                  <Button
+                    variant={secondaryAction.variant ?? 'outline'}
+                    onPress={secondaryAction.onPress}
+                    loading={secondaryAction.loading}
+                    disabled={secondaryAction.disabled}
+                    style={{ flex: 1 }}>
+                    {secondaryAction.label}
+                  </Button>
+                ) : null}
+                {primaryAction ? (
+                  <Button
+                    variant={primaryAction.variant ?? 'primary'}
+                    onPress={primaryAction.onPress}
+                    loading={primaryAction.loading}
+                    disabled={primaryAction.disabled}
+                    style={{ flex: 1 }}>
+                    {primaryAction.label}
+                  </Button>
+                ) : null}
+              </View>
+            )}
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </KeyboardAvoidingView>
     </RNModal>
   );
 }

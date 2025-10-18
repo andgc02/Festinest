@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import type { ListRenderItemInfo } from 'react-native';
 import type { User } from 'firebase/auth';
 
@@ -9,7 +9,7 @@ import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { useAuth } from '@/providers/AuthProvider';
-import { createGroup, fetchUserGroups, GroupVoteUtils } from '@/services/groups';
+import { createGroup, deleteGroup, fetchUserGroups, GroupVoteUtils } from '@/services/groups';
 import { Group } from '@/types/group';
 
 export function GroupHomeScreen() {
@@ -24,6 +24,7 @@ export function GroupHomeScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'info' | 'error' | 'success'>('info');
+  const [deletingGroupId, setDeletingGroupId] = useState<string | null>(null);
 
   const username = useMemo(() => deriveUsername(user), [user]);
 
@@ -62,6 +63,38 @@ export function GroupHomeScreen() {
     setRefreshing(true);
     void loadGroups();
   }, [loadGroups]);
+
+  const performDeleteGroup = useCallback(
+    async (groupId: string) => {
+      setDeletingGroupId(groupId);
+      try {
+        await deleteGroup(groupId);
+        setGroups((prev) => prev.filter((group) => group.id !== groupId));
+        showToast('Group deleted.', 'info');
+      } catch (error) {
+        console.warn('Failed to delete group', error);
+        showToast('Could not delete the group. Try again.', 'error');
+      } finally {
+        setDeletingGroupId((current) => (current === groupId ? null : current));
+      }
+    },
+    [showToast],
+  );
+
+  const confirmDeleteGroup = useCallback(
+    (group: Group) => {
+      Alert.alert(
+        'Delete group?',
+        `This will remove ${group.name} for everyone.`,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Delete', style: 'destructive', onPress: () => void performDeleteGroup(group.id) },
+        ],
+        { cancelable: true },
+      );
+    },
+    [performDeleteGroup],
+  );
 
   const handleCreateGroup = useCallback(async () => {
     if (!user) {
@@ -111,6 +144,7 @@ export function GroupHomeScreen() {
   const renderItem = ({ item }: ListRenderItemInfo<Group>) => {
     const ownerDisplay =
       item.ownerUsername && item.ownerUsername === username ? 'you' : item.ownerUsername || 'group owner';
+    const isDeleting = deletingGroupId === item.id;
 
     return (
       <Pressable
@@ -123,10 +157,21 @@ export function GroupHomeScreen() {
               <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{item.name}</Text>
               <Text style={{ fontSize: 13, color: '#475569' }}>Owned by {ownerDisplay}</Text>
             </View>
-            <View style={{ alignItems: 'flex-end' }}>
+            <View style={{ alignItems: 'flex-end', gap: 8 }}>
               <Text style={{ fontSize: 12, fontWeight: '600', color: '#5A67D8' }}>
                 {item.members.length} member{item.members.length === 1 ? '' : 's'}
               </Text>
+              <Pressable
+                onPress={(event) => {
+                  event.stopPropagation();
+                  confirmDeleteGroup(item);
+                }}
+                disabled={isDeleting}
+                style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+                <Text style={{ fontSize: 12, fontWeight: '600', color: isDeleting ? '#94A3B8' : '#DC2626' }}>
+                  {isDeleting ? 'Deleting…' : 'Delete'}
+                </Text>
+              </Pressable>
             </View>
           </View>
           <AvatarGroup avatars={item.members} maxVisible={5} size={36} />
@@ -186,7 +231,8 @@ export function GroupHomeScreen() {
           setNewGroupName('');
         }}
         title="Create a Group"
-        description="Pick a name your friends will recognise. IDs are generated automatically when you create the group.">
+        description="Pick a name your friends will recognise. IDs are generated automatically when you create the group."
+        dismissOnOverlayPress={!submitting}>
         <View style={{ gap: 16 }}>
           <Input
             value={newGroupName}
@@ -194,6 +240,8 @@ export function GroupHomeScreen() {
             placeholder="Weekend Warriors"
             autoFocus
             editable={!submitting}
+            returnKeyType="done"
+            onSubmitEditing={handleCreateGroup}
           />
           <Text style={{ fontSize: 12, color: '#94A3B8' }}>
             {groups.length}/{GroupVoteUtils.MAX_GROUPS_PER_USER} active groups
@@ -203,13 +251,20 @@ export function GroupHomeScreen() {
               variant="outline"
               style={{ flex: 1 }}
               onPress={() => {
+                if (submitting) {
+                  return;
+                }
                 setCreateModalVisible(false);
                 setNewGroupName('');
               }}
               disabled={submitting}>
               Cancel
             </Button>
-            <Button style={{ flex: 1 }} onPress={handleCreateGroup} loading={submitting}>
+            <Button
+              style={{ flex: 1 }}
+              onPress={handleCreateGroup}
+              loading={submitting}
+              disabled={submitting || !newGroupName.trim()}>
               Create group
             </Button>
           </View>
