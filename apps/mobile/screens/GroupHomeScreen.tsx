@@ -186,21 +186,8 @@ export function GroupHomeScreen() {
           setNewGroupName('');
         }}
         title="Create a Group"
-        description="Pick a name that your friends will recognise. You can manage up to five active groups."
-        primaryAction={{
-          label: submitting ? 'Creating...' : 'Create group',
-          onPress: handleCreateGroup,
-          disabled: submitting,
-        }}
-        secondaryAction={{
-          label: 'Cancel',
-          variant: 'outline',
-          onPress: () => {
-            setCreateModalVisible(false);
-            setNewGroupName('');
-          },
-        }}>
-        <View style={{ gap: 12 }}>
+        description="Pick a name your friends will recognise. IDs are generated automatically when you create the group.">
+        <View style={{ gap: 16 }}>
           <Input
             value={newGroupName}
             onChangeText={setNewGroupName}
@@ -208,12 +195,24 @@ export function GroupHomeScreen() {
             autoFocus
             editable={!submitting}
           />
-          <Text style={{ fontSize: 12, color: '#64748B' }}>
-            {'Group IDs are generated as `{username}-{slugified-name}`. Avoid special characters for the cleanest link.'}
-          </Text>
           <Text style={{ fontSize: 12, color: '#94A3B8' }}>
             {groups.length}/{GroupVoteUtils.MAX_GROUPS_PER_USER} active groups
           </Text>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <Button
+              variant="outline"
+              style={{ flex: 1 }}
+              onPress={() => {
+                setCreateModalVisible(false);
+                setNewGroupName('');
+              }}
+              disabled={submitting}>
+              Cancel
+            </Button>
+            <Button style={{ flex: 1 }} onPress={handleCreateGroup} loading={submitting}>
+              Create group
+            </Button>
+          </View>
         </View>
       </Modal>
     </View>
