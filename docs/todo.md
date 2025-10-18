@@ -43,6 +43,8 @@ Status legend (use one marker per task):
 - `[NEXT]` QR invite modal using `react-native-qrcode-svg`
 - `[NEXT]` Notification preferences plumbing (Expo push)
 - `[NEXT]` Group chat placeholder promoted to Firestore-backed preview
+- `[NEXT]` Lightning polls quick win for premium plan (swipe decisions)
+- `[NEXT]` Group leader controls (nudge, lock, highlight) gated behind premium
 - `[BLOCKED]` Moderation policy for group chat (product decision)
 
 ## Week 4 - Auth and Settings
@@ -51,6 +53,10 @@ Status legend (use one marker per task):
 - `[NEXT]` Password reset and social auth entry points
 - `[NEXT]` Onboarding wizard with premium upsell CTA
 - `[NEXT]` Settings privacy and data export options
+- `[NEXT]` Festival companion mode (lite) surfaced for premium users
+- `[NEXT]` Custom festival nicknames flowing through badges, recaps, lists
+- `[LATER]` Smart walk-time buffer and arrival warnings (premium)
+- `[LATER]` Festival archetype cards with seasonal refresh
 
 ## Data and Seeding
 - `[DONE]` Curated `data/festivals.json`
@@ -84,6 +90,7 @@ Status legend (use one marker per task):
 - `[DONE]` Document StyleSheet design system (colors, typography, spacing)
 - `[NEXT]` Write onboarding guide for new engineers (auth, data, env)
 - `[NEXT]` Draft release checklist (QA sign-off, seeding, analytics verification)
+- `[NEXT]` Document premium paywall and entitlement flow in README supplement
 
 ## Analytics and Growth
 - `[NEXT]` Define core analytics events (signup, save festival, vote)
@@ -98,3 +105,6 @@ Status legend (use one marker per task):
 - `[NEXT]` Apple Wallet or Google Wallet pass generation for tickets
 - `[NEXT]` Marketplace exploration (merch, bundles)
 - `[BLOCKED]` Partnerships API integration (depends on external access)
+- `[LATER]` Artist streak tracker insights for premium recap
+- `[LATER]` Daily recap generator and shareable premium cards
+- `[LATER]` Live set tracker instrumentation for premium history

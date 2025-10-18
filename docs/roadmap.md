@@ -133,9 +133,21 @@ Status legend:
 ### Enhancements and Stretch
 - `[LATER]` Offline caching for festival data and user schedules
 - `[LATER]` Recommendations engine (genre affinity plus group overlap)
-- `[LATER]` Premium upsell screen, paywall experiment, billing integration
 - `[LATER]` Apple Wallet or Google Wallet pass export
 - `[LATER]` Marketplace or vendor partnerships exploration
+- `[LATER]` Premium upsell screen, paywall experiment, billing integration
+
+### Premium Upsell Roadmap
+- `[NEXT]` Define paywall story and gating for premium companion features
+- `[NEXT]` Custom festival nicknames surfaced in badges, recaps, and lists
+- `[NEXT]` Smart schedule conflict solver with suggested alternates
+- `[NEXT]` Lightning polls and group leader controls inside shared schedules
+- `[NEXT]` Festival companion mode (lite) for in-festival usage
+- `[LATER]` Festival archetype personality cards and annual refresh
+- `[LATER]` Smart walk-time buffering with stage distance heuristics
+- `[LATER]` Artist streak tracker with follow-through suggestions
+- `[LATER]` Daily recap generator and sharable social cards
+- `[LATER]` Live set tracker (“Now Watching”) integration
 
 ## Timeline at a Glance
 - **Week 1 (complete):** foundation scaffolding, auth, theming, base components
