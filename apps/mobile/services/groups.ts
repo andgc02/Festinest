@@ -359,6 +359,49 @@ export const GroupVoteUtils = {
   MAX_GROUPS_PER_USER,
 };
 
+export async function leaveGroup(groupId: string, userId: string): Promise<void> {
+  try {
+    const reference = doc(db, COLLECTION_NAME, groupId);
+    await runTransaction(db, async (transaction) => {
+      const snapshot = await transaction.get(reference);
+
+      if (!snapshot.exists()) {
+        throw new Error(`Group ${groupId} not found`);
+      }
+
+      const group = mapGroup(snapshot);
+
+      if (group.ownerId === userId) {
+        throw new Error('Group owners must delete the group instead of leaving it.');
+      }
+
+      if (!group.memberIds.includes(userId)) {
+        throw new Error('You are not a member of this group.');
+      }
+
+      const nextMembers = group.members.filter((member) => member.id !== userId);
+      const nextMemberIds = group.memberIds.filter((id) => id !== userId);
+      const nextVotes = group.scheduleVotes.map((vote) => ({
+        ...vote,
+        voters: vote.voters.filter((id) => id !== userId),
+      }));
+
+      const nextGroup: Group = {
+        ...group,
+        members: nextMembers,
+        memberIds: nextMemberIds,
+        scheduleVotes: nextVotes,
+        updatedAt: new Date().toISOString(),
+      };
+
+      transaction.set(reference, serializeGroup(nextGroup), { merge: false });
+    });
+  } catch (error) {
+    console.warn(`Failed to leave group ${groupId}`, error);
+    throw error;
+  }
+}
+
 export async function deleteGroup(groupId: string): Promise<void> {
   try {
     const reference = doc(db, COLLECTION_NAME, groupId);

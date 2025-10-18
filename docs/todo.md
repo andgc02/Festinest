@@ -26,6 +26,7 @@ Status legend (use one marker per task):
 - `[DONE]` Artist discovery tab with list and detail screens
 - `[DONE]` Lineup and schedule cards surface artist genres and socials
 - `[DONE]` Optimistic loading states and skeletons for list and detail views
+- `[DONE]` Group detail delete & leave controls for owner and members
 
 ## Week 2.5 - Expo Go Internal Demo
 - `[DONE]` Prep Expo Go share build (documentation + QA checklist)

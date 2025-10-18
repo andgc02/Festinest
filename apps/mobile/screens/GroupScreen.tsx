@@ -1,6 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, Animated, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Animated, FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Avatar, AvatarGroup, Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -8,12 +8,13 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { useAuth } from '@/providers/AuthProvider';
-import { fetchGroupById, toggleGroupVote, GroupVoteUtils } from '@/services/groups';
+import { fetchGroupById, toggleGroupVote, GroupVoteUtils, deleteGroup, leaveGroup } from '@/services/groups';
 import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
 
 type TabKey = 'schedule' | 'chat';
 
 export function GroupScreen() {
+  const router = useRouter();
   const { groupId } = useLocalSearchParams<{ groupId?: string }>();
   const resolvedGroupId = groupId ?? 'demo-coachella-squad';
 
@@ -27,6 +28,8 @@ export function GroupScreen() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastType, setToastType] = useState<'info' | 'success' | 'error'>('info');
   const [voteBusy, setVoteBusy] = useState<Record<string, boolean>>({});
+  const [deleteBusy, setDeleteBusy] = useState(false);
+  const [leaveBusy, setLeaveBusy] = useState(false);
 
   const loadGroup = useCallback(async () => {
     setLoading(true);
@@ -110,6 +113,66 @@ export function GroupScreen() {
     setToastVisible(false);
   }, []);
 
+  const handleDeletePress = useCallback(() => {
+    if (deleteBusy) {
+      return;
+    }
+    if (!group || !user) {
+      showToast('Sign in as owner to delete this group.', 'error');
+      return;
+    }
+    if (user.uid !== group.ownerId) {
+      showToast('Only the owner can delete this group.', 'error');
+      return;
+    }
+    Alert.alert('Delete group?', `This will remove ${group.name} for everyone.`, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: async () => {
+          setDeleteBusy(true);
+          try {
+            await deleteGroup(group.id);
+            showToast('Group deleted.', 'info');
+            router.replace('/(tabs)/groups');
+          } catch (e) {
+            showToast('Failed to delete group.', 'error');
+          } finally {
+            setDeleteBusy(false);
+          }
+        }
+      },
+    ]);
+  }, [deleteBusy, group, user, showToast, router]);
+
+  const handleLeavePress = useCallback(() => {
+    if (leaveBusy) {
+      return;
+    }
+    if (!group || !user) {
+      showToast('Sign in to leave this group.', 'error');
+      return;
+    }
+    if (user.uid === group.ownerId) {
+      showToast('Group owners must delete the group instead.', 'error');
+      return;
+    }
+    Alert.alert('Leave group?', 'You will lose access to the shared schedule votes.', [
+      { text: 'Stay', style: 'cancel' },
+      { text: 'Leave', style: 'destructive', onPress: async () => {
+          setLeaveBusy(true);
+          try {
+            await leaveGroup(group.id, user.uid);
+            showToast('You left the group.', 'info');
+            router.replace('/(tabs)/groups');
+          } catch (e) {
+            showToast('Failed to leave the group.', 'error');
+          } finally {
+            setLeaveBusy(false);
+          }
+        }
+      },
+    ]);
+  }, [leaveBusy, group, user, showToast, router]);
+
   if (loading) {
     return (
       <View style={[styles.root, styles.loadingState]}>
@@ -135,6 +198,8 @@ export function GroupScreen() {
   const currentUsername = deriveUsername(user);
   const ownerDisplay =
     group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
+  const isOwner = Boolean(user && user.uid === group.ownerId);
+  const isMember = Boolean(user && group.memberIds.includes(user.uid));
 
   return (
     <View style={styles.root}>
@@ -162,6 +227,23 @@ export function GroupScreen() {
               </Text>
             ))}
           </View>
+        </View>
+        <View style={{ marginTop: 4 }}>
+          {isOwner ? (
+            <Pressable
+              onPress={handleDeletePress}
+              disabled={deleteBusy}
+              style={{ alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 8 }}>
+              <Text style={{ fontSize: 12, fontWeight: '600', color: '#DC2626' }}>{deleteBusy ? 'Deleting...' : 'Delete Group'}</Text>
+            </Pressable>
+          ) : isMember ? (
+            <Pressable
+              onPress={handleLeavePress}
+              disabled={leaveBusy}
+              style={{ alignSelf: 'flex-start', paddingVertical: 6, paddingHorizontal: 8 }}>
+              <Text style={{ fontSize: 12, fontWeight: '600', color: '#DC2626' }}>{leaveBusy ? 'Leaving...' : 'Leave Group'}</Text>
+            </Pressable>
+          ) : null}
         </View>
       </View>
 

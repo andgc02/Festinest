@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { KeyboardAvoidingView, Modal as RNModal, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Modal as RNModal, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 
 import { Button } from './Button';
@@ -51,8 +51,10 @@ export function Modal({
             onPress={(event) => event.stopPropagation()}>
             {title ? <Text style={styles.title}>{title}</Text> : null}
             {description ? <Text style={styles.description}>{description}</Text> : null}
-            {children ? <View style={{ marginTop: 16 }}>{children}</View> : null}
-            {(primaryAction || secondaryAction) && (
+            {/* scrollable content */}
+            <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.content}>
+              {children ? <View style={{ marginTop: 0 }}>{children}</View> : null}
+              {(primaryAction || secondaryAction) && (
               <View style={styles.actionsRow}>
                 {secondaryAction ? (
                   <Button
@@ -76,6 +78,7 @@ export function Modal({
                 ) : null}
               </View>
             )}
+            </ScrollView>
           </Pressable>
         </Pressable>
       </KeyboardAvoidingView>
@@ -92,6 +95,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   panel: {
+    maxHeight: '80%',
     width: '100%',
     maxWidth: 640,
     borderRadius: 24,
@@ -100,5 +104,6 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 20, fontWeight: '600', color: '#1A202C' },
   description: { marginTop: 8, fontSize: 16, color: '#334155' },
+  content: { marginTop: 16, paddingBottom: 8 },
   actionsRow: { marginTop: 24, flexDirection: 'row', gap: 12 },
 });
