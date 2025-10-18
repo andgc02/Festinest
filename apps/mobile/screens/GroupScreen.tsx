@@ -111,7 +111,7 @@ export function GroupScreen() {
   }, [resolvedGroupId]);
 
   const headerChips = useMemo(() => {
-    const membersCount = group?.members.length ?? 0;
+    const membersCount = group?.members?.length ?? 0;
     const voteCount = group ? group.scheduleVotes.filter((vote) => vote.voters.length > 0).length : 0;
 
     return [
@@ -124,7 +124,7 @@ export function GroupScreen() {
   }, [group]);
 
   const memberMap = useMemo(() => {
-    if (!group) {
+    if (!group?.members) {
       return new Map<string, Group['members'][number]>();
     }
     return new Map(group.members.map((member) => [member.id, member] as const));
@@ -325,6 +325,12 @@ export function GroupScreen() {
   const currentUsername = deriveUsername(user);
   const ownerDisplay =
     group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
+  const memberNames = Array.isArray(group.members) ? group.members : [];
+  const memberAvatars = memberNames.map((member) => ({
+    id: member.id,
+    name: member.name,
+    imageUri: member.avatarUrl,
+  }));
 
   const scheduleContent = (
     <Animated.FlatList
@@ -398,18 +404,13 @@ export function GroupScreen() {
           <FilterChip label="Group" selected animationDelay={0} />
         </View>
         <View style={styles.metaRow}>
-          <AvatarGroup
-            names={group.members.map((member) => member.name)}
-            size={36}
-            total={group.members.length}
-            maxVisible={3}
-          />
+          <AvatarGroup avatars={memberAvatars} size={36} maxVisible={3} />
           <View style={{ gap: 4 }}>
             <Text style={{ fontSize: 13, color: '#475569' }}>
               Owned by {ownerDisplay.replace(/(^\w{1})|(\s+\w{1})/g, (match) => match.toUpperCase())}
             </Text>
             <Text style={{ fontSize: 13, color: '#475569' }}>
-              {group.members.length} member{group.members.length === 1 ? '' : 's'}
+              {memberNames.length} member{memberNames.length === 1 ? '' : 's'}
             </Text>
           </View>
         </View>
@@ -690,3 +691,5 @@ function slugify(value: string) {
       .slice(0, 24) || 'user'
   );
 }
+
+

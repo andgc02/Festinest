@@ -108,4 +108,55 @@ Status legend (use one marker per task):
 - `[LATER]` Daily recap generator and shareable premium cards
 - `[LATER]` Live set tracker instrumentation for premium history
 
+## Security, Privacy, and Compliance
+- `[NEXT]` Harden Firestore security rules (per-user scope, schema validation, owner checks)
+- `[NEXT]` Migrate group document IDs away from predictable patterns (introduce generated IDs + slugs)
+- `[NEXT]` Add rules_tests/ coverage using Firebase Emulator (access control and premium entitlements)
+- `[NEXT]` Secure storage for PII and media (uid-scoped Storage rules, avoid emails in group/chat docs)
+- `[NEXT]` Implement user data export and deletion workflow (Cloud Function or batch delete)
+- `[NEXT]` Use environment-based service accounts (`FIREBASE_SERVICE_ACCOUNT_PATH` & secret management docs)
+- `[NEXT]` Create privacy review checklist (PII audit, analytics anonymization, crash report validation)
+- `[LATER]` Investigate field-level encryption for sensitive chat/premium fields
+
+## Performance & Stability
+- `[NEXT]` Enable Firestore offline persistence with cache warming for key collections
+- `[NEXT]` Introduce network/API retry strategy with exponential backoff for writes
+- `[LATER]` Lazy-load festival media and adopt optimized list virtualization
+
+## UX & Accessibility
+- `[NEXT]` Conduct accessibility audit (contrast, tap targets, voice-over)
+- `[NEXT]` Polish error and empty states with differentiated messaging and retry CTAs
+- `[NEXT]` Add haptics and micro-animations for key interactions
+- `[LATER]` Achieve dark theme parity across components
+
+## Developer Experience
+- `[NEXT]` Add env consistency script to validate required keys
+- `[NEXT]` Provide local mock Firestore data for offline onboarding
+- `[NEXT]` Set up CI/CD lint + build gates (Expo build validation, lint on PRs)
+
+## Social Layer Enhancements
+- `[NEXT]` Build group activity feed (votes, joins, schedule changes)
+- `[NEXT]` Add chat content moderation (client filter + server hook)
+- `[LATER]` Explore friend presence indicators
+
+## Monetization & Premium
+- `[NEXT]` Sync premium entitlement state in `/users/{uid}/entitlements`
+- `[LATER]` Introduce contextual upsell prompts and restore flows for subscriptions
+
+## Analytics & Insights
+- `[NEXT]` Track custom funnel metrics (signup → save → vote → invite)
+- `[LATER]` Explore anonymized navigation heatmaps and crash reporting integration
+
+## Infrastructure & DevOps
+- `[NEXT]` Establish staging environment parity (FESTINEST_ENV toggles)
+- `[NEXT]` Automate Firestore backups and monitoring dashboards
+
+## Compliance & Governance
+- `[NEXT]` Run GDPR/CCPA audit and expose data export/delete options in Settings
+- `[LATER]` Publish legal documents and privacy center in-app
+
+## Growth & Marketing
+- `[NEXT]` Implement referral link system and waitlist pre-signup capture
+- `[LATER]` Provide tooling for influencer/brand partnerships
+
 
