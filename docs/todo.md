@@ -21,7 +21,7 @@ Status legend (use one marker per task):
 - `[DONE]` Saved festivals state management shared across screens
 - `[ACTIVE]` Schedule builder day tabs with conflict detection logic
 - `[DONE]` Avatar and AvatarGroup components shared across screens
-- `[NEXT]` Group screen vote persistence (Firestore) and empty states
+- `[DONE]` Group screen vote persistence (Firestore) and empty states
 - `[DONE]` Settings screen saved festivals list and genre preferences form
 - `[DONE]` Artist discovery tab with list and detail screens
 - `[DONE]` Lineup and schedule cards surface artist genres and socials
