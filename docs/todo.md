@@ -78,6 +78,7 @@ Status legend (use one marker per task):
 - `[DONE]` Roadmap refreshed with full status breakdown
 - `[DONE]` README covers seeding instructions and local env
 - `[DONE]` Data model doc outlining artists/festivals schema
+- `[DONE]` Premium feature catalog + differentiators doc
 - `[NEXT]` Clean mojibake in legacy diagrams (Festival card, schedule row)
 - `[NEXT]` Add Figma links and export references in layout section
 - `[DONE]` Document StyleSheet design system (colors, typography, spacing)
