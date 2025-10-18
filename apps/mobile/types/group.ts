@@ -26,7 +26,11 @@ export type Group = {
   id: string;
   name: string;
   festivalId?: string;
+  ownerId: string;
+  ownerName?: string;
+  ownerUsername: string;
   members: GroupMember[];
+  memberIds: string[];
   scheduleVotes: GroupScheduleVote[];
   chatPreview: GroupChatMessage[];
   updatedAt?: string;
@@ -35,4 +39,3 @@ export type Group = {
 export function getVoteCount(vote: GroupScheduleVote) {
   return vote.voters.length;
 }
-

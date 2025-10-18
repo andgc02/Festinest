@@ -1,16 +1,20 @@
 import { Group } from '@/types/group';
 
 const baseGroup: Group = {
-  id: 'coachella-squad',
+  id: 'demo-coachella-squad',
   name: 'Coachella Squad',
   festivalId: 'coachella-2026',
+  ownerId: 'demo-user',
+  ownerName: 'Demo User',
+  ownerUsername: 'demo',
   members: [
-    { id: 'self', name: 'You' },
+    { id: 'demo-user', name: 'Demo User' },
     { id: 'alex', name: 'Alex' },
     { id: 'sam', name: 'Sam' },
     { id: 'riley', name: 'Riley' },
     { id: 'casey', name: 'Casey' },
   ],
+  memberIds: ['demo-user', 'alex', 'sam', 'riley', 'casey'],
   scheduleVotes: [
     {
       id: 'fred',
@@ -19,7 +23,7 @@ const baseGroup: Group = {
       day: 'Friday',
       time: '1:00 PM',
       stage: 'Main',
-      voters: ['self', 'alex', 'sam'],
+      voters: ['demo-user', 'alex', 'sam'],
     },
     {
       id: 'peggy',
@@ -38,10 +42,11 @@ const baseGroup: Group = {
   updatedAt: new Date().toISOString(),
 };
 
-export function getMockGroup(groupId?: string): Group {
+export function getMockGroup(groupId?: string, overrides?: Partial<Group>): Group {
   return {
     ...baseGroup,
-    id: groupId ?? baseGroup.id,
+    ...overrides,
+    id: groupId ?? overrides?.id ?? baseGroup.id,
+    memberIds: overrides?.memberIds ?? overrides?.members?.map((member) => member.id) ?? baseGroup.memberIds,
   };
 }
-

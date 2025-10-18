@@ -15,7 +15,7 @@ type TabKey = 'schedule' | 'chat';
 
 export function GroupScreen() {
   const { groupId } = useLocalSearchParams<{ groupId?: string }>();
-  const resolvedGroupId = groupId ?? 'coachella-squad';
+  const resolvedGroupId = groupId ?? 'demo-coachella-squad';
 
   const { user } = useAuth();
   const [group, setGroup] = useState<Group | null>(null);
@@ -132,15 +132,36 @@ export function GroupScreen() {
     );
   }
 
+  const currentUsername = deriveUsername(user);
+  const ownerDisplay =
+    group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
+
   return (
     <View style={styles.root}>
       <View style={{ gap: 16 }}>
         <Text style={typographyRN.display}>{group.name}</Text>
+        <View style={{ gap: 4 }}>
+          <Text style={{ fontSize: 14, color: '#475569' }}>Owned by {ownerDisplay}</Text>
+          <Text style={{ fontSize: 12, color: '#64748B' }}>
+            {group.members.length} member{group.members.length === 1 ? '' : 's'}
+          </Text>
+        </View>
         <AvatarGroup avatars={group.members} maxVisible={4} size={40} />
         <View style={{ flexDirection: 'row', gap: 8 }}>
           {headerChips.map((chip, index) => (
             <FilterChip key={`${chip.label}-${index}`} label={chip.label} selected={chip.selected} animationDelay={index * 80} />
           ))}
+        </View>
+        <View style={{ gap: 12 }}>
+          <Text style={{ fontSize: 14, fontWeight: '600', color: Colors.text }}>Members</Text>
+          <View style={{ gap: 8 }}>
+            {group.members.map((member) => (
+              <Text key={member.id} style={{ fontSize: 13, color: '#475569' }}>
+                {member.name}
+                {member.id === group.ownerId ? ' (owner)' : ''}
+              </Text>
+            ))}
+          </View>
         </View>
       </View>
 
@@ -351,3 +372,27 @@ function EmptyState({ title, description }: EmptyStateProps) {
   );
 }
 
+function deriveUsername(user?: { uid: string; displayName: string | null; email: string | null }) {
+  if (!user) {
+    return 'guest';
+  }
+
+  if (user.displayName) {
+    return slugify(user.displayName);
+  }
+
+  if (user.email) {
+    const handle = user.email.split('@')[0] ?? 'user';
+    return slugify(handle);
+  }
+
+  return slugify(user.uid.slice(0, 8));
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 24) || 'user';
+}
