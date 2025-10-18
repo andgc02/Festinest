@@ -25,7 +25,7 @@ Status legend (use one marker per task):
 - `[DONE]` Settings screen saved festivals list and genre preferences form
 - `[DONE]` Artist discovery tab with list and detail screens
 - `[DONE]` Lineup and schedule cards surface artist genres and socials
-- `[NEXT]` Optimistic loading states and skeletons for list and detail views
+- `[DONE]` Optimistic loading states and skeletons for list and detail views
 
 ## Week 2.5 - Expo Go Internal Demo
 - `[NEXT]` Prep Expo Go share build (documentation + QA checklist)
