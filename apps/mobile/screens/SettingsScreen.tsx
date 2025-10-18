@@ -86,7 +86,7 @@ export function SettingsScreen() {
 
       <View style={styles.card}>
         <Text style={typographyRN.subheading}>Profile</Text>
-        <ProfileRow label="Name" value="Taylor Swift" />
+        <ProfileRow label="Name" value="Admin Dev" />
         <ProfileRow label="Email" value={email} />
         <ProfileRow
           label="Preferred Genres"
