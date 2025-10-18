@@ -19,7 +19,7 @@ Status legend (use one marker per task):
 - `[DONE]` Light theme polish + entrance animations (Festival list, chips, Group, Schedule)
 - `[DONE]` Festival detail lineup accordion plus save CTA wiring
 - `[DONE]` Saved festivals state management shared across screens
-- `[ACTIVE]` Schedule builder day tabs with conflict detection logic
+- `[DONE]` Schedule builder day tabs with conflict detection logic + layout normalization
 - `[DONE]` Avatar and AvatarGroup components shared across screens
 - `[DONE]` Group screen vote persistence (Firestore) and empty states
 - `[DONE]` Settings screen saved festivals list and genre preferences form

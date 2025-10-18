@@ -278,6 +278,9 @@ const MINIMUM_GRID_DURATION = 180;
 const TIME_LABEL_OFFSET = 6;
 const TIME_LABEL_HEIGHT = 20;
 const MINOR_LINE_HEIGHT = StyleSheet.hairlineWidth === 0 ? 0.5 : StyleSheet.hairlineWidth;
+const TARGET_DAY_DURATION_MINUTES = 10 * 60;
+const MIN_MINUTE_PIXEL_HEIGHT = 0.55;
+const MAX_MINUTE_PIXEL_HEIGHT = 6;
 
 function deriveFestivalSchedule(festival: Festival): FestivalScheduleEntry[] {
   const scheduleEntries = Array.isArray(festival.schedule) ? festival.schedule : [];
@@ -362,9 +365,11 @@ function ScheduleDayGrid({
     );
   }
 
-  const minuteHeight =
+  const baseMinuteHeight =
     layoutMode === 'scroll' ? SCROLL_MINUTE_PIXEL_HEIGHT : FIT_MINUTE_PIXEL_HEIGHT;
   const totalMinutes = Math.max(day.gridEnd - day.gridStart, MINIMUM_GRID_DURATION);
+  const targetHeight = TARGET_DAY_DURATION_MINUTES * baseMinuteHeight;
+  const minuteHeight = clamp(targetHeight / totalMinutes, MIN_MINUTE_PIXEL_HEIGHT, MAX_MINUTE_PIXEL_HEIGHT);
   const gridHeight = Math.max(totalMinutes * minuteHeight, MIN_BLOCK_HEIGHT * 3);
   const timeColumnWidth = layoutMode === 'scroll' ? TIME_COLUMN_WIDTH : AUTO_FIT_TIME_COLUMN_WIDTH;
 
@@ -931,6 +936,10 @@ function alignDown(value: number, interval: number) {
 
 function alignUp(value: number, interval: number) {
   return Math.ceil(value / interval) * interval;
+}
+
+function clamp(value: number, minimum: number, maximum: number) {
+  return Math.min(Math.max(value, minimum), maximum);
 }
 
 function formatTimeRange(range: TimeRange) {
