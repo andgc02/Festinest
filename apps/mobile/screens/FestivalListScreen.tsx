@@ -46,32 +46,37 @@ export function FestivalListScreen() {
     void loadFestivals();
   }, [loadFestivals]);
 
+  const searchIndex = useMemo(
+    () =>
+      festivals.map((festival) => ({
+        festival,
+        haystack: buildFestivalHaystack(festival),
+      })),
+    [festivals],
+  );
+
   const filteredFestivals = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+    const tokens = buildQueryTokens(query);
 
-    const base = normalizedQuery
-      ? festivals.filter((festival) => {
-          return (
-            festival.name.toLowerCase().includes(normalizedQuery) ||
-            festival.location.toLowerCase().includes(normalizedQuery) ||
-            (festival.genre?.toLowerCase().includes(normalizedQuery) ?? false)
-          );
-        })
-      : festivals;
-
-    return base.filter((festival) => {
-      if (activeFilters.includes('genre') && !festival.genre) {
-        return false;
-      }
-      if (activeFilters.includes('date') && !(festival.startDate && festival.endDate)) {
-        return false;
-      }
-      if (activeFilters.includes('location') && !festival.location) {
-        return false;
-      }
-      return true;
-    });
-  }, [activeFilters, festivals, query]);
+    return searchIndex
+      .filter(({ festival, haystack }) => {
+        if (tokens.length && !tokens.every((token) => haystack.includes(token))) {
+          return false;
+        }
+        if (activeFilters.includes('genre') && !festivalHasGenreData(festival)) {
+          return false;
+        }
+        if (activeFilters.includes('date') && !festivalHasUpcomingDates(festival)) {
+          return false;
+        }
+        if (activeFilters.includes('location') && !festivalHasConcreteLocation(festival)) {
+          return false;
+        }
+        return true;
+      })
+      .map((entry) => entry.festival)
+      .sort(compareFestivals);
+  }, [activeFilters, searchIndex, query]);
 
   const toggleFilter = useCallback((key: FilterKey) => {
     setActiveFilters((prev) => (prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key]));
@@ -133,6 +138,123 @@ export function FestivalListScreen() {
       ) : null}
     </View>
   );
+}
+
+function buildFestivalHaystack(festival: Festival) {
+  const tokens = new Set<string>();
+
+  const push = (value?: string | null) => {
+    if (!value) return;
+    const normalized = normalizeText(value);
+    if (!normalized) return;
+    normalized.split(/\s+/).forEach((segment) => {
+      if (segment) {
+        tokens.add(segment);
+      }
+    });
+  };
+
+  push(festival.name);
+  push(festival.location);
+  push(festival.status);
+  push(festival.genre);
+
+  festival.genres?.forEach(push);
+
+  const addDateTokens = (input?: string) => {
+    if (!input) return;
+    const date = new Date(input);
+    if (Number.isNaN(date.getTime())) {
+      return;
+    }
+    push(date.toISOString().slice(0, 10));
+    push(String(date.getFullYear()));
+    push(date.toLocaleString('en-US', { month: 'long' }));
+    push(date.toLocaleString('en-US', { month: 'short' }));
+  };
+
+  addDateTokens(festival.startDate);
+  addDateTokens(festival.endDate);
+
+  if (festival.location) {
+    festival.location.split(/[,\-/]/).forEach((segment) => push(segment));
+  }
+
+  festival.lineup?.forEach((entry) => {
+    push(entry.artistName ?? entry.artist);
+    push(entry.stage);
+    push(entry.day);
+  });
+
+  festival.schedule?.forEach((entry) => {
+    push(entry.artistName ?? entry.artist);
+    push(entry.stage);
+    push(entry.day);
+  });
+
+  return Array.from(tokens).join(' ');
+}
+
+function buildQueryTokens(rawQuery: string) {
+  const normalized = normalizeText(rawQuery);
+  if (!normalized) {
+    return [];
+  }
+  return normalized.split(/[\s,]+/).filter(Boolean);
+}
+
+function festivalHasGenreData(festival: Festival) {
+  return Boolean((festival.genres && festival.genres.length > 0) || festival.genre);
+}
+
+function festivalHasUpcomingDates(festival: Festival) {
+  const start = festival.startDate ? Date.parse(festival.startDate) : Number.NaN;
+  const end = festival.endDate ? Date.parse(festival.endDate) : Number.NaN;
+  if (Number.isNaN(start) || Number.isNaN(end)) {
+    return false;
+  }
+  return end >= Date.now();
+}
+
+function festivalHasConcreteLocation(festival: Festival) {
+  if (!festival.location) {
+    return false;
+  }
+  const normalized = normalizeText(festival.location);
+  if (!normalized) {
+    return false;
+  }
+  return !['tba', 'tbd', 'unknown'].some((token) => normalized.includes(token));
+}
+
+function compareFestivals(a: Festival, b: Festival) {
+  const aTime = getFestivalSortTime(a);
+  const bTime = getFestivalSortTime(b);
+
+  if (aTime !== bTime) {
+    return aTime - bTime;
+  }
+
+  return a.name.localeCompare(b.name);
+}
+
+function getFestivalSortTime(festival: Festival) {
+  const parsed = festival.startDate ? Date.parse(festival.startDate) : Number.NaN;
+  if (Number.isNaN(parsed)) {
+    return Number.POSITIVE_INFINITY;
+  }
+  return parsed;
+}
+
+function normalizeText(value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return '';
+  }
+  return trimmed
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
 }
 
 function formatDateRange(startDate: string, endDate: string) {

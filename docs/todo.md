@@ -30,7 +30,7 @@ Status legend (use one marker per task):
 
 ## Week 2.5 - Expo Go Internal Demo
 - `[DONE]` Prep Expo Go share build (documentation + QA checklist)
-- `[NEXT]` Harden festival list search & filters for demo
+- `[DONE]` Harden festival list search & filters for demo (tokenized search, stronger default filters)
 - `[NEXT]` Add minimal profile read/edit view for demo
 - `[NEXT]` Ensure schedule builder read-only preview works end-to-end
 - `[NEXT]` QA navigation + theming consistency (tabs, status bar)
