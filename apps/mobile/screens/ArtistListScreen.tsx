@@ -9,6 +9,7 @@ import { Spacing } from '@/styles/spacing';
 import { useFadeInUp } from '@/hooks/useFadeInUp';
 import { fetchArtists } from '@/services/artists';
 import { Artist } from '@/types/artist';
+import { formatArtistGenres, getArtistImageUrl } from '@/utils/artist';
 
 export function ArtistListScreen() {
   const router = useRouter();
@@ -233,6 +234,8 @@ type ArtistListItemProps = {
 function ArtistListItem({ artist, index, onPress }: ArtistListItemProps) {
   const animatedStyle = useFadeInUp({ delay: index * 70 });
   const primaryGenre = artist.genres?.[0];
+  const thumbnailUri = getArtistImageUrl(artist, 64);
+  const genreLine = formatArtistGenres(artist);
 
   return (
     <Animated.View style={animatedStyle}>
@@ -240,15 +243,15 @@ function ArtistListItem({ artist, index, onPress }: ArtistListItemProps) {
         <Card style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
           <Avatar
             name={artist.name}
-            imageUri={artist.photoUrl}
+            imageUri={thumbnailUri}
             size={48}
             backgroundColor="#EEF2FF"
             textColor={Colors.primary}
           />
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{artist.name}</Text>
-            {artist.genres?.length ? (
-              <Text style={{ fontSize: 13, color: '#475569' }}>{artist.genres.join(' / ')}</Text>
+            {genreLine ? (
+              <Text style={{ fontSize: 13, color: '#475569' }}>{genreLine}</Text>
             ) : (
               <Text style={{ fontSize: 13, color: '#94A3B8' }}>Genres coming soon</Text>
             )}

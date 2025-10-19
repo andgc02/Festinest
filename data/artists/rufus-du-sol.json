@@ -1,30 +1,30 @@
 {
-  "id": "rufus-du-sol",
-  "name": "RUFUS DU SOL",
-  "genres": [
-    "Deep House",
-    "Alternative Dance",
-    "Electronica",
-    "House"
-  ],
-  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=256",
-  "image": {
-    "source": "Wikimedia Commons",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg",
-    "credit": "Photo by Ralph Arvesen",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "wikidataId": "Q16238866",
-    "fileName": "R\u00dcF\u00dcS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg",
-    "thumbnails": {
-      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=64",
-      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=128",
-      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=256"
-    }
-  },
-  "socials": {
-    "spotify": "https://open.spotify.com/artist/5Pb27ujIyYb33zBqVysBkj",
-    "instagram": "https://instagram.com/rufusdusol"
-  },
-  "updatedAt": "2025-10-17T00:00:00.000Z"
+    "id":  "rufus-du-sol",
+    "name":  "RUFUS DU SOL",
+    "genres":  [
+                   "Deep House",
+                   "Alternative Dance",
+                   "Electronica",
+                   "House"
+               ],
+    "photoUrl":  "https://commons.wikimedia.org/wiki/Special:FilePath/Rufus_Du_Sol_(29357069668).jpg?width=256",
+    "image":  {
+                  "source":  "Wikimedia Commons",
+                  "sourceUrl":  "https://commons.wikimedia.org/wiki/File:Rufus_Du_Sol_(29357069668).jpg",
+                  "credit":  "Photo by Ralph Arvesen",
+                  "license":  null,
+                  "licenseUrl":  null,
+                  "wikidataId":  "Q16238866",
+                  "fileName":  "Rufus_Du_Sol_(29357069668).jpg",
+                  "thumbnails":  {
+                                     "64":  "https://commons.wikimedia.org/wiki/Special:FilePath/Rufus_Du_Sol_(29357069668).jpg?width=64",
+                                     "128":  "https://commons.wikimedia.org/wiki/Special:FilePath/Rufus_Du_Sol_(29357069668).jpg?width=128",
+                                     "256":  "https://commons.wikimedia.org/wiki/Special:FilePath/Rufus_Du_Sol_(29357069668).jpg?width=256"
+                                 }
+              },
+    "socials":  {
+                    "spotify":  "https://open.spotify.com/artist/5Pb27ujIyYb33zBqVysBkj",
+                    "instagram":  "https://instagram.com/rufusdusol"
+                },
+    "updatedAt":  "2025-10-17T00:00:00.000Z"
 }

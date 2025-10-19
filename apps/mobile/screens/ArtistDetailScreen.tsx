@@ -11,7 +11,13 @@ import { fetchArtistById } from '@/services/artists';
 import { fetchFestivals } from '@/services/festivals';
 import { Artist } from '@/types/artist';
 import { Festival, FestivalLineupEntry, FestivalScheduleEntry } from '@/types/festival';
-import { getArtistSocialLinks } from '@/utils/artist';
+import {
+  formatArtistGenres,
+  getArtistImageAttribution,
+  getArtistImageUrl,
+  getArtistSocialLinks,
+  type ArtistImageAttribution,
+} from '@/utils/artist';
 
 type ArtistAppearance = {
   festival: Festival;
@@ -64,6 +70,12 @@ export function ArtistDetailScreen() {
     void load();
   }, [artistId]);
 
+  const heroImageUri = useMemo(() => getArtistImageUrl(artist, 256), [artist]);
+  const imageAttribution = useMemo<ArtistImageAttribution | undefined>(
+    () => getArtistImageAttribution(artist),
+    [artist],
+  );
+  const genreLine = useMemo(() => formatArtistGenres(artist), [artist]);
   const socialLinks = useMemo(() => getArtistSocialLinks(artist), [artist]);
 
   const safeAreaEdges = ['top', 'bottom'] as const;
@@ -96,9 +108,9 @@ export function ArtistDetailScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={{ gap: 20 }}>
           <View style={styles.header}>
-            {artist.photoUrl ? (
+            {heroImageUri ? (
               <Image
-                source={{ uri: artist.photoUrl }}
+                source={{ uri: heroImageUri }}
                 style={styles.heroImage}
                 resizeMode="cover"
               />
@@ -111,11 +123,50 @@ export function ArtistDetailScreen() {
             )}
             <View style={{ gap: 8 }}>
               <Text style={typographyRN.heading}>{artist.name}</Text>
-              {artist.genres?.length ? (
-                <Text style={{ fontSize: 14, color: '#475569' }}>{artist.genres.join(' · ')}</Text>
+              {genreLine ? (
+                <Text style={{ fontSize: 14, color: '#475569' }}>{genreLine}</Text>
               ) : null}
             </View>
           </View>
+
+          {heroImageUri && imageAttribution ? (
+            <View style={styles.attribution}>
+              <Text style={styles.attributionText}>
+                Photo: {imageAttribution.credit ?? 'Unknown photographer'}
+              </Text>
+              {imageAttribution.license ? (
+                <Text style={styles.attributionText}>
+                  License:{' '}
+                  {imageAttribution.licenseUrl ? (
+                    <Text
+                      style={styles.attributionLink}
+                      accessibilityRole="link"
+                      onPress={() => openLink(imageAttribution.licenseUrl ?? '')}>
+                      {imageAttribution.license}
+                    </Text>
+                  ) : (
+                    imageAttribution.license
+                  )}
+                </Text>
+              ) : null}
+              {imageAttribution.source ? (
+                <Text style={styles.attributionText}>
+                  Source:{' '}
+                  {imageAttribution.sourceUrl ? (
+                    <Text
+                      style={styles.attributionLink}
+                      accessibilityRole="link"
+                      onPress={() => openLink(imageAttribution.sourceUrl ?? '')}>
+                      {imageAttribution.source}
+                    </Text>
+                  ) : (
+                    imageAttribution.source
+                  )}
+                </Text>
+              ) : null}
+            </View>
+           ) : null}
+
 
           {socialLinks.length ? (
             <View style={{ gap: 12 }}>
@@ -341,6 +392,22 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#C7D2FE',
   },
+  attribution: {
+    borderRadius: 12,
+    backgroundColor: '#EEF2FF',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 4,
+  },
+  attributionText: {
+    fontSize: 12,
+    color: '#475569',
+  },
+  attributionLink: {
+    fontSize: 12,
+    color: Colors.primary,
+    textDecorationLine: 'underline',
+  },
   slotRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -376,3 +443,10 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
 });
+
+
+
+
+
+
+
