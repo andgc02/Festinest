@@ -56,6 +56,7 @@
           <button class="primary" id="generateBtn">Generate JSON</button>
           <button id="copyBtn">Copy JSON</button>
           <button class="accent" id="downloadBtn">Download .json</button>
+          <button id="saveBtn">Save to repo (artists)</button>
           <span class="hint">Downloads as <span id="fileOut">artist-id.json</span></span>
         </div>
         <div class="hint">Hints:
@@ -218,8 +219,12 @@
       }
 
       // Events
-      nameEl.addEventListener('input', () => { if (!idEl.value) { idEl.value = slugify(nameEl.value); } buildJson(); });
-      idEl.addEventListener('input', buildJson);
+      let idManuallyEdited = false;
+      nameEl.addEventListener('input', () => {
+        if (!idManuallyEdited || !idEl.value.trim()) { idEl.value = slugify(nameEl.value); }
+        buildJson();
+      });
+      idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });
       wikidataIdEl.addEventListener('input', buildJson);
       genresEl.addEventListener('input', buildJson);
       sourceUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(sourceUrlEl.value); } buildJson(); });
@@ -232,10 +237,19 @@
       $("generateBtn").addEventListener('click', (e) => { e.preventDefault(); buildJson(); });
       $("copyBtn").addEventListener('click', (e) => { e.preventDefault(); copyJson(); });
       $("downloadBtn").addEventListener('click', (e) => { e.preventDefault(); downloadJson(); });
+      $("saveBtn").addEventListener('click', async (e) => {
+        e.preventDefault(); buildJson();
+        try {
+          const data = JSON.parse(outputEl.textContent || '{}');
+          const res = await fetch('/api/save-artist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+          const body = await res.json();
+          if (!res.ok) throw new Error(body.error || 'Failed to save');
+          alert('Saved to ' + body.path);
+        } catch (err) { alert('Not saved: ' + err.message); }
+      });
 
       populateLicenses();
       buildJson();
     </script>
   </body>
   </html>
-

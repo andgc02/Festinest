@@ -7,11 +7,14 @@
     "seed:all": "node tools/seedFestivals.js",
     "seed:festivals": "node tools/seedFestivals.js --only=festivals",
     "seed:artists": "node tools/seedFestivals.js --only=artists",
-    "seed:only:festivals": "node tools/seedFestivals.js --only=festivals",
     "seed:attendance": "node tools/seedFestivals.js --only=attendance",
     "seed:skip:attendance": "node tools/seedFestivals.js --skip=attendance",
     "seed:validate": "node tools/seedFestivals.js --validate",
-    "seed:dry-run": "node tools/seedFestivals.js --dry-run",\n    "tool:artist": "node tools/serveArtistTool.js"\n  },
+    "seed:dry-run": "node tools/seedFestivals.js --dry-run",
+    "tool:artist": "node tools/serveArtistTool.js",
+    "tool:festival": "node tools/serveArtistTool.js",
+    "tool:studio": "node tools/serveArtistTool.js"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "firebase": "^12.4.0",
