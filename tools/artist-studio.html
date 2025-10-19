@@ -39,9 +39,8 @@
         <h2>Inputs</h2>
         <div class="row"><label for="name">Artist name</label><input id="name" type="text" placeholder="RÜFÜS DU SOL" /></div>
         <div class="row"><label for="id">Artist id (slug)</label><input id="id" type="text" placeholder="rufus-du-sol" /></div>
-        <div class="row"><label for="wikidataId">Wikidata ID</label><input id="wikidataId" type="text" placeholder="Q16238866 (optional)" /></div>
-        <div class="row"><label for="genres">Genres</label><input id="genres" type="text" placeholder="Deep House, Alternative Dance, Electronica, House" /></div>
-        <div class="row"><label for="sourceUrl">Commons File URL</label><input id="sourceUrl" type="url" placeholder="https://commons.wikimedia.org/wiki/File:Artist_Image.jpg" /></div>
+                <div class="row"><label for="genres">Genres</label><input id="genres" type="text" placeholder="Deep House, Alternative Dance, Electronica, House" /></div>
+        <div class="row"><label for="photoUrl">Photo URL (Commons File page)</label><input id="photoUrl" type="url" placeholder="https://commons.wikimedia.org/wiki/File:Artist_Image_(1234567890).jpg" /></div>
         <div class="row"><label for="fileName">File name</label><input id="fileName" type="text" placeholder="Artist_Image.jpg" /></div>
         <div class="row"><label for="credit">Author (credit)</label><input id="credit" type="text" placeholder="Ralph Arvesen" /></div>
         <div class="row"><label for="license">License</label>
@@ -77,9 +76,8 @@
       const $ = (id) => document.getElementById(id);
       const nameEl = $("name");
       const idEl = $("id");
-      const wikidataIdEl = $("wikidataId");
-      const genresEl = $("genres");
-      const sourceUrlEl = $("sourceUrl");
+            const genresEl = $("genres");
+      const photoUrlEl = $("photoUrl");
       const fileNameEl = $("fileName");
       const creditEl = $("credit");
       const licenseEl = $("license");
@@ -145,8 +143,8 @@
         const name = nameEl.value.trim();
         const id = idEl.value.trim() || slugify(name);
         const genres = parseGenres(genresEl.value);
-        const sourceUrl = sourceUrlEl.value.trim();
-        const fileName = (fileNameEl.value.trim() || deriveFileNameFromUrl(sourceUrl));
+        const photoPageUrl = photoUrlEl.value.trim();
+        const fileName = (fileNameEl.value.trim() || deriveFileNameFromUrl(photoPageUrl));
         const licenseIdx = Number(licenseEl.value || 0);
         const licenseObj = LICENSES[licenseIdx] || LICENSES[0];
         const creditRaw = creditEl.value.trim();
@@ -166,7 +164,7 @@
             credit,
             license,
             licenseUrl,
-            wikidataId: wikidataIdEl.value.trim() || undefined,
+            wikidataId: extractNumericIdFromFile(fileName) || extractNumericIdFromFile(photoPageUrl) || undefined,
             fileName: fileName || undefined,
             thumbnails: {
               '64': commonsFilePath(fileName, 64),
@@ -227,7 +225,7 @@
       idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });
       wikidataIdEl.addEventListener('input', buildJson);
       genresEl.addEventListener('input', buildJson);
-      sourceUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(sourceUrlEl.value); } buildJson(); });
+      photoUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(photoUrlEl.value); } buildJson(); });
       fileNameEl.addEventListener('input', buildJson);
       creditEl.addEventListener('input', buildJson);
       licenseEl.addEventListener('change', buildJson);
@@ -253,3 +251,4 @@
     </script>
   </body>
   </html>
+
