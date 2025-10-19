@@ -8,8 +8,8 @@ import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
 import { useAuth } from '@/providers/AuthProvider';
 
-const ADMIN_EMAIL = process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '';
-const ADMIN_PASSWORD = process.env.EXPO_PUBLIC_ADMIN_PASSWORD ?? '';
+const ADMIN_EMAIL = __DEV__ ? process.env.EXPO_PUBLIC_ADMIN_EMAIL ?? '' : '';
+const ADMIN_PASSWORD = __DEV__ ? process.env.EXPO_PUBLIC_ADMIN_PASSWORD ?? '' : '';
 
 export function LoginScreen() {
   const [email, setEmail] = useState(ADMIN_EMAIL);

@@ -76,6 +76,8 @@ Join our community of developers creating universal apps.
    - Update `EXPO_PUBLIC_INVITE_BASE_URL` to whatever domain should appear in shared group invites (defaults to `https://festinest.app` if omitted).
    - Keep `.env` out of version control; `.gitignore` already handles it.
 
+   Admin demo (dev-only): If you want a prefilled demo login and auto-create an admin account in your local Firebase, you can set `EXPO_PUBLIC_ADMIN_EMAIL` and `EXPO_PUBLIC_ADMIN_PASSWORD` in `.env`. These are read only in development (`__DEV__`) and should never be set for production builds. Any `EXPO_PUBLIC_*` value is shipped to the client bundle.
+
 4. **Run the app**
    - Start Metro: `npm run start`.
    - When the app boots, `lib/firebase.ts` initializes Firebase using the env vars. If any value is missing, the app throws an error immediately so you can fix the configuration.
@@ -92,10 +94,16 @@ Join our community of developers creating universal apps.
 - Festival JSON lives under `../data/festivals/*.json`; artist profiles live under `../data/artists/*.json`.
 - Attendance aggregates live under `../data/attendance/*.json` and seed the `festivalAttendees` collection.
 - To seed Firestore locally run from the repo root:
-  ```bash
-  npm run seed:festivals
-  ```
-  The script loads artists first, then festivals, and upserts each document by `id`.
+  - `npm run seed:festivals` (seed artists, festivals, attendance)
+  - Targeted runs:
+    - `npm run seed:artists`
+    - `npm run seed:only:festivals`
+    - `npm run seed:attendance`
+    - `npm run seed:skip:attendance`
+  - Safety helpers:
+    - `npm run seed:validate` (no writes; fails on validation warnings)
+    - `npm run seed:dry-run` (preview without writes)
+  The seeder loads artists first to validate festival references, then seeds enabled targets in batches.
 - Optional metadata (e.g. `genres`, `status`, `sources`, `lastUpdated`) can be stored alongside core fields - everything is merged when seeding.
 - After seeding, spot-check Firestore to ensure every `festival.lineup[].artistId` has a matching artist document.
 - The seeder now batches writes and will warn if a festival lineup or schedule references an unknown artist or omits required slot metadata (day, stage, time).

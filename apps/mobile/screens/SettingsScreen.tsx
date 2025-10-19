@@ -16,7 +16,7 @@ import { useProfileDetails } from '@/hooks/useProfileDetails';
 export function SettingsScreen() {
   const { signOut, user } = useAuth();
   const router = useRouter();
-  const email = user?.email ?? 'admin@festinest.dev';
+  const email = user?.email ?? 'you@example.com';
   const { savedIds, loading: savedLoading } = useSavedFestivals();
   const [festivals, setFestivals] = useState<Festival[]>([]);
   const [loadingFestivals, setLoadingFestivals] = useState(true);

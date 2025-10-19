@@ -26,8 +26,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [initializing, setInitializing] = useState(true);
   const hasSeededAdmin = useRef(false);
 
-  const adminEmail = process.env.EXPO_PUBLIC_ADMIN_EMAIL;
-  const adminPassword = process.env.EXPO_PUBLIC_ADMIN_PASSWORD;
+  const adminEmail = __DEV__ ? process.env.EXPO_PUBLIC_ADMIN_EMAIL : undefined;
+  const adminPassword = __DEV__ ? process.env.EXPO_PUBLIC_ADMIN_PASSWORD : undefined;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
@@ -69,7 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    void ensureAdminAccount();
+    // Only in development builds
+    if (__DEV__) {
+      void ensureAdminAccount();
+    }
   }, [adminEmail, adminPassword, user]);
 
   const value = useMemo<AuthContextValue>(
