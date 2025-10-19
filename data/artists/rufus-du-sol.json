@@ -7,7 +7,21 @@
     "Electronica",
     "House"
   ],
-  "photoUrl": "https://example.com/rufus-du-sol.jpg",
+  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=256",
+  "image": {
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg",
+    "credit": "Photo by Ralph Arvesen",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "wikidataId": "Q16238866",
+    "fileName": "R\u00dcF\u00dcS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg",
+    "thumbnails": {
+      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=64",
+      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=128",
+      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%9CF%C3%9FS_DU_SOL_-_Life_Is_Beautiful_2019_(48680819608).jpg?width=256"
+    }
+  },
   "socials": {
     "spotify": "https://open.spotify.com/artist/5Pb27ujIyYb33zBqVysBkj",
     "instagram": "https://instagram.com/rufusdusol"

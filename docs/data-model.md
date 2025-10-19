@@ -11,7 +11,21 @@ _Last updated: Oct 2025_
   "id": "fred-again",
   "name": "Fred again..",
   "genres": ["EDM", "House"],
-  "photoUrl": "https://...",
+  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Artist_File.jpg?width=256",
+  "image": {
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Artist_File.jpg",
+    "credit": "Photographer Name",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "wikidataId": "Q12345",
+    "fileName": "Artist_File.jpg",
+    "thumbnails": {
+      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/Artist_File.jpg?width=64",
+      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/Artist_File.jpg?width=128",
+      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/Artist_File.jpg?width=256"
+    }
+  },
   "socials": {
     "spotify": "https://...",
     "instagram": "https://..."
@@ -19,6 +33,10 @@ _Last updated: Oct 2025_
   "updatedAt": "2025-10-17T00:00:00.000Z"
 }
 ```
+
+`photoUrl` remains the primary field consumers render today. When sourcing from Wikimedia Commons (via Wikidata P18),
+persist the richer metadata under the optional `image` object so downstream surfaces can render attribution, pick an
+appropriate thumbnail width, or fall back to initials when a file is missing.
 
 ### Festivals
 
