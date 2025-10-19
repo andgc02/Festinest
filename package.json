@@ -4,7 +4,13 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "seed:festivals": "node tools/seedFestivals.js"
+    "seed:festivals": "node tools/seedFestivals.js",
+    "seed:artists": "node tools/seedFestivals.js --only=artists",
+    "seed:only:festivals": "node tools/seedFestivals.js --only=festivals",
+    "seed:attendance": "node tools/seedFestivals.js --only=attendance",
+    "seed:skip:attendance": "node tools/seedFestivals.js --skip=attendance",
+    "seed:validate": "node tools/seedFestivals.js --validate",
+    "seed:dry-run": "node tools/seedFestivals.js --dry-run"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
