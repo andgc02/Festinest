@@ -4,7 +4,8 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
-    "seed:festivals": "node tools/seedFestivals.js",
+    "seed:all": "node tools/seedFestivals.js",
+    "seed:festivals": "node tools/seedFestivals.js --only=festivals",
     "seed:artists": "node tools/seedFestivals.js --only=artists",
     "seed:only:festivals": "node tools/seedFestivals.js --only=festivals",
     "seed:attendance": "node tools/seedFestivals.js --only=attendance",

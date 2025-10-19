@@ -24,10 +24,10 @@
    - `FIREBASE_SERVICE_ACCOUNT_JSON` (stringified JSON)
 3. Ensure `EXPO_PUBLIC_FIREBASE_*` variables point to the same project.
 4. From repo root, use these scripts:
-   - `npm run seed:festivals` (seed artists, festivals, attendance)
+   - `npm run seed:all` (seed artists, festivals, attendance)
    - Targeted:
      - `npm run seed:artists`
-     - `npm run seed:only:festivals`
+     - `npm run seed:festivals` (just festivals)
      - `npm run seed:attendance`
      - `npm run seed:skip:attendance`
    - Safety:
@@ -37,3 +37,4 @@
 Notes
 - The seeder always loads artists first to validate festival references.
 - Documents are upserted by `id` in batched writes.
+

@@ -364,7 +364,7 @@ async function run() {
   if (options.targets.artists) {
   const seededArtists = await seedCollection("artists", artistItems, options);
   if (!options.dryRun) {
-    console.log(Seeded  artist document(s).);
+    console.log(`Seeded ${"${seededArtists}"} artist document(s).`);
   }
 } else {
   console.log("Skipping artists (targeted run)");
@@ -373,7 +373,7 @@ async function run() {
 if (options.targets.festivals) {
   const seededFestivals = await seedCollection("festivals", festivalItems, options);
   if (!options.dryRun) {
-    console.log(Seeded  festival document(s).);
+    console.log(`Seeded ${"${seededFestivals}"} festival document(s).`);
   }
 } else {
   console.log("Skipping festivals (targeted run)");
@@ -382,7 +382,7 @@ if (options.targets.festivals) {
   if (options.targets.attendance) {
   const seededAttendance = await seedAttendance(attendanceItems, options);
   if (!options.dryRun) {
-    console.log(Seeded  festival attendee document(s).);
+    console.log(`Seeded ${"${seededAttendance}"} festival attendee document(s).`);
   }
 } else {
   console.log("Skipping attendance (targeted run)");
@@ -400,6 +400,9 @@ run().catch((error) => {
   console.error("Failed to seed data:", error);
   process.exit(1);
 });
+
+
+
 
 
 
