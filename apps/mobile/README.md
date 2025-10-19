@@ -87,6 +87,7 @@ Join our community of developers creating universal apps.
 - Design system (StyleSheet): `../docs/design-system.md`
 - Roadmap: `../docs/roadmap.md`
 - TODOs: `../docs/todo.md`
+- Tools: `../docs/tools.md`
 - Data model & Firestore schema: `../docs/data-model.md`
 
 ## Festival data & seeding

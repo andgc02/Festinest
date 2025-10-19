@@ -2,16 +2,25 @@
   "id": "bleachers",
   "name": "Bleachers",
   "genres": [
-    "Indie Pop",
-    "New Wave",
-    "Rock",
-    "Alternative Rock",
-    "Synth-Pop"
+    "indie pop"
   ],
-  "photoUrl": "https://example.com/bleachers.jpg",
+  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Bleachers%202014.jpg?width=256",
+  "image": {
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File%3ABleachers%202014.jpg",
+    "credit": "Photo by Justin Higuchi",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "fileName": "Bleachers 2014.jpg",
+    "thumbnails": {
+      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/Bleachers%202014.jpg?width=64",
+      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/Bleachers%202014.jpg?width=128",
+      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/Bleachers%202014.jpg?width=256"
+    }
+  },
   "socials": {
     "spotify": "https://open.spotify.com/artist/2eam0iDomRHGBypaDQLwWI",
     "instagram": "https://instagram.com/bleachersmusic"
   },
-  "updatedAt": "2025-10-17T00:00:00.000Z"
+  "updatedAt": "2025-10-19T22:00:58.284Z"
 }

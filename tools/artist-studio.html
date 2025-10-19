@@ -3,54 +3,98 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Festinest • Artist JSON Studio</title>
+    <title>Festinest &bull; Artist JSON Studio</title>
     <style>
       :root { --bg:#0b1020; --panel:#11182a; --muted:#8fa3bf; --text:#e6eef8; --primary:#6aa3ff; --accent:#64d2b6; }
       * { box-sizing: border-box; }
       body { margin: 0; font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
       header { padding: 16px 20px; border-bottom: 1px solid #1b2740; position: sticky; top: 0; background: linear-gradient(180deg, rgba(11,16,32,0.95), rgba(11,16,32,0.8)); backdrop-filter: blur(6px); }
       h1 { margin: 0; font-size: 18px; letter-spacing: 0.2px; }
-      .container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
+      .container { display: grid; grid-template-columns: 1.5fr 0.5fr; gap: 16px; padding: 16px; max-width: 1400px; margin: 0 auto; align-items: start; }
       .panel { background: var(--panel); border: 1px solid #1b2740; border-radius: 12px; padding: 16px; }
       .panel h2 { margin: 0 0 12px; font-size: 16px; }
-      .row { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: center; margin-bottom: 10px; }
+      .row { display: grid; grid-template-columns: 1fr; gap: 8px; align-items: stretch; margin-bottom: 10px; }
+      /* Stacked layout for all rows (labels above inputs) */
+      .row.stacked { grid-template-columns: 1fr; }
+      .row label { margin-bottom: 2px; }
       .row label { color: var(--muted); font-weight: 600; }
-      input[type="text"], input[type="url"], textarea, select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #2a3a5d; background: #0f1526; color: var(--text); }
+      input[type="text"], input[type="url"], textarea, select { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid #2a3a5d; background: #0f1526; color: var(--text); font-size: 15px; }
       textarea { min-height: 72px; resize: vertical; }
       .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
-      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      /* grid2 no longer used */
       .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
       button { padding: 10px 14px; border-radius: 8px; border: 1px solid #2a3a5d; background: #16203a; color: var(--text); cursor: pointer; }
       button.primary { background: #17305c; border-color: #2955a6; color: #e8f2ff; }
       button.accent { background: #0f3b3b; border-color: #1f7b7b; color: #d9fffa; }
-      pre { margin: 0; padding: 12px; border-radius: 8px; background: #0b1222; border: 1px solid #1b2740; max-height: 60vh; overflow: auto; }
+      .btn-sm { padding: 8px 12px; font-size: 13px; }
+      /* Inline image preview */
+      .previewBox { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: start; }
+      #imgPreview { width: 180px; height: 180px; object-fit: cover; border-radius: 8px; border: 1px solid #1b2740; background: #0b1222; }
+      #thumbStatus { display: flex; flex-wrap: wrap; gap: 6px; }
+      .badge { display:inline-flex; align-items:center; gap:6px; padding: 4px 8px; border-radius: 999px; border: 1px solid #2a3a5d; font-size: 12px; }
+      .badge.pending { color: #cfe3ff; border-color: #37528a; }
+      .badge.ok { color: #d8ffe8; border-color: #2d7a57; }
+      .badge.fail { color: #ffd6d6; border-color: #8a3737; }
+      pre { margin: 0; padding: 12px; border-radius: 8px; background: #0b1222; border: 1px solid #1b2740; max-height: 92vh; overflow: auto; }
       .inline { display: inline-flex; gap: 8px; align-items: center; }
       .pill { display:inline-block; padding: 2px 8px; border:1px solid #2a3a5d; border-radius:999px; font-size:12px; color: var(--muted); }
       footer { padding: 10px 16px; color: var(--muted); text-align: center; }
+      /* Commons search results */
+      #searchResults { margin-top: 6px; display: grid; gap: 8px; }
+      .result { display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center; padding: 8px; border: 1px solid #243455; border-radius: 8px; background: #0c1326; }
+      .result img { width: 64px; height: 64px; object-fit: cover; border-radius: 6px; border: 1px solid #1b2740; background: #0b1222; }
+      .result h4 { margin: 0; font-size: 13px; font-weight: 600; }
+      .result .meta { font-size: 12px; color: var(--muted); }
+      .result .license { font-size: 12px; color: #cfe3ff; }
       @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } }
     </style>
   </head>
   <body>
     <header>
-      <h1>Festinest • Artist JSON Studio <span class="pill">lightweight</span></h1>
+      <h1>Festinest &bull; Artist JSON Studio <span class="pill">lightweight</span></h1>
     </header>
     <div class="container">
       <section class="panel" id="formPanel">
         <h2>Inputs</h2>
-        <div class="row"><label for="name">Artist name</label><input id="name" type="text" placeholder="RÜFÜS DU SOL" /></div>
-        <div class="row"><label for="id">Artist id (slug)</label><input id="id" type="text" placeholder="rufus-du-sol" /></div>
-                <div class="row"><label for="genres">Genres</label><input id="genres" type="text" placeholder="Deep House, Alternative Dance, Electronica, House" /></div>
-        <div class="row"><label for="photoUrl">Photo URL (Commons File page)</label><input id="photoUrl" type="url" placeholder="https://commons.wikimedia.org/wiki/File:Artist_Image_(1234567890).jpg" /></div>
-        <div class="row"><label for="fileName">File name</label><input id="fileName" type="text" placeholder="Artist_Image.jpg" /></div>
-        <div class="row"><label for="credit">Author (credit)</label><input id="credit" type="text" placeholder="Ralph Arvesen" /></div>
-        <div class="row"><label for="license">License</label>
-          <div class="grid2">
-            <select id="license"></select>
-            <select id="licenseUrl"></select>
+        <div class="hint">Hints:
+          <ul>
+            <li>Workflow: 1) Search for artist, 2) Click "Use" on the best result, 3) Adjust fields if needed. If offline: type artist name, paste/photo URL, then Validate thumbnails.</li>
+            <li>Search is biased to musicians/bands via Wikidata; falls back to Commons and prefers newer uploads.</li>
+            <li>Paste a Commons File page URL (https://commons.wikimedia.org/wiki/File:...) to auto-fill file name and thumbnails.</li>
+            <li>Genres can be comma-separated; order preserved.</li>
+            <li>License URL auto-fills to match the selected license type.</li>
+          </ul>
+        </div>
+        <div class="row stacked"><label for="commonsSearch">Search Wikimedia Commons by artist name</label>
+          <div class="inline" style="width:100%">
+            <input id="commonsSearch" type="text" placeholder="e.g., Sabrina Carpenter" style="flex:1" />
+            <button id="searchBtn" class="btn-sm">Search</button>
+          </div>
+          <div id="searchResults" class="hint"></div>
+        </div>
+        <div class="row"><label for="name">Artist name</label><input id="name" type="text" placeholder="Sabrina Carpenter" /></div>
+        <div class="row"><label for="id">Artist id (slug)</label><input id="id" type="text" placeholder="sabrina-carpenter" /></div>
+                <div class="row"><label for="genres">Genres</label><input id="genres" type="text" placeholder="pop music, teen pop, dance-pop, contemporary R&amp;B, electropop" /></div>
+        <div class="row stacked"><label for="photoUrl">Photo URL (Commons File page)</label><input id="photoUrl" type="url" placeholder="https://commons.wikimedia.org/wiki/File:Primavera2025 (139 of 182) (54574520207) (cropped).jpg" /></div>
+        <div class="row stacked"><label for="fileName">File name</label><input id="fileName" type="text" placeholder="Primavera2025 (139 of 182) (54574520207) (cropped).jpg" /></div>
+        <div class="row stacked"><label>Image preview</label>
+          <div class="previewBox">
+            <img id="imgPreview" alt="Preview" />
+            <div>
+              <div class="hint">Validates Special:FilePath derivatives</div>
+              <div id="thumbStatus" class="hint"></div>
+              <div class="actions" style="margin-top:8px">
+                <button id="validateBtn" class="btn-sm">Validate thumbnails</button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="row"><label for="spotify">Spotify URL</label><input id="spotify" type="url" placeholder="https://open.spotify.com/artist/..." /></div>
-        <div class="row"><label for="instagram">Instagram URL</label><input id="instagram" type="url" placeholder="https://instagram.com/username" /></div>
+        <div class="row stacked"><label for="credit">Author (credit)</label><input id="credit" type="text" placeholder="Raph_PH" /></div>
+        <div class="row stacked"><label for="license">License</label>
+          <select id="license"></select>
+        </div>
+        <div class="row stacked"><label for="spotify">Spotify URL</label><input id="spotify" type="url" placeholder="https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B" /></div>
+        <div class="row stacked"><label for="instagram">Instagram URL</label><input id="instagram" type="url" placeholder="https://instagram.com/sabrinacarpenter" /></div>
         <div class="actions">
           <button class="primary" id="generateBtn">Generate JSON</button>
           <button id="copyBtn">Copy JSON</button>
@@ -58,20 +102,14 @@
           <button id="saveBtn">Save to repo (artists)</button>
           <span class="hint">Downloads as <span id="fileOut">artist-id.json</span></span>
         </div>
-        <div class="hint">Hints:
-          <ul>
-            <li>Paste a Commons File page URL (https://commons.wikimedia.org/wiki/File:...) to auto-fill file name and thumbnails.</li>
-            <li>Genres can be comma-separated; order preserved.</li>
-            <li>License URL is auto-selected for common Creative Commons options; you can override.</li>
-          </ul>
-        </div>
+        
       </section>
       <section class="panel">
         <h2>Preview JSON</h2>
         <pre id="output">{}</pre>
       </section>
     </div>
-    <footer>© Festinest internal tool. No external requests.</footer>
+    <footer>&copy; Festinest internal tool. Uses Wikidata + Wikimedia Commons APIs for search/autofill.</footer>
     <script>
       const $ = (id) => document.getElementById(id);
       const nameEl = $("name");
@@ -81,11 +119,16 @@
       const fileNameEl = $("fileName");
       const creditEl = $("credit");
       const licenseEl = $("license");
-      const licenseUrlEl = $("licenseUrl");
+      const commonsSearchEl = $("commonsSearch");
+      const searchBtnEl = $("searchBtn");
+      const searchResultsEl = $("searchResults");
       const spotifyEl = $("spotify");
       const instagramEl = $("instagram");
       const outputEl = $("output");
       const fileOutEl = $("fileOut");
+      const previewImgEl = $("imgPreview");
+      const validateBtnEl = $("validateBtn");
+      const thumbStatusEl = $("thumbStatus");
 
       const LICENSES = [
         { label: "None / Unknown", url: "" },
@@ -99,12 +142,7 @@
 
       function populateLicenses() {
         licenseEl.innerHTML = LICENSES.map((l, i) => `<option value="${i}">${l.label}</option>`).join("");
-        licenseUrlEl.innerHTML = LICENSES.map((l, i) => `<option value="${i}">${l.url || "(no link)"}</option>`).join("");
-        licenseEl.addEventListener("change", syncLicenseUrl);
-        licenseUrlEl.addEventListener("change", syncLicenseByUrl);
       }
-      function syncLicenseUrl() { licenseUrlEl.value = licenseEl.value; }
-      function syncLicenseByUrl() { licenseEl.value = licenseUrlEl.value; }
 
       function slugify(value) {
         return (value || "")
@@ -117,19 +155,39 @@
       }
 
       function deriveFileNameFromUrl(url) {
+        const raw = String(url || '').trim();
+        if (!raw) return '';
         try {
-          const u = new URL(url);
-          const page = decodeURIComponent(u.pathname);
-          const idx = page.lastIndexOf('File:');
-          if (idx >= 0) return page.substring(idx + 5);
-          const last = page.substring(page.lastIndexOf('/') + 1);
-          return decodeURIComponent(last);
-        } catch { return ''; }
+          const u = new URL(raw);
+          const path = decodeURIComponent(u.pathname || '');
+          const idx = path.lastIndexOf('File:');
+          if (idx >= 0) return path.substring(idx + 5);
+          const last = path.substring(path.lastIndexOf('/') + 1);
+          if (last) return last;
+        } catch {
+          // ignore parse errors and fall back to manual parsing
+        }
+        const decoded = decodeURIComponent(raw);
+        const i = decoded.lastIndexOf('File:');
+        if (i >= 0) return decoded.substring(i + 5);
+        const seg = decoded.substring(decoded.lastIndexOf('/') + 1);
+        return seg || '';
       }
 
-      `function commonsFilePath(fileName, width) {
+      function commonsFilePath(fileName, width) {
         if (!fileName) return '';
-        return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`n      function extractNumericIdFromFile(fileNameOrUrl){`n        const source = fileNameOrUrl || \x27\x27;`n        const m = /\((\d{5,})\)/.exec(source);`n        return m ? m[1] : undefined;`n      }`n?width=${width}`;
+        return 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(fileName) + '?width=' + width;
+      }
+  
+      function commonsFilePageUrl(fileTitle) {
+        const title = fileTitle.startsWith('File:') ? fileTitle : ('File:' + fileTitle);
+        return 'https://commons.wikimedia.org/wiki/' + encodeURIComponent(title);
+      }
+
+      function extractNumericIdFromFile(fileNameOrUrl){
+        const source = fileNameOrUrl || '';
+        const m = /\((\d{5,})\)/.exec(source);
+        return m ? m[1] : undefined;
       }
 
       function parseGenres(value) {
@@ -137,6 +195,304 @@
           .split(',')
           .map((g) => g.trim())
           .filter(Boolean);
+      }
+
+      // --- Lightweight caching (localStorage) ---
+      function cacheGet(key) {
+        try {
+          const raw = localStorage.getItem(key);
+          if (!raw) return null;
+          const obj = JSON.parse(raw);
+          if (obj && obj.exp && obj.exp > Date.now()) return obj.v;
+        } catch {}
+        return null;
+      }
+      function cacheSet(key, value, ttlMs) {
+        try { localStorage.setItem(key, JSON.stringify({ v: value, exp: Date.now() + (ttlMs || 86400000) })); } catch {}
+      }
+
+      // --- Commons Search Helpers ---
+      function stripHtml(html) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html || '';
+        return (tmp.textContent || tmp.innerText || '').trim();
+      }
+
+      function normalizeLicenseShortName(name) {
+        const n = (name || '').trim();
+        if (!n) return '';
+        if (/cc0/i.test(n)) return 'CC0 1.0 (Public Domain)';
+        if (/by-sa\s*4\.0/i.test(n)) return 'CC BY-SA 4.0';
+        if (/by-sa\s*3\.0/i.test(n)) return 'CC BY-SA 3.0';
+        if (/by\s*4\.0/i.test(n)) return 'CC BY 4.0';
+        if (/by\s*3\.0/i.test(n)) return 'CC BY 3.0';
+        if (/by\s*2\.0/i.test(n)) return 'CC BY 2.0';
+        return n; // hope it's already a short label we have
+      }
+
+      function licenseIndexFromShortName(shortName) {
+        const target = normalizeLicenseShortName(shortName);
+        const i = LICENSES.findIndex(l => l.label === target);
+        return i >= 0 ? i : 0;
+      }
+
+      async function searchCommonsByArtist(query, limit = 6) {
+        const q = encodeURIComponent(query);
+        const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${q}&gsrsort=create_timestamp_desc&gsrnamespace=6&gsrlimit=${limit}&prop=imageinfo&iiprop=extmetadata|url|dimensions&iiurlwidth=128`;
+        const cacheKey = `commons:search:${query.toLowerCase()}`;
+        const cached = cacheGet(cacheKey);
+        if (cached) return cached;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Commons API error');
+        const data = await res.json();
+        const pages = (data.query && data.query.pages) ? Object.values(data.query.pages) : [];
+        const results = pages.map(p => {
+          const inf = (p.imageinfo && p.imageinfo[0]) || {};
+          const meta = inf.extmetadata || {};
+          const artist = stripHtml((meta.Artist && meta.Artist.value) || '');
+          const credit = stripHtml((meta.Credit && meta.Credit.value) || '');
+          const licenseShort = (meta.LicenseShortName && meta.LicenseShortName.value) || '';
+          const licenseUrl = (meta.LicenseUrl && meta.LicenseUrl.value) || '';
+          const title = p.title || '';
+          return {
+            title,
+            fileName: title.replace(/^File:/, ''),
+            pageUrl: commonsFilePageUrl(title),
+            thumb: inf.thumburl || commonsFilePath(title.replace(/^File:/,''), 128),
+            author: artist || credit || '',
+            licenseShort,
+            licenseUrl,
+          };
+        });
+        cacheSet(cacheKey, results, 86400000);
+        return results;
+      }
+
+      async function fetchCommonsMeta(fileName) {
+        const cacheKey = `commons:meta:${fileName}`;
+        const cached = cacheGet(cacheKey);
+        if (cached) return cached;
+        const title = 'File:' + fileName;
+        const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&titles=${encodeURIComponent(title)}&iiprop=extmetadata|url`;
+        const res = await fetch(url);
+        if (!res.ok) return {};
+        const data = await res.json();
+        const pages = (data.query && data.query.pages) ? Object.values(data.query.pages) : [];
+        const info = (pages[0] && pages[0].imageinfo && pages[0].imageinfo[0]) || {};
+        const meta = info.extmetadata || {};
+        const artist = stripHtml((meta.Artist && meta.Artist.value) || '');
+        const credit = stripHtml((meta.Credit && meta.Credit.value) || '');
+        const licenseShort = (meta.LicenseShortName && meta.LicenseShortName.value) || '';
+        const licenseUrl = (meta.LicenseUrl && meta.LicenseUrl.value) || '';
+        const out = { author: artist || credit || '', licenseShort, licenseUrl };
+        cacheSet(cacheKey, out, 604800000);
+        return out;
+      }
+
+      async function searchWikidataByArtist(query, limit = 6) {
+        const q = encodeURIComponent(query);
+        const searchUrl = `https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json&origin=*&language=en&uselang=en&type=item&limit=${limit}&search=${q}`;
+        const cacheKey = `wd:search:${query.toLowerCase()}:${limit}`;
+        const cached = cacheGet(cacheKey);
+        if (cached) return cached;
+        const sres = await fetch(searchUrl);
+        if (!sres.ok) throw new Error('Wikidata search error');
+        const sdata = await sres.json();
+        const ids = (sdata.search || []).map(r => r.id).filter(Boolean);
+        if (!ids.length) return [];
+        const getUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&origin=*&props=claims|labels|descriptions&ids=${ids.join('|')}&languages=en`;
+        const gres = await fetch(getUrl);
+        if (!gres.ok) throw new Error('Wikidata getentities error');
+        const gdata = await gres.json();
+        const entities = gdata.entities || {};
+        // collect genre entity IDs across items so we can fetch labels in one shot
+        const allGenreIds = new Set();
+        const musicInsts = new Set(['Q215380','Q2088357','Q5741069','Q3551672','Q1059984','Q2188189']);
+        const musicOccs = new Set(['Q639669','Q177220','Q483501','Q1028181','Q488205','Q36834']);
+        const base = ids.map(id => {
+          const ent = entities[id];
+          if (!ent) return null;
+          const claims = ent.claims || {};
+          const label = ent.labels?.en?.value || '';
+          const description = ent.descriptions?.en?.value || '';
+          const p18 = (claims.P18 && claims.P18[0] && claims.P18[0].mainsnak && claims.P18[0].mainsnak.datavalue && claims.P18[0].mainsnak.datavalue.value) || '';
+          if (!p18) return null; // only keep items with an image
+          const spotifyId = (claims.P1902 && claims.P1902[0] && claims.P1902[0].mainsnak?.datavalue?.value) || '';
+          const instagramUser = (claims.P2003 && claims.P2003[0] && claims.P2003[0].mainsnak?.datavalue?.value) || '';
+          const instIds = (claims.P31 || []).map(c => c.mainsnak?.datavalue?.value?.id).filter(Boolean);
+          const genreIds = (claims.P136 || []).map(c => c.mainsnak?.datavalue?.value?.id).filter(Boolean);
+          const occIds = (claims.P106 || []).map(c => c.mainsnak?.datavalue?.value?.id).filter(Boolean);
+          const isMusic = instIds.some(x => musicInsts.has(x)) || occIds.some(x => musicOccs.has(x));
+          if (!isMusic) return null;
+          genreIds.forEach(id => allGenreIds.add(id));
+          return { id, label, description, p18, spotifyId, instagramUser, genreIds };
+        }).filter(Boolean);
+
+        // fetch genre labels once
+        const genreMap = {};
+        if (allGenreIds.size) {
+          const genreUrl = `https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&origin=*&props=labels&ids=${Array.from(allGenreIds).join('|')}&languages=en`;
+          try {
+            const gres2 = await fetch(genreUrl);
+            if (gres2.ok) {
+              const g2 = await gres2.json();
+              const ents = g2.entities || {};
+              for (const gid of Object.keys(ents)) {
+                const lab = ents[gid]?.labels?.en?.value;
+                if (lab) genreMap[gid] = lab;
+              }
+            }
+          } catch {}
+        }
+
+        // fetch Commons metadata for P18 in parallel
+        const metas = await Promise.all(base.map(b => fetchCommonsMeta(b.p18)));
+        const results = base.map((b, i) => {
+          const meta = metas[i] || {};
+          const genres = (b.genreIds || []).map(gid => genreMap[gid]).filter(Boolean);
+          return {
+            wikidataId: b.id,
+            label: b.label,
+            description: b.description,
+            title: 'File:' + b.p18,
+            fileName: b.p18,
+            pageUrl: commonsFilePageUrl('File:' + b.p18),
+            thumb: commonsFilePath(b.p18, 128),
+            author: meta.author || '',
+            licenseShort: meta.licenseShort || '',
+            licenseUrl: meta.licenseUrl || '',
+            spotify: b.spotifyId ? `https://open.spotify.com/artist/${b.spotifyId}` : '',
+            instagram: b.instagramUser ? `https://instagram.com/${b.instagramUser}` : '',
+            genres,
+          };
+        });
+        cacheSet(cacheKey, results, 86400000);
+        return results;
+      }
+
+      function renderSearchResults(results) {
+        if (!results.length) { searchResultsEl.innerHTML = '<span class="hint">No results found.</span>'; return; }
+        searchResultsEl.innerHTML = results.map((r, idx) => `
+          <div class="result">
+            <img src="${r.thumb || ''}" alt="thumb" />
+            <div>
+              <h4>${r.label || r.title}</h4>
+              <div class="meta">${r.description ? r.description + ' - ' : ''}${r.author ? 'by ' + r.author : 'Author unknown'}</div>
+              <div class="license">${normalizeLicenseShortName(r.licenseShort) || 'Unknown license'}</div>
+            </div>
+            <div>
+              <button class="btn-sm" data-idx="${idx}" data-action="useResult">Use</button>
+            </div>
+          </div>
+        `).join('');
+        // Wire buttons
+        searchResultsEl.querySelectorAll('button[data-action="useResult"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-idx'));
+            const r = results[idx];
+            applyCommonsResult(r);
+          });
+        });
+      }
+
+      function applyCommonsResult(r) {
+        if (!r) return;
+        photoUrlEl.value = r.pageUrl;
+        fileNameEl.value = r.fileName;
+        if (r.label) {
+          nameEl.value = r.label;
+          if (!idManuallyEdited || !idEl.value.trim()) idEl.value = slugify(r.label);
+        }
+        if (Array.isArray(r.genres) && r.genres.length) {
+          genresEl.value = r.genres.join(', ');
+        }
+        if (r.author) creditEl.value = r.author;
+        const li = licenseIndexFromShortName(r.licenseShort);
+        licenseEl.value = String(li);
+        if (r.spotify) spotifyEl.value = r.spotify;
+        if (r.instagram) instagramEl.value = r.instagram;
+        buildJson();
+        updatePreview();
+        // Scroll preview into view a bit
+        // document.getElementById('output')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // --- Inline preview + validation ---
+      function updatePreview() {
+        const fileName = (fileNameEl.value.trim() || deriveFileNameFromUrl(photoUrlEl.value));
+        const url = commonsFilePath(fileName, 256);
+        if (previewImgEl) previewImgEl.src = url || '';
+      }
+
+      function validateImage(url, timeoutMs = 8000) {
+        return new Promise((resolve) => {
+          if (!url) return resolve(false);
+          const img = new Image();
+          let done = false;
+          const timer = setTimeout(() => { if (!done) { done = true; resolve(false); } }, timeoutMs);
+          img.onload = () => { if (!done) { done = true; clearTimeout(timer); resolve(true); } };
+          img.onerror = () => { if (!done) { done = true; clearTimeout(timer); resolve(false); } };
+          img.src = url;
+        });
+      }
+
+      async function validateThumbs(fileName) {
+        const sizes = [64, 128, 256];
+        const results = {};
+        if (thumbStatusEl) thumbStatusEl.innerHTML = sizes.map(s => `<span class="badge pending">${s}px checking...</span>`).join('');
+        for (const s of sizes) {
+          const url = commonsFilePath(fileName, s);
+          results[s] = await validateImage(url);
+        }
+        const ok = sizes.every(s => results[s]);
+        if (thumbStatusEl) {
+          thumbStatusEl.innerHTML = sizes.map(s => {
+            const cls = results[s] ? 'ok' : 'fail';
+            const icon = results[s] ? 'OK' : 'X';
+            return `<span class="badge ${cls}">${s}px ${icon}</span>`;
+          }).join('');
+        }
+        return { ok, results };
+      }
+
+      async function validateThumbnails(fileName) {
+        const sizes = [64, 128, 256];
+        const results = {};
+        if (thumbStatusEl) thumbStatusEl.innerHTML = sizes.map(s => `<span class="badge pending">${s}px ? checking?</span>`).join('');
+        for (const s of sizes) {
+          const url = commonsFilePath(fileName, s);
+          results[s] = await validateImage(url);
+        }
+        const ok = sizes.every(s => results[s]);
+        if (thumbStatusEl) {
+          thumbStatusEl.innerHTML = sizes.map(s => {
+            const cls = results[s] ? 'ok' : 'fail';
+            const icon = results[s] ? '?' : '?';
+            return `<span class="badge ${cls}">${s}px ${icon}</span>`;
+          }).join('');
+        }
+        return { ok, results };
+      }
+
+      async function tryAutofillFromPhotoUrl() {
+        const fileName = deriveFileNameFromUrl(photoUrlEl.value);
+        if (!fileName) return;
+        try {
+          const title = 'File:' + encodeURIComponent(fileName).replace(/%20/g, '_');
+          const url = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&titles=${title}&iiprop=extmetadata|url`;
+          const res = await fetch(url);
+          if (!res.ok) return;
+          const data = await res.json();
+          const pages = data?.query?.pages ? Object.values(data.query.pages) : [];
+          const inf = (pages[0]?.imageinfo && pages[0].imageinfo[0]) || {};
+          const meta = inf.extmetadata || {};
+          const author = stripHtml((meta.Artist && meta.Artist.value) || (meta.Credit && meta.Credit.value) || '');
+          if (!creditEl.value.trim() && author) creditEl.value = author;
+          const short = (meta.LicenseShortName && meta.LicenseShortName.value) || '';
+          const idx = licenseIndexFromShortName(short);
+          if (String(licenseEl.value || '0') !== String(idx)) licenseEl.value = String(idx);
+          buildJson();
+        } catch { /* ignore network issues */ }
       }
 
       function buildJson() {
@@ -223,19 +579,50 @@
         if (!idManuallyEdited || !idEl.value.trim()) { idEl.value = slugify(nameEl.value); }
         buildJson();
       });
-      idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });\n      genresEl.addEventListener('input', buildJson);
-      photoUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(photoUrlEl.value); } buildJson(); });
-      fileNameEl.addEventListener('input', buildJson);
+      idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });
+      genresEl.addEventListener('input', buildJson);
+      // Keep file name and thumbnails tightly coupled to Photo URL changes.
+      // Any edit to Photo URL re-derives the file name and refreshes preview.
+      let fileNameManuallyEdited = false;
+      const syncFromPhoto = () => {
+        const derived = deriveFileNameFromUrl(photoUrlEl.value);
+        if (!fileNameManuallyEdited || !fileNameEl.value.trim()) {
+          fileNameEl.value = derived || '';
+        }
+        updatePreview();
+        // opportunistically try to auto-fill credit/license from Commons metadata
+        tryAutofillFromPhotoUrl();
+        buildJson();
+      };
+      photoUrlEl.addEventListener('input', syncFromPhoto);
+      photoUrlEl.addEventListener('change', syncFromPhoto);
+      photoUrlEl.addEventListener('paste', () => setTimeout(syncFromPhoto, 0));
+      fileNameEl.addEventListener('input', () => { fileNameManuallyEdited = true; updatePreview(); buildJson(); });
       creditEl.addEventListener('input', buildJson);
       licenseEl.addEventListener('change', buildJson);
-      licenseUrlEl.addEventListener('change', buildJson);
       spotifyEl.addEventListener('input', buildJson);
       instagramEl.addEventListener('input', buildJson);
       $("generateBtn").addEventListener('click', (e) => { e.preventDefault(); buildJson(); });
       $("copyBtn").addEventListener('click', (e) => { e.preventDefault(); copyJson(); });
       $("downloadBtn").addEventListener('click', (e) => { e.preventDefault(); downloadJson(); });
+      validateBtnEl.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const fn = (fileNameEl.value.trim() || deriveFileNameFromUrl(photoUrlEl.value.trim()));
+        await validateThumbs(fn);
+      });
+
       $("saveBtn").addEventListener('click', async (e) => {
         e.preventDefault(); buildJson();
+        // Validate thumbnails before saving; allow override if some fail
+        try {
+          const fn = (fileNameEl.value.trim() || deriveFileNameFromUrl(photoUrlEl.value.trim()));
+          const res = await validateThumbs(fn);
+          if (!res.ok) {
+            const failed = Object.entries(res.results).filter(([_, ok]) => !ok).map(([s]) => s).join(', ');
+            const proceed = confirm(`Some thumbnails failed (${failed}). Save anyway?`);
+            if (!proceed) return;
+          }
+        } catch {}
         try {
           const data = JSON.parse(outputEl.textContent || '{}');
           const res = await fetch('/api/save-artist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
@@ -245,11 +632,42 @@
         } catch (err) { alert('Not saved: ' + err.message); }
       });
 
+      // Commons search events
+      async function handleSearch() {
+        const q = commonsSearchEl.value.trim() || nameEl.value.trim();
+        if (!q) { searchResultsEl.innerHTML = '<span class="hint">Enter an artist name to search.</span>'; return; }
+        searchResultsEl.innerHTML = '<span class="hint">Searching Commons?</span>';
+        try {
+          // Prefer Wikidata (P18) so we can also grab socials
+          let results = await searchWikidataByArtist(q, 8);
+          if (!results.length) {
+            // fallback to a direct Commons file search
+            results = await searchCommonsByArtist(q, 8);
+          }
+          renderSearchResults(results);
+        } catch (e) {
+          searchResultsEl.innerHTML = '<span class="hint">Search failed. Check connection or try a different query.</span>';
+        }
+      }
+      searchBtnEl.addEventListener('click', (e) => { e.preventDefault(); handleSearch(); });
+      commonsSearchEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); handleSearch(); } });
+
       populateLicenses();
+      // Initialize file name and preview if a Photo URL is present.
+      syncFromPhoto();
+      updatePreview();
       buildJson();
     </script>
   </body>
   </html>
+
+
+
+
+
+
+
+
 
 
 

@@ -2,13 +2,30 @@
   "id": "sabrina-carpenter",
   "name": "Sabrina Carpenter",
   "genres": [
-    "Pop",
-    "R&B"
+    "pop music",
+    "teen pop",
+    "dance-pop",
+    "contemporary R&B",
+    "electropop"
   ],
-  "photoUrl": "https://example.com/sabrina-carpenter.jpg",
+  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Primavera2025%20(139%20of%20182)%20(54574520207)%20(cropped).jpg?width=256",
+  "image": {
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File%3APrimavera2025%20(139%20of%20182)%20(54574520207)%20(cropped).jpg",
+    "credit": "Photo by Raph_PH",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "wikidataId": "54574520207",
+    "fileName": "Primavera2025 (139 of 182) (54574520207) (cropped).jpg",
+    "thumbnails": {
+      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/Primavera2025%20(139%20of%20182)%20(54574520207)%20(cropped).jpg?width=64",
+      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/Primavera2025%20(139%20of%20182)%20(54574520207)%20(cropped).jpg?width=128",
+      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/Primavera2025%20(139%20of%20182)%20(54574520207)%20(cropped).jpg?width=256"
+    }
+  },
   "socials": {
     "spotify": "https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B",
     "instagram": "https://instagram.com/sabrinacarpenter"
   },
-  "updatedAt": "2025-10-17T00:00:00.000Z"
+  "updatedAt": "2025-10-19T21:27:55.654Z"
 }

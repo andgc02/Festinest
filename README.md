@@ -8,6 +8,7 @@
 - docs/expo-go-share-checklist.md
 - docs/roadmap.md
 - docs/todo.md
+- docs/tools.md (local JSON studio tools)
 - data/festivals/* (curated festival list)
 - tools/seedFestivals.js (Firestore seeding script)
 
