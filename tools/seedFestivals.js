@@ -312,7 +312,28 @@ function parseOptions() {
   const dryRun = validate || args.includes("--dry-run");
   const strict = validate || args.includes("--strict");
 
-  return { validate, dryRun, strict };
+  const onlyArg = args.find((a) => a.startsWith("--only="));
+  const skipArg = args.find((a) => a.startsWith("--skip="));
+  const parseSet = (value) => new Set(String(value || "").split(",").map((v) => v.trim().toLowerCase()).filter(Boolean));
+  const onlySet = onlyArg ? parseSet(onlyArg.split("=", 2)[1]) : undefined;
+  const skipSet = skipArg ? parseSet(skipArg.split("=", 2)[1]) : undefined;
+
+  const isEnabled = (key) => {
+    if (onlySet && onlySet.size > 0) return onlySet.has(key);
+    if (skipSet && skipSet.size > 0) return !skipSet.has(key);
+    return true;
+  };
+
+  return {
+    validate,
+    dryRun,
+    strict,
+    targets: {
+      artists: isEnabled("artists"),
+      festivals: isEnabled("festivals"),
+      attendance: isEnabled("attendance"),
+    },
+  };
 }
 
 async function run() {
@@ -340,20 +361,32 @@ async function run() {
     );
   }
 
+  if (options.targets.artists) {
   const seededArtists = await seedCollection("artists", artistItems, options);
   if (!options.dryRun) {
-    console.log(`Seeded ${seededArtists} artist document(s).`);
+    console.log(Seeded  artist document(s).);
   }
+} else {
+  console.log("Skipping artists (targeted run)");
+}
 
+if (options.targets.festivals) {
   const seededFestivals = await seedCollection("festivals", festivalItems, options);
   if (!options.dryRun) {
-    console.log(`Seeded ${seededFestivals} festival document(s).`);
+    console.log(Seeded  festival document(s).);
   }
+} else {
+  console.log("Skipping festivals (targeted run)");
+}
 
+  if (options.targets.attendance) {
   const seededAttendance = await seedAttendance(attendanceItems, options);
   if (!options.dryRun) {
-    console.log(`Seeded ${seededAttendance} festival attendee document(s).`);
+    console.log(Seeded  festival attendee document(s).);
   }
+} else {
+  console.log("Skipping attendance (targeted run)");
+}
 
   if (options.dryRun) {
     console.log("Dry run complete.");
@@ -367,3 +400,6 @@ run().catch((error) => {
   console.error("Failed to seed data:", error);
   process.exit(1);
 });
+
+
+
