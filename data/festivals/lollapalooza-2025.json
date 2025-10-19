@@ -2,18 +2,10 @@
   "id": "lollapalooza-2025",
   "name": "Lollapalooza 2025",
   "location": "Chicago, IL",
-  "startDate": "2025-07-31",
-  "endDate": "2025-08-03",
-  "genres": [
-    "Pop",
-    "Hip-Hop",
-    "Rock",
-    "Electronic"
-  ],
-  "status": "confirmed",
+  "startdate": "2025-07-31",
+  "enddate": "2025-08-03",
   "website": "https://www.lollapalooza.com",
-  "ticketUrl": "https://www.lollapalooza.com/tickets",
-  "lastUpdated": "2025-10-17T00:00:00.000Z",
+  "lastupdated": "2025-10-17T00:00:00.000Z",
   "sources": [
     {
       "name": "Official Lineup Announcement",

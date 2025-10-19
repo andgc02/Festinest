@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Festinest • Festival JSON Studio</title>
+    <title>Festinest &bull; Festival JSON Studio</title>
     <style>
       :root { --bg:#0b1020; --panel:#11182a; --muted:#8fa3bf; --text:#e6eef8; --primary:#6aa3ff; --accent:#64d2b6; }
       * { box-sizing: border-box; }
@@ -32,7 +32,7 @@
   </head>
   <body>
     <header>
-      <h1>Festinest • Festival JSON Studio</h1>
+      <h1>Festinest &bull; Festival JSON Studio</h1>
     </header>
     <div class="container">
       <section class="panel">
@@ -40,9 +40,9 @@
         <div class="row"><label for="name">Festival name</label><input id="name" type="text" placeholder="Coachella 2026" /></div>
         <div class="row"><label for="id">Festival id (slug)</label><input id="id" type="text" placeholder="coachella-2026" /></div>
         <div class="row"><label for="location">Location</label><input id="location" type="text" placeholder="Indio, CA" /></div>
-        <div class="row"><label for="startDate">Start date (ISO)</label><input id="startDate" type="text" placeholder="2026-04-10" /></div>
-        <div class="row"><label for="endDate">End date (ISO)</label><input id="endDate" type="text" placeholder="2026-04-12" /></div>
-        <div class="row"><label for="genres">Genres (optional)</label><input id="genres" type="text" placeholder="Pop, EDM" /></div>
+        <div class="row"><label for="startdate">Start date (ISO)</label><input id="startdate" type="text" placeholder="2026-04-10" /></div>
+        <div class="row"><label for="enddate">End date (ISO)</label><input id="enddate" type="text" placeholder="2026-04-12" /></div>
+        <div class="row"><label for="website">Website URL</label><input id="website" type="url" placeholder="https://coachella.com" /></div>
         <h3>Lineup</h3>
         <div id="lineup" class="list"></div>
         <div class="actions">
@@ -61,18 +61,18 @@
         <pre id="output">{}</pre>
       </section>
     </div>
-    <footer>© Festinest internal tool. No external requests.</footer>
-    <script>
+    <footer>&copy; Festinest internal tool. No external requests.</footer>
+        <script>
       const $ = (id) => document.getElementById(id);
-      const nameEl = $('name');
-      const idEl = $('id');
-      const locationEl = $('location');
-      const startEl = $('startDate');
-      const endEl = $('endDate');
-      const genresEl = $('genres');
-      const lineupEl = $('lineup');
-      const outputEl = $('output');
-      const fileOutEl = $('fileOut');
+      const nameEl = $("name");
+      const idEl = $("id");
+      const locationEl = $("location");
+      const startEl = $("startdate");
+      const endEl = $("enddate");
+      const websiteEl = $("website");
+      const lineupEl = $("lineup");
+      const outputEl = $("output");
+      const fileOutEl = $("fileOut");
 
       function slugify(value) {
         return (value || "").toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g,'').trim().replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-+|-+$/g,'');
@@ -87,19 +87,15 @@
           <input placeholder="day" value="${data.day||''}" />
           <input placeholder="stage" value="${data.stage||''}" />
           <input placeholder="time" value="${data.time||''}" />
-          <button type="button">✕</button>
+          <button type="button">&times;</button>
         `;
-        const btn = row.querySelector('button');
-        btn.addEventListener('click', ()=> { row.remove(); buildJson(); });
+        row.querySelector('button').addEventListener('click', ()=> { row.remove(); buildJson(); });
         lineupEl.appendChild(row);
       }
-
-      function parseGenres(value){ return (value||'').split(',').map(g=>g.trim()).filter(Boolean); }
 
       function buildJson(){
         const id = idEl.value.trim() || slugify(nameEl.value.trim());
         const name = nameEl.value.trim();
-        const genres = parseGenres(genresEl.value);
         const lineup = Array.from(lineupEl.querySelectorAll('.slot')).map((row)=>{
           const [artistIdEl, dayEl, stageEl, timeEl] = row.querySelectorAll('input');
           const entry = { artistId: artistIdEl.value.trim() };
@@ -113,27 +109,27 @@
           id,
           name,
           ...(locationEl.value.trim()? { location: locationEl.value.trim() } : {}),
-          ...(startEl.value.trim()? { startDate: startEl.value.trim() } : {}),
-          ...(endEl.value.trim()? { endDate: endEl.value.trim() } : {}),
-          ...(genres.length? { genres } : {}),
+          ...(startEl.value.trim()? { startdate: startEl.value.trim() } : {}),
+          ...(endEl.value.trim()? { enddate: endEl.value.trim() } : {}),
+          ...(websiteEl.value.trim()? { website: websiteEl.value.trim() } : {}),
           ...(lineup.length? { lineup } : {}),
-          updatedAt: new Date().toISOString(),
+          lastupdated: new Date().toISOString(),
         };
         outputEl.textContent = JSON.stringify(object, null, 2);
         fileOutEl.textContent = `${id||'festival'}.json`;
       }
 
-      $('addSlotBtn').addEventListener('click', (e)=> { e.preventDefault(); addLineupRow(); buildJson(); });
+      $("addSlotBtn").addEventListener('click', (e)=> { e.preventDefault(); addLineupRow(); buildJson(); });
       nameEl.addEventListener('input', ()=>{ if(!idManuallyEdited || !idEl.value.trim()) idEl.value = slugify(nameEl.value); buildJson(); });
       idEl.addEventListener('input', ()=>{ idManuallyEdited = true; buildJson(); });
       locationEl.addEventListener('input', buildJson);
       startEl.addEventListener('input', buildJson);
       endEl.addEventListener('input', buildJson);
-      genresEl.addEventListener('input', buildJson);
-      $('generateBtn').addEventListener('click', (e)=> { e.preventDefault(); buildJson(); });
-      $('copyBtn').addEventListener('click', (e)=> { e.preventDefault(); navigator.clipboard?.writeText(outputEl.textContent||'{}'); });
-      $('downloadBtn').addEventListener('click', (e)=>{ e.preventDefault(); const id = idEl.value.trim() || slugify(nameEl.value.trim()) || 'festival'; const blob = new Blob([outputEl.textContent||'{}'], {type:'application/json;charset=utf-8'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${id}.json`; a.click(); URL.revokeObjectURL(url); });
-      $('saveBtn').addEventListener('click', async (e)=>{
+      websiteEl.addEventListener('input', buildJson);
+      $("generateBtn").addEventListener('click', (e)=> { e.preventDefault(); buildJson(); });
+      $("copyBtn").addEventListener('click', (e)=> { e.preventDefault(); navigator.clipboard?.writeText(outputEl.textContent||'{}'); });
+      $("downloadBtn").addEventListener('click', (e)=>{ e.preventDefault(); const id = idEl.value.trim() || slugify(nameEl.value.trim()) || 'festival'; const blob = new Blob([outputEl.textContent||'{}'], {type:'application/json;charset=utf-8'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${id}.json`; a.click(); URL.revokeObjectURL(url); });
+      $("saveBtn").addEventListener('click', async (e)=>{
         e.preventDefault(); buildJson();
         try{ const data = JSON.parse(outputEl.textContent||'{}'); const res = await fetch('/api/save-festival',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const body = await res.json(); if(!res.ok) throw new Error(body.error||'Failed to save'); alert('Saved to '+body.path); } catch(err){ alert('Not saved: '+err.message); }
       });
@@ -143,4 +139,7 @@
     </script>
   </body>
   </html>
+
+
+
 

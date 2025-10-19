@@ -2,29 +2,10 @@
   "id": "coachella-2026",
   "name": "Coachella 2026",
   "location": "Indio, CA",
-  "startDate": "2026-04-10",
-  "endDate": "2026-04-19",
-  "genres": [
-    "Pop",
-    "EDM",
-    "Hip-Hop",
-    "Indie"
-  ],
-  "status": "confirmed",
+  "startdate": "2026-04-10",
+  "enddate": "2026-04-19",
   "website": "https://www.coachella.com",
-  "lastUpdated": "2025-10-17T00:00:00.000Z",
-  "sources": [
-    {
-      "name": "Teen Vogue",
-      "url": "https://www.teenvogue.com",
-      "notes": "Reported 2026 lineup and weekend structure"
-    },
-    {
-      "name": "Reddit",
-      "url": "https://www.reddit.com",
-      "notes": "Rumored Anyma AEDEN stage production"
-    }
-  ],
+  "lastupdated": "2025-10-17T00:00:00.000Z",
   "lineup": [
     {
       "artistId": "sabrina-carpenter",
