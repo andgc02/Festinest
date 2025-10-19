@@ -127,9 +127,9 @@
         } catch { return ''; }
       }
 
-      function commonsFilePath(fileName, width) {
+      `function commonsFilePath(fileName, width) {
         if (!fileName) return '';
-        return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}?width=${width}`;
+        return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}`n      function extractNumericIdFromFile(fileNameOrUrl){`n        const source = fileNameOrUrl || \x27\x27;`n        const m = /\((\d{5,})\)/.exec(source);`n        return m ? m[1] : undefined;`n      }`n?width=${width}`;
       }
 
       function parseGenres(value) {
@@ -159,8 +159,9 @@
           genres,
           photoUrl,
           image: {
-            source: sourceUrl ? 'Wikimedia Commons' : undefined,
-            sourceUrl: sourceUrl || undefined,
+            source: photoPageUrl ? 'Wikimedia Commons' : undefined,
+            sourceUrl: photoPageUrl || undefined,
+
             credit,
             license,
             licenseUrl,
@@ -222,9 +223,7 @@
         if (!idManuallyEdited || !idEl.value.trim()) { idEl.value = slugify(nameEl.value); }
         buildJson();
       });
-      idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });
-      wikidataIdEl.addEventListener('input', buildJson);
-      genresEl.addEventListener('input', buildJson);
+      idEl.addEventListener('input', () => { idManuallyEdited = true; buildJson(); });\n      genresEl.addEventListener('input', buildJson);
       photoUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(photoUrlEl.value); } buildJson(); });
       fileNameEl.addEventListener('input', buildJson);
       creditEl.addEventListener('input', buildJson);
@@ -251,4 +250,7 @@
     </script>
   </body>
   </html>
+
+
+
 
