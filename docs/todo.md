@@ -39,7 +39,7 @@ Status legend (use one marker per task):
 ## Week 3 - Social Features
 - `[DONE]` Firestore group schema (members, votes, chat preview)
 - `[DONE]` Real-time schedule voting integration
-- `[NEXT]` QR invite modal using `react-native-qrcode-svg`
+- `[DONE]` QR invite modal using `react-native-qrcode-svg`
 - `[NEXT]` Notification preferences plumbing (Expo push)
 - `[NEXT]` Group chat placeholder promoted to Firestore-backed preview
 - `[NEXT]` Lightning polls quick win for premium plan (swipe decisions)

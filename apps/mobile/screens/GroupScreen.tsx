@@ -7,6 +7,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Share,
   Pressable,
   StyleSheet,
   Text,
@@ -14,6 +15,7 @@ import {
   View,
 } from 'react-native';
 import type { ListRenderItemInfo } from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 
 import { Avatar, AvatarGroup, Button, FilterChip, Modal, Tabs, Toast } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -129,6 +131,9 @@ export function GroupScreen() {
     }
     return new Map(group.members.map((member) => [member.id, member] as const));
   }, [group]);
+
+  const inviteUrl = useMemo(() => createGroupInviteUrl(resolvedGroupId), [resolvedGroupId]);
+  const inviteCode = useMemo(() => createGroupInviteCode(resolvedGroupId), [resolvedGroupId]);
 
   const showToast = useCallback((message: string, type: 'info' | 'success' | 'error' = 'info') => {
     setToastMessage(message);
@@ -263,6 +268,27 @@ export function GroupScreen() {
       },
     ]);
   }, [leaveBusy, group, user, showToast, router]);
+
+  const handleShareInvite = useCallback(async () => {
+    if (Platform.OS === 'web') {
+      showToast('Sharing is only available on mobile right now. Copy the link instead.', 'info');
+      return;
+    }
+
+    try {
+      await Share.share({
+        title: `Join ${group?.name ?? 'my Festinest group'}`,
+        message: `Join ${group?.name ?? 'my Festinest group'} on Festinest.\nInvite code: ${inviteCode}\nLink: ${inviteUrl}`,
+        url: inviteUrl,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      if (!/dismissed/i.test(message)) {
+        console.warn('Failed to launch share sheet', err);
+        showToast('Could not share the invite. Copy the link below instead.', 'error');
+      }
+    }
+  }, [group?.name, inviteCode, inviteUrl, showToast]);
 
   const renderScheduleItem = useCallback(
     ({ item, index }: ListRenderItemInfo<GroupScheduleVote>) => (
@@ -463,15 +489,36 @@ export function GroupScreen() {
 
       <Toast visible={toastVisible} message={toastMessage} type={toastType} onHide={handleCloseToast} />
 
-      <Modal visible={qrModalVisible} onClose={() => setQrModalVisible(false)} title="Invite to this group">
-        <Text style={{ fontSize: 14, color: '#475569', lineHeight: 20 }}>
-          Share this QR code or link with friends you trust. We’ll add permissions and temporary invites in an upcoming
-          release.
-        </Text>
-        <View style={styles.qrPlaceholder}>
-          <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>QR preview coming soon</Text>
+      <Modal
+        visible={qrModalVisible}
+        onDismiss={() => setQrModalVisible(false)}
+        title="Invite to this group"
+        description="Share this QR code or link with friends you trust. We'll add granular permissions and temporary invites soon.">
+        <View style={{ gap: 20 }}>
+          <View style={styles.qrCodeContainer}>
+            <QRCode value={inviteUrl} size={220} backgroundColor="transparent" color={Colors.text} />
+          </View>
+          <View style={styles.inviteCodeContainer}>
+            <Text style={styles.inviteCodeLabel}>Invite code</Text>
+            <Text selectable style={styles.inviteCodeValue}>
+              {inviteCode}
+            </Text>
+          </View>
+          <View style={styles.inviteLinkContainer}>
+            <Text style={styles.inviteLinkLabel}>Share link</Text>
+            <Text selectable style={styles.inviteLinkValue}>
+              {inviteUrl}
+            </Text>
+          </View>
+          <View style={styles.inviteActions}>
+            <Button style={styles.inviteAction} variant="secondary" onPress={handleShareInvite}>
+              Share link
+            </Button>
+            <Button style={styles.inviteAction} onPress={() => setQrModalVisible(false)}>
+              Close
+            </Button>
+          </View>
         </View>
-        <Button onPress={() => setQrModalVisible(false)}>Close</Button>
       </Modal>
     </View>
   );
@@ -523,12 +570,56 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     padding: 16,
   },
-  qrPlaceholder: {
-    marginVertical: 24,
+  qrCodeContainer: {
+    marginVertical: 12,
     borderRadius: 16,
     backgroundColor: '#F8FAFC',
-    padding: 32,
+    padding: 24,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inviteLinkContainer: {
+    borderRadius: 14,
+    backgroundColor: '#EEF2FF',
+    padding: 16,
+    gap: 6,
+  },
+  inviteCodeContainer: {
+    borderRadius: 14,
+    backgroundColor: '#111827',
+    padding: 16,
+    gap: 6,
+  },
+  inviteCodeLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    color: '#A5B4FC',
+  },
+  inviteCodeValue: {
+    fontSize: 28,
+    fontWeight: '700',
+    letterSpacing: 4,
+    color: '#F8FAFC',
+  },
+  inviteLinkLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    color: '#6366F1',
+  },
+  inviteLinkValue: {
+    fontSize: 14,
+    color: Colors.text,
+  },
+  inviteActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  inviteAction: {
+    flex: 1,
   },
   chatContainer: {
     flex: 1,
@@ -713,6 +804,25 @@ function slugify(value: string) {
       .replace(/^-+|-+$/g, '')
       .slice(0, 24) || 'user'
   );
+}
+
+function createGroupInviteUrl(groupId: string) {
+  const base = process.env.EXPO_PUBLIC_INVITE_BASE_URL ?? 'https://festinest.app';
+  const normalizedBase = base.replace(/\/+$/, '');
+  return `${normalizedBase}/group/${encodeURIComponent(groupId)}`;
+}
+
+function createGroupInviteCode(groupId: string, length = 6) {
+  const normalized = groupId.trim().toLowerCase();
+  let hash = 0x811c9dc5; // 32-bit FNV-1a offset basis
+
+  for (let index = 0; index < normalized.length; index += 1) {
+    hash ^= normalized.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193); // 32-bit FNV prime
+  }
+
+  const encoded = (hash >>> 0).toString(36).toUpperCase();
+  return encoded.padStart(length, '0').slice(-length);
 }
 
 

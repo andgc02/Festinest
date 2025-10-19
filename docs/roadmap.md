@@ -29,7 +29,7 @@ Status legend:
 ## In Flight (Week 2 Focus)
 - `[DONE]` Festival detail lineup accordion and saved festivals CTA wiring
 - `[ACTIVE]` Schedule builder day tabs plus conflict detection research
-- `[ACTIVE]` Group screen revamp (votes preview, chat summary, invite modal)
+- `[DONE]` Group screen revamp (votes preview, chat summary, invite modal)
 - `[DONE]` Theming cleanup on legacy screens using StyleSheet tokens; remove remaining mojibake
 - `[DONE]` Avatar and AvatarGroup components for profile and group views
 - `[DONE]` Saved festivals state management shared across tabs
@@ -43,7 +43,7 @@ Status legend:
 | Festival Detail | `[ACTIVE]` | Persist saved festivals to Firestore, add travel tips block | Local persistence + accordion shipped |
 | Artists | `[DONE]` | Layer in previews, follow actions, and Firestore sync | Discovery list + detail screen live |
 | Schedule Builder | `[NEXT]` | Conflict detection, Firestore persistence, sharing workflow | Tabs component powers day switching |
-| Group | `[ACTIVE]` | Persist votes and chat, integrate invite QR | UI polished with animated rows + light surfaces |
+| Group | `[ACTIVE]` | Persist votes and chat | UI polished with animated rows, QR invites live |
 | Settings | `[ACTIVE]` | Profile edit flow and premium toggle prep (saved list + genre prefs shipped) | Prepare for premium toggle |
 | Login/Onboarding | `[NEXT]` | Social auth entry points, copy and logging polish | Demo credentials prefilled |
 
@@ -83,7 +83,7 @@ Status legend:
 - `[DONE]` Group home & detail controls with multi-group management, automatic IDs, delete + leave actions
 - `[DONE]` Firestore group schema (members, votes, chat preview content)
 - `[DONE]` Real-time vote tally broadcast to all group members
-- `[NEXT]` QR invite modal with `react-native-qrcode-svg` and share sheet
+- `[DONE]` QR invite modal with `react-native-qrcode-svg` and share sheet
 - `[LATER]` Full chat experience (push notifications, unread state)
 - `[BLOCKED]` Moderation policy with product and operations
 

@@ -73,6 +73,7 @@ Join our community of developers creating universal apps.
 3. **Populate environment variables**
    - Duplicate `.env.example` in this directory and rename it to `.env`.
    - Paste the values from the Firebase config into the matching `EXPO_PUBLIC_FIREBASE_*` entries.
+   - Update `EXPO_PUBLIC_INVITE_BASE_URL` to whatever domain should appear in shared group invites (defaults to `https://festinest.app` if omitted).
    - Keep `.env` out of version control; `.gitignore` already handles it.
 
 4. **Run the app**
