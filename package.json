@@ -11,11 +11,11 @@
     "seed:attendance": "node tools/seedFestivals.js --only=attendance",
     "seed:skip:attendance": "node tools/seedFestivals.js --skip=attendance",
     "seed:validate": "node tools/seedFestivals.js --validate",
-    "seed:dry-run": "node tools/seedFestivals.js --dry-run"
-  },
+    "seed:dry-run": "node tools/seedFestivals.js --dry-run",\n    "tool:artist": "node tools/serveArtistTool.js"\n  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "firebase": "^12.4.0",
     "firebase-admin": "^13.5.0"
   }
 }
+

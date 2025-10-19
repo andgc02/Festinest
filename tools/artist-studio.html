@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Festinest • Artist JSON Studio</title>
+    <style>
+      :root { --bg:#0b1020; --panel:#11182a; --muted:#8fa3bf; --text:#e6eef8; --primary:#6aa3ff; --accent:#64d2b6; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background: var(--bg); color: var(--text); }
+      header { padding: 16px 20px; border-bottom: 1px solid #1b2740; position: sticky; top: 0; background: linear-gradient(180deg, rgba(11,16,32,0.95), rgba(11,16,32,0.8)); backdrop-filter: blur(6px); }
+      h1 { margin: 0; font-size: 18px; letter-spacing: 0.2px; }
+      .container { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px; max-width: 1200px; margin: 0 auto; }
+      .panel { background: var(--panel); border: 1px solid #1b2740; border-radius: 12px; padding: 16px; }
+      .panel h2 { margin: 0 0 12px; font-size: 16px; }
+      .row { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: center; margin-bottom: 10px; }
+      .row label { color: var(--muted); font-weight: 600; }
+      input[type="text"], input[type="url"], textarea, select { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #2a3a5d; background: #0f1526; color: var(--text); }
+      textarea { min-height: 72px; resize: vertical; }
+      .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
+      .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+      button { padding: 10px 14px; border-radius: 8px; border: 1px solid #2a3a5d; background: #16203a; color: var(--text); cursor: pointer; }
+      button.primary { background: #17305c; border-color: #2955a6; color: #e8f2ff; }
+      button.accent { background: #0f3b3b; border-color: #1f7b7b; color: #d9fffa; }
+      pre { margin: 0; padding: 12px; border-radius: 8px; background: #0b1222; border: 1px solid #1b2740; max-height: 60vh; overflow: auto; }
+      .inline { display: inline-flex; gap: 8px; align-items: center; }
+      .pill { display:inline-block; padding: 2px 8px; border:1px solid #2a3a5d; border-radius:999px; font-size:12px; color: var(--muted); }
+      footer { padding: 10px 16px; color: var(--muted); text-align: center; }
+      @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Festinest • Artist JSON Studio <span class="pill">lightweight</span></h1>
+    </header>
+    <div class="container">
+      <section class="panel" id="formPanel">
+        <h2>Inputs</h2>
+        <div class="row"><label for="name">Artist name</label><input id="name" type="text" placeholder="RÜFÜS DU SOL" /></div>
+        <div class="row"><label for="id">Artist id (slug)</label><input id="id" type="text" placeholder="rufus-du-sol" /></div>
+        <div class="row"><label for="wikidataId">Wikidata ID</label><input id="wikidataId" type="text" placeholder="Q16238866 (optional)" /></div>
+        <div class="row"><label for="genres">Genres</label><input id="genres" type="text" placeholder="Deep House, Alternative Dance, Electronica, House" /></div>
+        <div class="row"><label for="sourceUrl">Commons File URL</label><input id="sourceUrl" type="url" placeholder="https://commons.wikimedia.org/wiki/File:Artist_Image.jpg" /></div>
+        <div class="row"><label for="fileName">File name</label><input id="fileName" type="text" placeholder="Artist_Image.jpg" /></div>
+        <div class="row"><label for="credit">Author (credit)</label><input id="credit" type="text" placeholder="Ralph Arvesen" /></div>
+        <div class="row"><label for="license">License</label>
+          <div class="grid2">
+            <select id="license"></select>
+            <select id="licenseUrl"></select>
+          </div>
+        </div>
+        <div class="row"><label for="spotify">Spotify URL</label><input id="spotify" type="url" placeholder="https://open.spotify.com/artist/..." /></div>
+        <div class="row"><label for="instagram">Instagram URL</label><input id="instagram" type="url" placeholder="https://instagram.com/username" /></div>
+        <div class="actions">
+          <button class="primary" id="generateBtn">Generate JSON</button>
+          <button id="copyBtn">Copy JSON</button>
+          <button class="accent" id="downloadBtn">Download .json</button>
+          <span class="hint">Downloads as <span id="fileOut">artist-id.json</span></span>
+        </div>
+        <div class="hint">Hints:
+          <ul>
+            <li>Paste a Commons File page URL (https://commons.wikimedia.org/wiki/File:...) to auto-fill file name and thumbnails.</li>
+            <li>Genres can be comma-separated; order preserved.</li>
+            <li>License URL is auto-selected for common Creative Commons options; you can override.</li>
+          </ul>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Preview JSON</h2>
+        <pre id="output">{}</pre>
+      </section>
+    </div>
+    <footer>© Festinest internal tool. No external requests.</footer>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const nameEl = $("name");
+      const idEl = $("id");
+      const wikidataIdEl = $("wikidataId");
+      const genresEl = $("genres");
+      const sourceUrlEl = $("sourceUrl");
+      const fileNameEl = $("fileName");
+      const creditEl = $("credit");
+      const licenseEl = $("license");
+      const licenseUrlEl = $("licenseUrl");
+      const spotifyEl = $("spotify");
+      const instagramEl = $("instagram");
+      const outputEl = $("output");
+      const fileOutEl = $("fileOut");
+
+      const LICENSES = [
+        { label: "None / Unknown", url: "" },
+        { label: "CC BY 2.0", url: "https://creativecommons.org/licenses/by/2.0/" },
+        { label: "CC BY 3.0", url: "https://creativecommons.org/licenses/by/3.0/" },
+        { label: "CC BY 4.0", url: "https://creativecommons.org/licenses/by/4.0/" },
+        { label: "CC BY-SA 3.0", url: "https://creativecommons.org/licenses/by-sa/3.0/" },
+        { label: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/" },
+        { label: "CC0 1.0 (Public Domain)", url: "https://creativecommons.org/publicdomain/zero/1.0/" },
+      ];
+
+      function populateLicenses() {
+        licenseEl.innerHTML = LICENSES.map((l, i) => `<option value="${i}">${l.label}</option>`).join("");
+        licenseUrlEl.innerHTML = LICENSES.map((l, i) => `<option value="${i}">${l.url || "(no link)"}</option>`).join("");
+        licenseEl.addEventListener("change", syncLicenseUrl);
+        licenseUrlEl.addEventListener("change", syncLicenseByUrl);
+      }
+      function syncLicenseUrl() { licenseUrlEl.value = licenseEl.value; }
+      function syncLicenseByUrl() { licenseEl.value = licenseUrlEl.value; }
+
+      function slugify(value) {
+        return (value || "")
+          .toLowerCase()
+          .normalize('NFKD').replace(/[^\w\s-]/g, '')
+          .trim()
+          .replace(/[\s_]+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-+|-+$/g, '');
+      }
+
+      function deriveFileNameFromUrl(url) {
+        try {
+          const u = new URL(url);
+          const page = decodeURIComponent(u.pathname);
+          const idx = page.lastIndexOf('File:');
+          if (idx >= 0) return page.substring(idx + 5);
+          const last = page.substring(page.lastIndexOf('/') + 1);
+          return decodeURIComponent(last);
+        } catch { return ''; }
+      }
+
+      function commonsFilePath(fileName, width) {
+        if (!fileName) return '';
+        return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}?width=${width}`;
+      }
+
+      function parseGenres(value) {
+        return (value || '')
+          .split(',')
+          .map((g) => g.trim())
+          .filter(Boolean);
+      }
+
+      function buildJson() {
+        const name = nameEl.value.trim();
+        const id = idEl.value.trim() || slugify(name);
+        const genres = parseGenres(genresEl.value);
+        const sourceUrl = sourceUrlEl.value.trim();
+        const fileName = (fileNameEl.value.trim() || deriveFileNameFromUrl(sourceUrl));
+        const licenseIdx = Number(licenseEl.value || 0);
+        const licenseObj = LICENSES[licenseIdx] || LICENSES[0];
+        const creditRaw = creditEl.value.trim();
+        const credit = creditRaw ? `Photo by ${creditRaw}` : null;
+        const license = licenseObj.url ? licenseObj.label : null;
+        const licenseUrl = licenseObj.url || null;
+        const photoUrl = commonsFilePath(fileName, 256);
+
+        const payload = {
+          id,
+          name,
+          genres,
+          photoUrl,
+          image: {
+            source: sourceUrl ? 'Wikimedia Commons' : undefined,
+            sourceUrl: sourceUrl || undefined,
+            credit,
+            license,
+            licenseUrl,
+            wikidataId: wikidataIdEl.value.trim() || undefined,
+            fileName: fileName || undefined,
+            thumbnails: {
+              '64': commonsFilePath(fileName, 64),
+              '128': commonsFilePath(fileName, 128),
+              '256': commonsFilePath(fileName, 256),
+            },
+          },
+          socials: {
+            ...(spotifyEl.value.trim() ? { spotify: spotifyEl.value.trim() } : {}),
+            ...(instagramEl.value.trim() ? { instagram: instagramEl.value.trim() } : {}),
+          },
+          updatedAt: new Date().toISOString(),
+        };
+
+        // Ensure nulls for license if None selected (keeps exact shape expectation)
+        if (!license) { payload.image.license = null; payload.image.licenseUrl = null; }
+        if (!creditRaw) { payload.image.credit = null; }
+
+        // Clean undefined keys
+        payload.image = Object.fromEntries(Object.entries(payload.image).filter(([k,v]) => v !== undefined));
+        if (!Object.keys(payload.socials).length) delete payload.socials;
+
+        const ordered = {
+          id: payload.id,
+          name: payload.name,
+          genres: payload.genres,
+          photoUrl: payload.photoUrl,
+          image: payload.image,
+          socials: payload.socials || {},
+          updatedAt: payload.updatedAt,
+        };
+
+        outputEl.textContent = JSON.stringify(ordered, null, 2);
+        fileOutEl.textContent = `${id || 'artist'}.json`;
+      }
+
+      function copyJson() {
+        const text = outputEl.textContent || '';
+        navigator.clipboard?.writeText(text).catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        });
+      }
+      function downloadJson() {
+        const id = idEl.value.trim() || slugify(nameEl.value.trim()) || 'artist';
+        const blob = new Blob([outputEl.textContent || '{}'], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `${id}.json`; a.click(); URL.revokeObjectURL(url);
+      }
+
+      // Events
+      nameEl.addEventListener('input', () => { if (!idEl.value) { idEl.value = slugify(nameEl.value); } buildJson(); });
+      idEl.addEventListener('input', buildJson);
+      wikidataIdEl.addEventListener('input', buildJson);
+      genresEl.addEventListener('input', buildJson);
+      sourceUrlEl.addEventListener('input', () => { if (!fileNameEl.value) { fileNameEl.value = deriveFileNameFromUrl(sourceUrlEl.value); } buildJson(); });
+      fileNameEl.addEventListener('input', buildJson);
+      creditEl.addEventListener('input', buildJson);
+      licenseEl.addEventListener('change', buildJson);
+      licenseUrlEl.addEventListener('change', buildJson);
+      spotifyEl.addEventListener('input', buildJson);
+      instagramEl.addEventListener('input', buildJson);
+      $("generateBtn").addEventListener('click', (e) => { e.preventDefault(); buildJson(); });
+      $("copyBtn").addEventListener('click', (e) => { e.preventDefault(); copyJson(); });
+      $("downloadBtn").addEventListener('click', (e) => { e.preventDefault(); downloadJson(); });
+
+      populateLicenses();
+      buildJson();
+    </script>
+  </body>
+  </html>
+
