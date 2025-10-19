@@ -111,7 +111,7 @@ export function GroupScreen() {
   }, [resolvedGroupId]);
 
   const headerChips = useMemo(() => {
-    const membersCount = group?.members?.length ?? 0;
+    const membersCount = group?.members.length ?? 0;
     const voteCount = group ? group.scheduleVotes.filter((vote) => vote.voters.length > 0).length : 0;
 
     return [
@@ -124,7 +124,7 @@ export function GroupScreen() {
   }, [group]);
 
   const memberMap = useMemo(() => {
-    if (!group?.members) {
+    if (!group) {
       return new Map<string, Group['members'][number]>();
     }
     return new Map(group.members.map((member) => [member.id, member] as const));
@@ -325,7 +325,7 @@ export function GroupScreen() {
   const currentUsername = deriveUsername(user);
   const ownerDisplay =
     group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
-  const memberNames = Array.isArray(group.members) ? group.members : [];
+  const memberNames = Array.isArray(group?.members) ? group.members : [];
   const memberAvatars = memberNames.map((member) => ({
     id: member.id,
     name: member.name,
@@ -351,12 +351,13 @@ export function GroupScreen() {
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      enabled>
       <View style={styles.chatContainer}>
         {chatLoading ? (
           <View style={styles.chatLoading}>
             <ActivityIndicator color={Colors.primary} />
-            <Text style={styles.chatLoadingText}>Loading messages…</Text>
+            <Text style={styles.chatLoadingText}>Loading messages...</Text>
           </View>
         ) : chatError ? (
           <View style={styles.chatLoading}>
@@ -372,6 +373,7 @@ export function GroupScreen() {
             keyExtractor={(item) => item.id}
             renderItem={renderChatItem}
             contentContainerStyle={styles.chatListContent}
+            onContentSizeChange={() => chatListRef.current?.scrollToEnd({ animated: true })}
           />
         )}
         <View style={styles.chatInputRow}>
@@ -382,6 +384,7 @@ export function GroupScreen() {
             placeholderTextColor="#94A3B8"
             style={styles.chatInput}
             multiline
+            onFocus={() => requestAnimationFrame(() => chatListRef.current?.scrollToEnd({ animated: true }))}
           />
           <Button
             size="md"
@@ -420,14 +423,28 @@ export function GroupScreen() {
           ))}
         </Animated.View>
         <View style={styles.actionsRow}>
-          <Button variant="secondary" onPress={() => setQrModalVisible(true)}>
-            Invite Friends
+          <Button
+            size="md"
+            style={styles.actionButton}
+            variant="secondary"
+            onPress={() => setQrModalVisible(true)}>
+            Invite
           </Button>
-          <Button variant="outline" onPress={handleLeavePress} disabled={leaveBusy}>
-            Leave Group
+          <Button
+            size="md"
+            style={styles.actionButton}
+            variant="outline"
+            onPress={handleLeavePress}
+            disabled={leaveBusy}>
+            Leave
           </Button>
-          <Button variant="outline" onPress={handleDeletePress} disabled={deleteBusy}>
-            Delete Group
+          <Button
+            size="md"
+            style={styles.actionButton}
+            variant="outline"
+            onPress={handleDeletePress}
+            disabled={deleteBusy}>
+            Delete
           </Button>
         </View>
       </Animated.View>
@@ -495,6 +512,9 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
+  actionButton: {
+    minWidth: 96,
+  },
   body: {
     flex: 1,
   },
@@ -556,11 +576,14 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E2E8F0',
     paddingTop: 12,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
     gap: 12,
   },
   chatInput: {
+    flex: 1,
     minHeight: 44,
-    maxHeight: 120,
+    maxHeight: 140,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: '#CBD5E1',
@@ -571,7 +594,7 @@ const styles = StyleSheet.create({
     color: Colors.text,
   },
   chatSendButton: {
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
   },
 });
 
