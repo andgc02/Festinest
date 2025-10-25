@@ -37,7 +37,16 @@
     <div class="container">
       <section class="panel">
         <h2>Inputs</h2>
-        <div class="row"><label for="name">Festival name</label><input id="name" type="text" placeholder="Coachella 2026" /></div>
+        <div class="hint">
+          <ul>
+            <li>Workflow: 1) set name + year, 2) tweak slug if needed, 3) add lineup entries.</li>
+            <li>Year is stored separately so multi-year runs stay grouped.</li>
+            <li>Website URL is required for quick linking.</li>
+            <li>Lineup rows accept artistId plus optional day/stage/time.</li>
+          </ul>
+        </div>
+        <div class="row"><label for="name">Festival name</label><input id="name" type="text" placeholder="Coachella" /></div>
+        <div class="row"><label for="year">Year</label><input id="year" type="number" min="1900" max="2100" placeholder="2026" /></div>
         <div class="row"><label for="id">Festival id (slug)</label><input id="id" type="text" placeholder="coachella-2026" /></div>
         <div class="row"><label for="location">Location</label><input id="location" type="text" placeholder="Indio, CA" /></div>
         <div class="row"><label for="startdate">Start date (ISO)</label><input id="startdate" type="text" placeholder="2026-04-10" /></div>
@@ -62,9 +71,10 @@
       </section>
     </div>
     <footer>&copy; Festinest internal tool. No external requests.</footer>
-        <script>
+            <script>
       const $ = (id) => document.getElementById(id);
       const nameEl = $("name");
+      const yearEl = $("year");
       const idEl = $("id");
       const locationEl = $("location");
       const startEl = $("startdate");
@@ -78,6 +88,15 @@
         return (value || "").toLowerCase().normalize('NFKD').replace(/[^\w\s-]/g,'').trim().replace(/[\s_]+/g,'-').replace(/-+/g,'-').replace(/^-+|-+$/g,'');
       }
       let idManuallyEdited = false;
+
+      function buildSlug() {
+        const base = slugify(nameEl.value.trim());
+        const year = yearEl.value.trim();
+        const composite = year ? `${base}-${year}` : base;
+        if (!idManuallyEdited || !idEl.value.trim()) {
+          idEl.value = composite.replace(/-+/g,'-').replace(/^-+|-+$/g,'');
+        }
+      }
 
       function addLineupRow(data={}){
         const row = document.createElement('div');
@@ -104,10 +123,12 @@
           if (timeEl.value.trim()) entry.time = timeEl.value.trim();
           return entry;
         }).filter(e=>e.artistId);
+        const yearValue = parseInt(yearEl.value.trim(), 10);
 
         const object = {
           id,
           name,
+          ...(Number.isFinite(yearValue) ? { year: yearValue } : {}),
           ...(locationEl.value.trim()? { location: locationEl.value.trim() } : {}),
           ...(startEl.value.trim()? { startdate: startEl.value.trim() } : {}),
           ...(endEl.value.trim()? { enddate: endEl.value.trim() } : {}),
@@ -120,7 +141,8 @@
       }
 
       $("addSlotBtn").addEventListener('click', (e)=> { e.preventDefault(); addLineupRow(); buildJson(); });
-      nameEl.addEventListener('input', ()=>{ if(!idManuallyEdited || !idEl.value.trim()) idEl.value = slugify(nameEl.value); buildJson(); });
+      nameEl.addEventListener('input', ()=>{ buildSlug(); buildJson(); });
+      yearEl.addEventListener('input', ()=>{ buildSlug(); buildJson(); });
       idEl.addEventListener('input', ()=>{ idManuallyEdited = true; buildJson(); });
       locationEl.addEventListener('input', buildJson);
       startEl.addEventListener('input', buildJson);
@@ -131,12 +153,20 @@
       $("downloadBtn").addEventListener('click', (e)=>{ e.preventDefault(); const id = idEl.value.trim() || slugify(nameEl.value.trim()) || 'festival'; const blob = new Blob([outputEl.textContent||'{}'], {type:'application/json;charset=utf-8'}); const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`${id}.json`; a.click(); URL.revokeObjectURL(url); });
       $("saveBtn").addEventListener('click', async (e)=>{
         e.preventDefault(); buildJson();
-        try{ const data = JSON.parse(outputEl.textContent||'{}'); const res = await fetch('/api/save-festival',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); const body = await res.json(); if(!res.ok) throw new Error(body.error||'Failed to save'); alert('Saved to '+body.path); } catch(err){ alert('Not saved: '+err.message); }
+        try{
+          const data = JSON.parse(outputEl.textContent||'{}');
+          const res = await fetch('/api/save-festival',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+          const body = await res.json();
+          if(!res.ok) throw new Error(body.error||'Failed to save');
+          alert('Saved to ' + body.path);
+        } catch(err){ alert('Not saved: ' + err.message); }
       });
 
       addLineupRow();
+      buildSlug();
       buildJson();
     </script>
+
   </body>
   </html>
 

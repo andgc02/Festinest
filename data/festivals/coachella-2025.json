@@ -1,13 +1,11 @@
 {
-    "id":  "coachella-2025",
-    "name":  "Coachella",
-    "location":  "Indio, CA",
-  "startdate":  "2025-04-11",
-  "enddate":  "2025-04-13",
-  "website":  "https://coachella.com",
-  "lineup":  [
-
-               ],
-  "lastupdated": "2025-10-17T00:00:00.000Z"
+  "id": "coachella-2025",
+  "name": "Coachella",
+  "year": 2025,
+  "location": "Indio, CA",
+  "startdate": "2025-04-11",
+  "enddate": "2025-04-13",
+  "website": "https://coachella.com",
+  "lastupdated": "2025-10-17T00:00:00.000Z",
+  "lineup": []
 }
-

@@ -1,14 +1,26 @@
 {
   "id": "electric-forest-2025",
   "name": "Electric Forest 2025",
+  "year": 2025,
   "location": "Rothbury, MI",
   "startdate": "2025-06-19",
   "enddate": "2025-06-22",
   "website": "https://electricforest.com",
+  "lastupdated": "2025-10-17T00:00:00.000Z",
   "lineup": [
-    { "artistId": "fred-again", "artistName": "Fred again..", "stage": "Ranch Arena", "day": "Thursday", "time": "22:30" },
-    { "artistId": "lana-del-rey", "artistName": "Lana Del Rey", "stage": "Sherwood Court", "day": "Friday", "time": "21:00" }
-  ],
-  "lastupdated": "2025-10-17T00:00:00.000Z"
+    {
+      "artistId": "fred-again",
+      "artistName": "Fred again..",
+      "stage": "Ranch Arena",
+      "day": "Thursday",
+      "time": "22:30"
+    },
+    {
+      "artistId": "lana-del-rey",
+      "artistName": "Lana Del Rey",
+      "stage": "Sherwood Court",
+      "day": "Friday",
+      "time": "21:00"
+    }
+  ]
 }
-

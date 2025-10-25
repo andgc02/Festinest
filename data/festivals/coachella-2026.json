@@ -1,6 +1,7 @@
 {
   "id": "coachella-2026",
   "name": "Coachella 2026",
+  "year": 2026,
   "location": "Indio, CA",
   "startdate": "2026-04-10",
   "enddate": "2026-04-19",
@@ -951,88 +952,6 @@
       "stage": "TBA",
       "day": "Sunday",
       "time": "TBA"
-    }
-  ],
-  "schedule": [
-    {
-      "day": "Friday Weekend 1",
-      "artist": "Sabrina Carpenter",
-      "time": "21:30",
-      "stage": "Coachella Stage",
-      "artistId": "sabrina-carpenter",
-      "artistName": "Sabrina Carpenter"
-    },
-    {
-      "day": "Friday Weekend 1",
-      "artist": "The xx",
-      "time": "20:00",
-      "stage": "Outdoor Theatre",
-      "artistId": "the-xx",
-      "artistName": "The xx"
-    },
-    {
-      "day": "Friday Weekend 1",
-      "artist": "Disclosure",
-      "time": "23:00",
-      "stage": "Sahara Tent",
-      "artistId": "disclosure",
-      "artistName": "Disclosure"
-    },
-    {
-      "day": "Friday Weekend 2",
-      "artist": "Sabrina Carpenter",
-      "time": "21:30",
-      "stage": "Coachella Stage",
-      "artistId": "sabrina-carpenter",
-      "artistName": "Sabrina Carpenter"
-    },
-    {
-      "day": "Saturday Weekend 1",
-      "artist": "Justin Bieber",
-      "time": "22:00",
-      "stage": "Coachella Stage",
-      "artistId": "justin-bieber",
-      "artistName": "Justin Bieber"
-    },
-    {
-      "day": "Saturday Weekend 1",
-      "artist": "The Strokes",
-      "time": "20:30",
-      "stage": "Outdoor Theatre",
-      "artistId": "the-strokes",
-      "artistName": "The Strokes"
-    },
-    {
-      "day": "Saturday Weekend 2",
-      "artist": "Justin Bieber",
-      "time": "22:00",
-      "stage": "Coachella Stage",
-      "artistId": "justin-bieber",
-      "artistName": "Justin Bieber"
-    },
-    {
-      "day": "Sunday Weekend 1",
-      "artist": "Karol G",
-      "time": "21:00",
-      "stage": "Coachella Stage",
-      "artistId": "karol-g",
-      "artistName": "Karol G"
-    },
-    {
-      "day": "Sunday Weekend 1",
-      "artist": "Anyma presents AEDEN",
-      "time": "23:30",
-      "stage": "Mojave",
-      "artistId": "anyma-presents-aeden",
-      "artistName": "Anyma presents AEDEN"
-    },
-    {
-      "day": "Sunday Weekend 2",
-      "artist": "Karol G",
-      "time": "21:00",
-      "stage": "Coachella Stage",
-      "artistId": "karol-g",
-      "artistName": "Karol G"
     }
   ]
 }

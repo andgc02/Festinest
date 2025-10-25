@@ -2,14 +2,27 @@
   "id": "young-miko",
   "name": "Young Miko",
   "genres": [
-    "Latin Trap",
-    "Latin R&B",
-    "Reggaeton"
+    "reggaeton",
+    "Latin pop",
+    "Latin trap"
   ],
-  "photoUrl": "https://example.com/young-miko.jpg",
+  "photoUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Young%20Miko%20encendi%C3%B3%20con%20sus%20%C3%A9xitos%20a%20El%20Salvador%201-24%20screenshot%20(cropped).png?width=256",
+  "image": {
+    "source": "Wikimedia Commons",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File%3AYoung%20Miko%20encendi%C3%B3%20con%20sus%20%C3%A9xitos%20a%20El%20Salvador%201-24%20screenshot%20(cropped).png",
+    "credit": "Photo by La Prensa Gráfica Noticias de El Salvador",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "fileName": "Young Miko encendió con sus éxitos a El Salvador 1-24 screenshot (cropped).png",
+    "thumbnails": {
+      "64": "https://commons.wikimedia.org/wiki/Special:FilePath/Young%20Miko%20encendi%C3%B3%20con%20sus%20%C3%A9xitos%20a%20El%20Salvador%201-24%20screenshot%20(cropped).png?width=64",
+      "128": "https://commons.wikimedia.org/wiki/Special:FilePath/Young%20Miko%20encendi%C3%B3%20con%20sus%20%C3%A9xitos%20a%20El%20Salvador%201-24%20screenshot%20(cropped).png?width=128",
+      "256": "https://commons.wikimedia.org/wiki/Special:FilePath/Young%20Miko%20encendi%C3%B3%20con%20sus%20%C3%A9xitos%20a%20El%20Salvador%201-24%20screenshot%20(cropped).png?width=256"
+    }
+  },
   "socials": {
     "spotify": "https://open.spotify.com/artist/3qsKSpcV3ncke3hw52JSMB",
     "instagram": "https://instagram.com/itsyoungmiko"
   },
-  "updatedAt": "2025-10-17T00:00:00.000Z"
+  "updatedAt": "2025-10-25T20:12:06.398Z"
 }
