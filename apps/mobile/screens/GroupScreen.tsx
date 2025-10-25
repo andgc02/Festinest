@@ -13,6 +13,7 @@ import {
   Text,
   TextInput,
   View,
+  PanResponder,
 } from 'react-native';
 import type { ListRenderItemInfo } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -32,10 +33,16 @@ import {
   listenToGroup,
   listenToGroupChat,
   sendGroupChatMessage,
+  createLightningPoll,
+  voteOnLightningPoll,
+  closeLightningPoll,
+  recordGroupNudge,
+  toggleScheduleVoteLock,
+  toggleScheduleVoteHighlight,
 } from '@/services/groups';
-import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
+import { Group, GroupChatMessage, GroupLightningPoll, GroupScheduleVote, LightningPollChoice } from '@/types/group';
 
-type TabKey = 'schedule' | 'chat';
+type TabKey = 'schedule' | 'chat' | 'polls';
 
 export function GroupScreen() {
   const router = useRouter();
@@ -61,6 +68,14 @@ export function GroupScreen() {
   const [chatDraft, setChatDraft] = useState('');
   const [sendingChat, setSendingChat] = useState(false);
   const chatListRef = useRef<FlatList<GroupChatMessage> | null>(null);
+  const [pollModalVisible, setPollModalVisible] = useState(false);
+  const [pollPrompt, setPollPrompt] = useState('');
+  const [pollLeftChoice, setPollLeftChoice] = useState('');
+  const [pollRightChoice, setPollRightChoice] = useState('');
+  const [pollSubmitting, setPollSubmitting] = useState(false);
+  const [pollVoteBusy, setPollVoteBusy] = useState<Record<string, boolean>>({});
+  const [leaderActionBusy, setLeaderActionBusy] = useState<Record<string, boolean>>({});
+  const [nudging, setNudging] = useState(false);
 
   const loadGroup = useCallback(async () => {
     setLoading(true);
@@ -115,14 +130,22 @@ export function GroupScreen() {
   const headerChips = useMemo(() => {
     const membersCount = group?.members.length ?? 0;
     const voteCount = group ? group.scheduleVotes.filter((vote) => vote.voters.length > 0).length : 0;
+    const activePolls = group ? group.lightningPolls.filter((poll) => poll.active).length : 0;
 
-    return [
+    const chips = [
       { label: `${membersCount} member${membersCount === 1 ? '' : 's'}`, selected: true },
       {
         label: voteCount > 0 ? `Votes on ${voteCount} set${voteCount === 1 ? '' : 's'}` : 'No votes yet',
         selected: voteCount > 0,
       },
     ];
+
+    chips.push({
+      label: activePolls ? `${activePolls} lightning poll${activePolls === 1 ? '' : 's'}` : 'Polls ready',
+      selected: activePolls > 0,
+    });
+
+    return chips;
   }, [group]);
 
   const memberMap = useMemo(() => {
@@ -134,6 +157,16 @@ export function GroupScreen() {
 
   const inviteUrl = useMemo(() => createGroupInviteUrl(resolvedGroupId), [resolvedGroupId]);
   const inviteCode = useMemo(() => createGroupInviteCode(resolvedGroupId), [resolvedGroupId]);
+
+  const sortedPolls = useMemo(() => {
+    const polls = group?.lightningPolls ?? [];
+    return [...polls].sort((a, b) => {
+      if (a.active === b.active) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return a.active ? -1 : 1;
+    });
+  }, [group?.lightningPolls]);
 
   const showToast = useCallback((message: string, type: 'info' | 'success' | 'error' = 'info') => {
     setToastMessage(message);
@@ -202,6 +235,150 @@ export function GroupScreen() {
   const handleCloseToast = useCallback(() => {
     setToastVisible(false);
   }, []);
+
+  const handleCreateLightningPoll = useCallback(async () => {
+    if (!group || !user) {
+      showToast('Sign in as the host to start a poll.', 'error');
+      return;
+    }
+
+    setPollSubmitting(true);
+    try {
+      await createLightningPoll({
+        groupId: group.id,
+        userId: user.uid,
+        prompt: pollPrompt,
+        leftLabel: pollLeftChoice,
+        rightLabel: pollRightChoice,
+      });
+      setPollModalVisible(false);
+      setPollPrompt('');
+      setPollLeftChoice('');
+      setPollRightChoice('');
+      showToast('Lightning poll launched.', 'success');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not start that poll.';
+      showToast(message, 'error');
+    } finally {
+      setPollSubmitting(false);
+    }
+  }, [group, user, pollPrompt, pollLeftChoice, pollRightChoice, showToast]);
+
+  const handleVoteOnPoll = useCallback(
+    async (pollId: string, choice: LightningPollChoice) => {
+      if (!group || !user) {
+        showToast('Sign in to vote on lightning polls.', 'error');
+        return;
+      }
+
+      setPollVoteBusy((prev) => ({ ...prev, [pollId]: true }));
+      try {
+        await voteOnLightningPoll({
+          groupId: group.id,
+          pollId,
+          userId: user.uid,
+          choice,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Could not save your vote.';
+        showToast(message, 'error');
+      } finally {
+        setPollVoteBusy((prev) => ({ ...prev, [pollId]: false }));
+      }
+    },
+    [group, user, showToast],
+  );
+
+  const handleClosePoll = useCallback(
+    async (pollId: string) => {
+      if (!group || !user) {
+        showToast('Sign in as the host to close polls.', 'error');
+        return;
+      }
+
+      setPollVoteBusy((prev) => ({ ...prev, [pollId]: true }));
+      try {
+        await closeLightningPoll({
+          groupId: group.id,
+          pollId,
+          userId: user.uid,
+        });
+        showToast('Poll closed for everyone.', 'info');
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Could not close that poll.';
+        showToast(message, 'error');
+      } finally {
+        setPollVoteBusy((prev) => ({ ...prev, [pollId]: false }));
+      }
+    },
+    [group, user, showToast],
+  );
+
+  const handleSendNudge = useCallback(async () => {
+    if (!group || !user) {
+      showToast('Sign in as the host to send nudges.', 'error');
+      return;
+    }
+
+    setNudging(true);
+    try {
+      await recordGroupNudge({ groupId: group.id, userId: user.uid });
+      showToast('Heads-up sent to your group.', 'success');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Could not send that nudge.';
+      showToast(message, 'error');
+    } finally {
+      setNudging(false);
+    }
+  }, [group, user, showToast]);
+
+  const handleToggleLock = useCallback(
+    async (slotId: string) => {
+      if (!group || !user) {
+        showToast('Sign in as the host to lock slots.', 'error');
+        return;
+      }
+
+      setLeaderActionBusy((prev) => ({ ...prev, [slotId]: true }));
+      try {
+        await toggleScheduleVoteLock({
+          groupId: group.id,
+          voteId: slotId,
+          userId: user.uid,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Could not update the lock state.';
+        showToast(message, 'error');
+      } finally {
+        setLeaderActionBusy((prev) => ({ ...prev, [slotId]: false }));
+      }
+    },
+    [group, user, showToast],
+  );
+
+  const handleToggleHighlight = useCallback(
+    async (slotId: string) => {
+      if (!group || !user) {
+        showToast('Sign in as the host to highlight slots.', 'error');
+        return;
+      }
+
+      setLeaderActionBusy((prev) => ({ ...prev, [slotId]: true }));
+      try {
+        await toggleScheduleVoteHighlight({
+          groupId: group.id,
+          voteId: slotId,
+          userId: user.uid,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Could not update highlight state.';
+        showToast(message, 'error');
+      } finally {
+        setLeaderActionBusy((prev) => ({ ...prev, [slotId]: false }));
+      }
+    },
+    [group, user, showToast],
+  );
 
   const handleDeletePress = useCallback(() => {
     if (deleteBusy) {
@@ -291,17 +468,39 @@ export function GroupScreen() {
   }, [group?.name, inviteCode, inviteUrl, showToast]);
 
   const renderScheduleItem = useCallback(
-    ({ item, index }: ListRenderItemInfo<GroupScheduleVote>) => (
-      <ScheduleRow
-        key={item.id}
-        item={item}
-        index={index}
-        currentUserId={user?.uid}
-        onToggleVote={handleToggleVote}
-        busy={voteBusy[item.id]}
-      />
-    ),
-    [handleToggleVote, user?.uid, voteBusy],
+    ({ item, index }: ListRenderItemInfo<GroupScheduleVote>) => {
+      const locked =
+        (group?.leaderControls.lockedScheduleVoteIds ?? []).includes(item.id);
+      const highlighted =
+        (group?.leaderControls.highlightedVoteIds ?? []).includes(item.id);
+
+      return (
+        <ScheduleRow
+          key={item.id}
+          item={item}
+          index={index}
+          currentUserId={user?.uid}
+          onToggleVote={handleToggleVote}
+          busy={voteBusy[item.id]}
+          locked={locked}
+          highlighted={highlighted}
+          canOverrideLock={isGroupOwner}
+          leaderBusy={leaderActionBusy[item.id]}
+          onToggleLock={isGroupOwner ? handleToggleLock : undefined}
+          onToggleHighlight={isGroupOwner ? handleToggleHighlight : undefined}
+        />
+      );
+    },
+    [
+      handleToggleVote,
+      user?.uid,
+      voteBusy,
+      group,
+      isGroupOwner,
+      leaderActionBusy,
+      handleToggleLock,
+      handleToggleHighlight,
+    ],
   );
 
   const renderChatItem = useCallback(
@@ -351,6 +550,10 @@ export function GroupScreen() {
   const currentUsername = deriveUsername(user);
   const ownerDisplay =
     group.ownerUsername && group.ownerUsername === currentUsername ? 'you' : group.ownerUsername || 'group owner';
+  const isGroupOwner = Boolean(user && user.uid === group.ownerId);
+  const lastNudgeRelative = group.leaderControls.lastNudgeAt
+    ? formatRelativeTime(group.leaderControls.lastNudgeAt)
+    : null;
   const memberNames = Array.isArray(group?.members) ? group.members : [];
   const memberAvatars = memberNames.map((member) => ({
     id: member.id,
@@ -364,6 +567,18 @@ export function GroupScreen() {
       keyExtractor={(item) => item.id}
       renderItem={renderScheduleItem}
       contentContainerStyle={{ gap: 12 }}
+      ListHeaderComponent={
+        isGroupOwner ? (
+          <LeaderToolsCard
+            onNudge={handleSendNudge}
+            loading={nudging}
+            lastNudge={lastNudgeRelative}
+            onLaunchPoll={() => setPollModalVisible(true)}
+            activePolls={group.lightningPolls.filter((poll) => poll.active).length}
+          />
+        ) : null
+      }
+      ListHeaderComponentStyle={isGroupOwner ? { marginBottom: 12 } : undefined}
       ListEmptyComponent={
         <EmptyState
           title="No schedule votes yet"
@@ -425,6 +640,55 @@ export function GroupScreen() {
     </KeyboardAvoidingView>
   );
 
+  const pollsContent = (
+    <Animated.ScrollView contentContainerStyle={styles.pollsContent}>
+      {isGroupOwner ? (
+        <View style={styles.pollsHostCard}>
+          <Text style={styles.pollsHostTitle}>Premium host controls</Text>
+          <Text style={styles.pollsHostBody}>
+            Lightning polls and leader controls are part of the premium toolkit. Swipe decisions keep the group moving.
+          </Text>
+          <Button onPress={() => setPollModalVisible(true)} style={{ marginTop: 12 }}>
+            Launch lightning poll
+          </Button>
+          <Text style={styles.pollsHostMeta}>
+            {group.lightningPolls.filter((poll) => poll.active).length} active · {group.lightningPolls.length} total
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.pollsInfoCard}>
+          <Text style={styles.pollsInfoTitle}>Lightning polls are host-only</Text>
+          <Text style={styles.pollsInfoBody}>
+            Your premium host can start a poll anytime. Swipe to vote and we&rsquo;ll tally the squad in real time.
+          </Text>
+        </View>
+      )}
+
+      {sortedPolls.length ? (
+        sortedPolls.map((poll) => (
+          <LightningPollCard
+            key={poll.id}
+            poll={poll}
+            currentUserId={user?.uid}
+            onVote={handleVoteOnPoll}
+            onClose={handleClosePoll}
+            canManage={isGroupOwner}
+            busy={pollVoteBusy[poll.id]}
+          />
+        ))
+      ) : (
+        <EmptyState
+          title="No lightning polls yet"
+          description={
+            isGroupOwner
+              ? 'Kick off a quick swipe poll when the group is split on plans.'
+              : "Your host hasn't started a poll yet."
+          }
+        />
+      )}
+    </Animated.ScrollView>
+  );
+
   return (
     <View style={styles.root}>
       <Animated.View style={[styles.header, headerFade]}>
@@ -456,6 +720,16 @@ export function GroupScreen() {
             onPress={() => setQrModalVisible(true)}>
             Invite
           </Button>
+          {isGroupOwner ? (
+            <Button
+              size="md"
+              style={styles.actionButton}
+              onPress={handleSendNudge}
+              loading={nudging}
+              disabled={nudging}>
+              Nudge
+            </Button>
+          ) : null}
           <Button
             size="md"
             style={styles.actionButton}
@@ -473,6 +747,9 @@ export function GroupScreen() {
             Delete
           </Button>
         </View>
+        {isGroupOwner && lastNudgeRelative ? (
+          <Text style={styles.leaderMeta}>Last nudge {lastNudgeRelative}</Text>
+        ) : null}
       </Animated.View>
 
       <Tabs
@@ -481,11 +758,18 @@ export function GroupScreen() {
         items={[
           { key: 'schedule', label: 'Shared Schedule' },
           { key: 'chat', label: 'Chat' },
+          { key: 'polls', label: 'Lightning Polls' },
         ]}
         variant="underline"
       />
 
-      <View style={styles.body}>{selectedTab === 'schedule' ? scheduleContent : chatContent}</View>
+      <View style={styles.body}>
+        {selectedTab === 'schedule'
+          ? scheduleContent
+          : selectedTab === 'chat'
+          ? chatContent
+          : pollsContent}
+      </View>
 
       <Toast visible={toastVisible} message={toastMessage} type={toastType} onHide={handleCloseToast} />
 
@@ -516,6 +800,70 @@ export function GroupScreen() {
             </Button>
             <Button style={styles.inviteAction} onPress={() => setQrModalVisible(false)}>
               Close
+            </Button>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={pollModalVisible}
+        onDismiss={() => {
+          if (pollSubmitting) {
+            return;
+          }
+          setPollModalVisible(false);
+        }}
+        title="Launch lightning poll"
+        description="Premium hosts can spin up a quick swipe decision for the group."
+        dismissOnOverlayPress={!pollSubmitting}>
+        <View style={{ gap: 16 }}>
+          <TextInput
+            value={pollPrompt}
+            onChangeText={setPollPrompt}
+            placeholder="Where should we meet before Fred again..?"
+            style={styles.pollInput}
+            editable={!pollSubmitting}
+            multiline
+          />
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <TextInput
+              value={pollLeftChoice}
+              onChangeText={setPollLeftChoice}
+              placeholder="Option A"
+              style={[styles.pollInput, { flex: 1 }]}
+              editable={!pollSubmitting}
+            />
+            <TextInput
+              value={pollRightChoice}
+              onChangeText={setPollRightChoice}
+              placeholder="Option B"
+              style={[styles.pollInput, { flex: 1 }]}
+              editable={!pollSubmitting}
+            />
+          </View>
+          <View style={{ flexDirection: 'row', gap: 12 }}>
+            <Button
+              variant="outline"
+              style={{ flex: 1 }}
+              onPress={() => {
+                if (pollSubmitting) {
+                  return;
+                }
+                setPollModalVisible(false);
+              }}>
+              Cancel
+            </Button>
+            <Button
+              style={{ flex: 1 }}
+              onPress={handleCreateLightningPoll}
+              loading={pollSubmitting}
+              disabled={
+                pollSubmitting ||
+                !pollPrompt.trim().length ||
+                !pollLeftChoice.trim().length ||
+                !pollRightChoice.trim().length
+              }>
+              Launch poll
             </Button>
           </View>
         </View>
@@ -561,6 +909,10 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     minWidth: 96,
+  },
+  leaderMeta: {
+    fontSize: 12,
+    color: '#94A3B8',
   },
   body: {
     flex: 1,
@@ -687,6 +1039,240 @@ const styles = StyleSheet.create({
   chatSendButton: {
     alignSelf: 'center',
   },
+  scheduleCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 16,
+    backgroundColor: Colors.surface,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+  },
+  scheduleCardVoted: {
+    backgroundColor: '#EEF2FF',
+    borderColor: Colors.primary,
+  },
+  scheduleCardHighlighted: {
+    backgroundColor: '#FFF7ED',
+    borderColor: '#FB923C',
+  },
+  scheduleCardLocked: {
+    borderColor: '#94A3B8',
+  },
+  scheduleTagsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 6,
+  },
+  scheduleTagLocked: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#475569',
+    textTransform: 'uppercase',
+  },
+  scheduleTagHighlight: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#EA580C',
+    textTransform: 'uppercase',
+  },
+  voteCountPill: {
+    borderRadius: 9999,
+    backgroundColor: '#E2E8F0',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
+  voteCountText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#1A202C',
+  },
+  leaderActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 8,
+    marginTop: 8,
+  },
+  leaderActionButton: {
+    borderRadius: 999,
+    backgroundColor: '#E2E8F0',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
+  leaderActionButtonDisabled: {
+    opacity: 0.6,
+  },
+  leaderActionText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  leaderToolsCard: {
+    borderRadius: 20,
+    backgroundColor: '#F8FAFF',
+    padding: 16,
+    gap: 8,
+  },
+  leaderToolsTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  leaderToolsBody: {
+    fontSize: 13,
+    color: '#475569',
+  },
+  leaderToolsMeta: {
+    fontSize: 12,
+    color: '#94A3B8',
+  },
+  pollsContent: {
+    gap: 16,
+    paddingVertical: 16,
+  },
+  pollsHostCard: {
+    borderRadius: 20,
+    backgroundColor: '#EEF2FF',
+    padding: 16,
+    gap: 8,
+  },
+  pollsHostTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  pollsHostBody: {
+    fontSize: 13,
+    color: '#475569',
+  },
+  pollsHostMeta: {
+    fontSize: 12,
+    color: '#6366F1',
+  },
+  pollsInfoCard: {
+    borderRadius: 20,
+    backgroundColor: '#F1F5F9',
+    padding: 16,
+    gap: 6,
+  },
+  pollsInfoTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  pollsInfoBody: {
+    fontSize: 13,
+    color: '#475569',
+  },
+  pollInput: {
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: Colors.text,
+  },
+  pollCard: {
+    borderRadius: 24,
+    backgroundColor: Colors.surface,
+    padding: 16,
+    gap: 16,
+  },
+  pollHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  pollStatus: {
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+  },
+  pollStatusActive: {
+    color: '#16A34A',
+  },
+  pollStatusClosed: {
+    color: '#94A3B8',
+  },
+  pollCloseAction: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#DC2626',
+  },
+  pollPrompt: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: Colors.text,
+  },
+  pollSwipeTrack: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 12,
+    overflow: 'hidden',
+    gap: 8,
+  },
+  pollSwipeHint: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#94A3B8',
+  },
+  pollSwipeThumb: {
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    alignSelf: 'center',
+  },
+  pollSwipeThumbText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  pollChoicesRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  pollChoice: {
+    flex: 1,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    padding: 12,
+    gap: 4,
+  },
+  pollChoiceSelectedLeft: {
+    borderColor: '#F97316',
+    backgroundColor: '#FFF7ED',
+  },
+  pollChoiceSelectedRight: {
+    borderColor: Colors.primary,
+    backgroundColor: '#EEF2FF',
+  },
+  pollChoiceDisabled: {
+    opacity: 0.6,
+  },
+  pollChoiceLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: Colors.text,
+  },
+  pollChoiceMeta: {
+    fontSize: 12,
+    color: '#475569',
+  },
+  pollStatsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  pollStatsText: {
+    fontSize: 12,
+    color: '#94A3B8',
+  },
 });
 
 type ScheduleRowProps = {
@@ -695,52 +1281,260 @@ type ScheduleRowProps = {
   currentUserId?: string;
   onToggleVote: (slotId: string) => void;
   busy?: boolean;
+  locked?: boolean;
+  highlighted?: boolean;
+  canOverrideLock?: boolean;
+  leaderBusy?: boolean;
+  onToggleLock?: (slotId: string) => void;
+  onToggleHighlight?: (slotId: string) => void;
 };
 
-function ScheduleRow({ item, index, currentUserId, onToggleVote, busy = false }: ScheduleRowProps) {
+function ScheduleRow({
+  item,
+  index,
+  currentUserId,
+  onToggleVote,
+  busy = false,
+  locked = false,
+  highlighted = false,
+  canOverrideLock = false,
+  leaderBusy = false,
+  onToggleLock,
+  onToggleHighlight,
+}: ScheduleRowProps) {
   const animatedStyle = useFadeInUp({ delay: index * 70 });
   const votesCount = item.voters.length;
   const hasVoted = currentUserId ? item.voters.includes(currentUserId) : false;
   const subtitle = [item.day, item.time, item.stage].filter(Boolean).join(' \u2022 ');
+  const lockedForUser = locked && !canOverrideLock;
+  const disableVote = busy || lockedForUser;
 
   return (
     <Animated.View style={animatedStyle}>
       <Pressable
         accessibilityRole="button"
-        accessibilityState={{ selected: hasVoted, busy }}
-        onPress={() => onToggleVote(item.id)}
-        disabled={busy}
-        style={{ opacity: busy ? 0.6 : 1 }}>
+        accessibilityState={{ selected: hasVoted, busy: busy || leaderBusy, disabled: disableVote }}
+        onPress={() => {
+          if (disableVote) {
+            return;
+          }
+          onToggleVote(item.id);
+        }}
+        disabled={disableVote}
+        style={{ opacity: disableVote ? 0.6 : 1 }}>
         <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderRadius: 16,
-            backgroundColor: hasVoted ? '#EEF2FF' : Colors.surface,
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            borderWidth: hasVoted ? 1 : 0,
-            borderColor: hasVoted ? Colors.primary : 'transparent',
-          }}>
-          <View>
+          style={[
+            styles.scheduleCard,
+            hasVoted && styles.scheduleCardVoted,
+            highlighted && styles.scheduleCardHighlighted,
+            lockedForUser && styles.scheduleCardLocked,
+          ]}>
+          <View style={{ flex: 1 }}>
             <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{item.artistName}</Text>
             <Text style={{ fontSize: 12, color: '#475569' }}>{subtitle || 'Details coming soon'}</Text>
+            <View style={styles.scheduleTagsRow}>
+              {locked ? <Text style={styles.scheduleTagLocked}>{lockedForUser ? 'Locked' : 'Locked (you)'}</Text> : null}
+              {highlighted ? <Text style={styles.scheduleTagHighlight}>Spotlight</Text> : null}
+            </View>
           </View>
-          <View
-            style={{
-              borderRadius: 9999,
-              backgroundColor: hasVoted ? Colors.primary : '#E2E8F0',
-              paddingHorizontal: 12,
-              paddingVertical: 4,
-            }}>
-            <Text style={{ fontSize: 12, fontWeight: '600', color: hasVoted ? '#FFFFFF' : '#1A202C' }}>
+          <View style={styles.voteCountPill}>
+            <Text style={styles.voteCountText}>
               {votesCount} vote{votesCount === 1 ? '' : 's'}
             </Text>
           </View>
         </View>
       </Pressable>
+      {canOverrideLock && (onToggleLock || onToggleHighlight) ? (
+        <View style={styles.leaderActions}>
+          {onToggleLock ? (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation();
+                onToggleLock(item.id);
+              }}
+              disabled={leaderBusy}
+              style={[styles.leaderActionButton, leaderBusy && styles.leaderActionButtonDisabled]}>
+              <Text style={styles.leaderActionText}>{locked ? 'Unlock' : 'Lock'}</Text>
+            </Pressable>
+          ) : null}
+          {onToggleHighlight ? (
+            <Pressable
+              onPress={(event) => {
+                event.stopPropagation();
+                onToggleHighlight(item.id);
+              }}
+              disabled={leaderBusy}
+              style={[styles.leaderActionButton, leaderBusy && styles.leaderActionButtonDisabled]}>
+              <Text style={styles.leaderActionText}>{highlighted ? 'Unmark' : 'Highlight'}</Text>
+            </Pressable>
+          ) : null}
+        </View>
+      ) : null}
     </Animated.View>
+  );
+}
+
+type LeaderToolsCardProps = {
+  onNudge: () => void;
+  loading?: boolean;
+  lastNudge?: string | null;
+  onLaunchPoll: () => void;
+  activePolls: number;
+};
+
+function LeaderToolsCard({ onNudge, loading = false, lastNudge, onLaunchPoll, activePolls }: LeaderToolsCardProps) {
+  return (
+    <View style={styles.leaderToolsCard}>
+      <Text style={styles.leaderToolsTitle}>Premium leader controls</Text>
+      <Text style={styles.leaderToolsBody}>
+        Keep the squad in sync with quick nudges, locked slots, and swipe-ready lightning polls.
+      </Text>
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <Button variant="secondary" style={{ flex: 1 }} onPress={onLaunchPoll}>
+          New poll
+        </Button>
+        <Button style={{ flex: 1 }} onPress={onNudge} loading={loading} disabled={loading}>
+          Nudge members
+        </Button>
+      </View>
+      <Text style={styles.leaderToolsMeta}>
+        {activePolls} active poll{activePolls === 1 ? '' : 's'} · Last nudge {lastNudge ?? 'never'}
+      </Text>
+    </View>
+  );
+}
+
+type LightningPollCardProps = {
+  poll: GroupLightningPoll;
+  currentUserId?: string;
+  canManage: boolean;
+  busy?: boolean;
+  onVote: (pollId: string, choice: LightningPollChoice) => void;
+  onClose: (pollId: string) => void;
+};
+
+function LightningPollCard({
+  poll,
+  currentUserId,
+  canManage,
+  busy = false,
+  onVote,
+  onClose,
+}: LightningPollCardProps) {
+  const swipe = useRef(new Animated.Value(0)).current;
+  const userVote = currentUserId ? poll.votes[currentUserId] : undefined;
+  const votes = Object.values(poll.votes);
+  const leftVotes = votes.filter((vote) => vote === 'left').length;
+  const rightVotes = votes.filter((vote) => vote === 'right').length;
+  const totalVotes = leftVotes + rightVotes;
+
+  const handleChoice = useCallback(
+    (choice: LightningPollChoice) => {
+      if (busy || !poll.active) {
+        return;
+      }
+      onVote(poll.id, choice);
+    },
+    [busy, onVote, poll.active, poll.id],
+  );
+
+  const panResponder = useMemo(
+    () =>
+      PanResponder.create({
+        onMoveShouldSetPanResponder: (_, gesture) => Math.abs(gesture.dx) > 10,
+        onPanResponderMove: (_, gesture) => {
+          if (busy || !poll.active) {
+            return;
+          }
+          swipe.setValue(gesture.dx);
+        },
+        onPanResponderRelease: (_, gesture) => {
+          if (!poll.active) {
+            Animated.spring(swipe, { toValue: 0, useNativeDriver: true }).start();
+            return;
+          }
+          if (gesture.dx > 70) {
+            handleChoice('right');
+          } else if (gesture.dx < -70) {
+            handleChoice('left');
+          }
+          Animated.spring(swipe, { toValue: 0, useNativeDriver: true }).start();
+        },
+        onPanResponderTerminate: () => {
+          Animated.spring(swipe, { toValue: 0, useNativeDriver: true }).start();
+        },
+      }),
+    [busy, handleChoice, poll.active, swipe],
+  );
+
+  return (
+    <View style={styles.pollCard}>
+      <View style={styles.pollHeader}>
+        <Text style={[styles.pollStatus, poll.active ? styles.pollStatusActive : styles.pollStatusClosed]}>
+          {poll.active ? 'Active' : 'Closed'}
+        </Text>
+        {canManage && poll.active ? (
+          <Pressable onPress={() => onClose(poll.id)} disabled={busy} hitSlop={8}>
+            <Text style={styles.pollCloseAction}>{busy ? 'Closing...' : 'Close poll'}</Text>
+          </Pressable>
+        ) : null}
+      </View>
+      <Text style={styles.pollPrompt}>{poll.prompt}</Text>
+      <View style={styles.pollSwipeTrack}>
+        <Text style={styles.pollSwipeHint}>
+          {poll.active ? 'Swipe left or right to decide' : 'Poll closed'}
+        </Text>
+        <Animated.View
+          {...(poll.active ? panResponder.panHandlers : {})}
+          style={[
+            styles.pollSwipeThumb,
+            {
+              backgroundColor: userVote ? (userVote === 'left' ? '#F97316' : Colors.primary) : '#CBD5E1',
+              transform: [{ translateX: swipe }],
+            },
+          ]}>
+          <Text
+            style={[
+              styles.pollSwipeThumbText,
+              !userVote && { color: Colors.text },
+            ]}>
+            {userVote ? `Voted ${userVote === 'left' ? poll.leftLabel : poll.rightLabel}` : 'Swipe left / right'}
+          </Text>
+        </Animated.View>
+      </View>
+      <View style={styles.pollChoicesRow}>
+        <Pressable
+          style={[
+            styles.pollChoice,
+            userVote === 'left' && styles.pollChoiceSelectedLeft,
+            (!poll.active || busy) && styles.pollChoiceDisabled,
+          ]}
+          disabled={busy || !poll.active}
+          onPress={() => handleChoice('left')}>
+          <Text style={styles.pollChoiceLabel}>{poll.leftLabel}</Text>
+          <Text style={styles.pollChoiceMeta}>{leftVotes} votes</Text>
+        </Pressable>
+        <Pressable
+          style={[
+            styles.pollChoice,
+            userVote === 'right' && styles.pollChoiceSelectedRight,
+            (!poll.active || busy) && styles.pollChoiceDisabled,
+          ]}
+          disabled={busy || !poll.active}
+          onPress={() => handleChoice('right')}>
+          <Text style={styles.pollChoiceLabel}>{poll.rightLabel}</Text>
+          <Text style={styles.pollChoiceMeta}>{rightVotes} votes</Text>
+        </Pressable>
+      </View>
+      <View style={styles.pollStatsRow}>
+        <Text style={styles.pollStatsText}>
+          Total {totalVotes} vote{totalVotes === 1 ? '' : 's'}
+        </Text>
+        <Text style={styles.pollStatsText}>
+          {new Date(poll.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </Text>
+      </View>
+    </View>
   );
 }
 
@@ -777,6 +1571,33 @@ function formatTimestamp(timestamp: string) {
     day: 'numeric',
   });
   return `${dateFormatter.format(date)} · ${timeFormatter.format(date)}`;
+}
+
+function formatRelativeTime(timestamp?: string | null) {
+  if (!timestamp) {
+    return null;
+  }
+
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  const diffMs = Date.now() - date.getTime();
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
+  if (diffMs < minute) {
+    return 'just now';
+  }
+  if (diffMs < hour) {
+    return `${Math.round(diffMs / minute)}m ago`;
+  }
+  if (diffMs < day) {
+    return `${Math.round(diffMs / hour)}h ago`;
+  }
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
 function deriveUsername(user?: { uid: string; displayName: string | null; email: string | null }) {

@@ -11,7 +11,7 @@ Status legend:
 - `[DONE]` Week 1 foundation work (routing, auth, theming, core components)
 - `[ACTIVE]` Week 2 feature polish across Festival Detail, Schedule Builder, and Group
 - `[NEXT]` Premium upsell foundations (profile sync, schedule preview, conflict solver)
-- `[ACTIVE]` Week 3 collaboration work (notifications plumbing, chat preview, invites ramp-up)
+- `[ACTIVE]` Week 3 collaboration work (notifications plumbing, chat preview, lightning polls, leader controls)
 - `[LATER]` Analytics, growth, premium upsell, offline support, partnerships
 
 ## Completed to Date
@@ -85,6 +85,8 @@ Status legend:
 - `[DONE]` Real-time vote tally broadcast to all group members
 - `[DONE]` QR invite modal with `react-native-qrcode-svg` and share sheet
 - `[DONE]` Group home chat preview populated from Firestore messages (Week 3 sprint)
+- `[DONE]` Lightning polls with swipe decisions for premium hosts
+- `[DONE]` Leader controls for nudges, locked slots, and highlights
 - `[LATER]` Full chat experience (push notifications, unread state)
 - `[BLOCKED]` Moderation policy with product and operations
 
@@ -141,7 +143,7 @@ Status legend:
 - `[NEXT]` Define paywall story and gating for premium companion features
 - `[NEXT]` Custom festival nicknames surfaced in badges, recaps, and lists
 - `[NEXT]` Smart schedule conflict solver with suggested alternates
-- `[NEXT]` Lightning polls and group leader controls inside shared schedules
+- `[DONE]` Lightning polls and group leader controls inside shared schedules
 - `[NEXT]` Festival companion mode (lite) for in-festival usage
 - `[LATER]` Festival archetype personality cards and annual refresh
 - `[LATER]` Smart walk-time buffering with stage distance heuristics
@@ -153,7 +155,7 @@ Status legend:
 - **Week 1 (complete):** foundation scaffolding, auth, theming, base components
 - **Week 2 (in flight):** screen polish, state management, avatars, save flows
 - **Premium foundations (current):** Search hardening, profile placeholder, schedule preview, Firestore prep
-- **Week 3 (active):** collaboration feature set (Expo push notifications, Firestore chat preview, invites)
+- **Week 3 (active):** collaboration feature set (Expo push notifications, chat preview, lightning polls, leader tools)
 - **Week 4 (next):** deep auth/settings, onboarding, premium preview, QA automation
 - **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
 

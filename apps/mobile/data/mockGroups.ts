@@ -39,6 +39,27 @@ const baseGroup: Group = {
     { id: '1', authorId: 'alex', authorName: 'Alex', message: 'Meet at the main gate at noon?', timestamp: '11:45 AM' },
     { id: '2', authorId: 'sam', authorName: 'Sam', message: 'Bring water and sunscreen!', timestamp: '11:47 AM' },
   ],
+  lightningPolls: [
+    {
+      id: 'demo-poll',
+      prompt: 'Sunset set: Fisher or RÜFÜS?',
+      leftLabel: 'Fisher',
+      rightLabel: 'RÜFÜS DU SOL',
+      createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+      createdBy: 'demo-user',
+      active: true,
+      votes: {
+        'demo-user': 'right',
+        alex: 'left',
+        sam: 'right',
+      },
+    },
+  ],
+  leaderControls: {
+    lockedScheduleVoteIds: ['fred'],
+    highlightedVoteIds: ['peggy'],
+    lastNudgeAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
+  },
   updatedAt: new Date().toISOString(),
 };
 

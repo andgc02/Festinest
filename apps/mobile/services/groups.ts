@@ -22,10 +22,27 @@ import {
 
 import { db } from '@/lib/firebase';
 import { getMockGroup } from '@/data/mockGroups';
-import { Group, GroupChatMessage, GroupScheduleVote } from '@/types/group';
+import {
+  Group,
+  GroupChatMessage,
+  GroupLeaderControls,
+  GroupLightningPoll,
+  GroupScheduleVote,
+  LightningPollChoice,
+} from '@/types/group';
 
 const COLLECTION_NAME = 'groups';
 const MAX_GROUPS_PER_USER = 5;
+const MAX_ACTIVE_LIGHTNING_POLLS = 3;
+
+const DEFAULT_LEADER_CONTROLS: GroupLeaderControls = {
+  lockedScheduleVoteIds: [],
+  highlightedVoteIds: [],
+};
+
+function createId(prefix: string) {
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+}
 
 function mapScheduleVotes(values: unknown): GroupScheduleVote[] {
   if (!Array.isArray(values)) {
@@ -124,6 +141,75 @@ function mapChatPreview(values: unknown): Group['chatPreview'] {
     .filter((item): item is Group['chatPreview'][number] => Boolean(item));
 }
 
+function mapLightningPolls(values: unknown): GroupLightningPoll[] {
+  if (!Array.isArray(values)) {
+    return [];
+  }
+
+  return values
+    .map((value) => {
+      if (!value || typeof value !== 'object') {
+        return null;
+      }
+
+      const poll = value as Record<string, unknown>;
+      const id = typeof poll.id === 'string' ? poll.id : undefined;
+      const prompt = typeof poll.prompt === 'string' ? poll.prompt : undefined;
+      const leftLabel = typeof poll.leftLabel === 'string' ? poll.leftLabel : undefined;
+      const rightLabel = typeof poll.rightLabel === 'string' ? poll.rightLabel : undefined;
+      const createdBy = typeof poll.createdBy === 'string' ? poll.createdBy : undefined;
+      const createdAt = typeof poll.createdAt === 'string' ? poll.createdAt : new Date().toISOString();
+      const active = typeof poll.active === 'boolean' ? poll.active : true;
+
+      if (!id || !prompt || !leftLabel || !rightLabel || !createdBy) {
+        return null;
+      }
+
+      const votes: Record<string, LightningPollChoice> = {};
+      if (poll.votes && typeof poll.votes === 'object') {
+        Object.entries(poll.votes as Record<string, unknown>).forEach(([key, value]) => {
+          if (value === 'left' || value === 'right') {
+            votes[key] = value;
+          }
+        });
+      }
+
+      return {
+        id,
+        prompt,
+        leftLabel,
+        rightLabel,
+        createdBy,
+        createdAt,
+        active,
+        votes,
+      };
+    })
+    .filter((item): item is GroupLightningPoll => Boolean(item));
+}
+
+function mapLeaderControls(values: unknown): GroupLeaderControls {
+  if (!values || typeof values !== 'object') {
+    return { ...DEFAULT_LEADER_CONTROLS };
+  }
+
+  const data = values as Record<string, unknown>;
+  const locked =
+    Array.isArray(data.lockedScheduleVoteIds) && data.lockedScheduleVoteIds.every((value) => typeof value === 'string')
+      ? (data.lockedScheduleVoteIds as string[])
+      : [];
+  const highlighted =
+    Array.isArray(data.highlightedVoteIds) && data.highlightedVoteIds.every((value) => typeof value === 'string')
+      ? (data.highlightedVoteIds as string[])
+      : [];
+
+  return {
+    lockedScheduleVoteIds: locked,
+    highlightedVoteIds: highlighted,
+    lastNudgeAt: typeof data.lastNudgeAt === 'string' ? data.lastNudgeAt : undefined,
+  };
+}
+
 function mapGroup(snapshot: DocumentSnapshot<DocumentData>): Group {
   const data = snapshot.data() ?? {};
 
@@ -144,6 +230,8 @@ function mapGroup(snapshot: DocumentSnapshot<DocumentData>): Group {
     memberIds,
     scheduleVotes: mapScheduleVotes(data.scheduleVotes),
     chatPreview: mapChatPreview(data.chatPreview),
+    lightningPolls: mapLightningPolls(data.lightningPolls),
+    leaderControls: mapLeaderControls(data.leaderControls),
     updatedAt: typeof data.updatedAt === 'string' ? data.updatedAt : undefined,
   };
 }
@@ -177,7 +265,42 @@ function serializeGroup(group: Group) {
       message: message.message,
       timestamp: message.timestamp,
     })),
+    lightningPolls: group.lightningPolls.map(serializeLightningPoll),
+    leaderControls: serializeLeaderControls(group.leaderControls),
     updatedAt: group.updatedAt ?? new Date().toISOString(),
+  };
+}
+
+function serializeLightningPoll(poll: GroupLightningPoll) {
+  return {
+    id: poll.id,
+    prompt: poll.prompt,
+    leftLabel: poll.leftLabel,
+    rightLabel: poll.rightLabel,
+    createdAt: poll.createdAt,
+    createdBy: poll.createdBy,
+    active: poll.active,
+    votes: poll.votes,
+  };
+}
+
+function serializeLeaderControls(controls: GroupLeaderControls) {
+  return {
+    lockedScheduleVoteIds: controls.lockedScheduleVoteIds,
+    highlightedVoteIds: controls.highlightedVoteIds,
+    lastNudgeAt: controls.lastNudgeAt ?? null,
+  };
+}
+
+function ensureLeaderControls(controls?: GroupLeaderControls): GroupLeaderControls {
+  if (!controls) {
+    return { ...DEFAULT_LEADER_CONTROLS };
+  }
+
+  return {
+    lockedScheduleVoteIds: Array.from(new Set(controls.lockedScheduleVoteIds)),
+    highlightedVoteIds: Array.from(new Set(controls.highlightedVoteIds)),
+    lastNudgeAt: controls.lastNudgeAt,
   };
 }
 
@@ -335,6 +458,8 @@ export async function createGroup({
     memberIds: [ownerId],
     scheduleVotes: [],
     chatPreview: [],
+    lightningPolls: [],
+    leaderControls: { ...DEFAULT_LEADER_CONTROLS },
     updatedAt: new Date().toISOString(),
   };
 
@@ -401,6 +526,18 @@ export async function toggleGroupVote(group: Group, slotId: string, userId: stri
 export const GroupVoteUtils = {
   applyVoteState,
   MAX_GROUPS_PER_USER,
+  isVoteLocked(controls: GroupLeaderControls | undefined, voteId: string) {
+    if (!controls) {
+      return false;
+    }
+    return controls.lockedScheduleVoteIds.includes(voteId);
+  },
+  isVoteHighlighted(controls: GroupLeaderControls | undefined, voteId: string) {
+    if (!controls) {
+      return false;
+    }
+    return controls.highlightedVoteIds.includes(voteId);
+  },
 };
 
 export async function leaveGroup(groupId: string, userId: string): Promise<void> {
@@ -586,4 +723,282 @@ export async function sendGroupChatMessage(params: {
     console.warn(`Failed to send chat message for group ${params.groupId}`, error);
     throw error;
   }
+}
+
+type CreateLightningPollParams = {
+  groupId: string;
+  userId: string;
+  prompt: string;
+  leftLabel: string;
+  rightLabel: string;
+};
+
+export async function createLightningPoll(params: CreateLightningPollParams): Promise<GroupLightningPoll> {
+  const prompt = params.prompt.trim();
+  const left = params.leftLabel.trim();
+  const right = params.rightLabel.trim();
+  if (!prompt || !left || !right) {
+    throw new Error('Provide a prompt and both choices to create a poll.');
+  }
+
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  const poll = await runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const group = mapGroup(snapshot);
+    if (group.ownerId !== params.userId) {
+      throw new Error('Only group owners with premium can launch a lightning poll.');
+    }
+
+    const activePolls = group.lightningPolls.filter((item) => item.active);
+    if (activePolls.length >= MAX_ACTIVE_LIGHTNING_POLLS) {
+      throw new Error('Close an active poll before starting another.');
+    }
+
+    const newPoll: GroupLightningPoll = {
+      id: createId('poll'),
+      prompt,
+      leftLabel: left,
+      rightLabel: right,
+      createdBy: params.userId,
+      createdAt: new Date().toISOString(),
+      active: true,
+      votes: {},
+    };
+
+    const nextPolls = [...group.lightningPolls, newPoll];
+    transaction.set(
+      reference,
+      {
+        lightningPolls: nextPolls.map(serializeLightningPoll),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    return newPoll;
+  });
+
+  return poll;
+}
+
+type VoteOnLightningPollParams = {
+  groupId: string;
+  pollId: string;
+  userId: string;
+  choice: LightningPollChoice;
+};
+
+export async function voteOnLightningPoll(params: VoteOnLightningPollParams): Promise<GroupLightningPoll> {
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const polls = mapLightningPolls(snapshot.data()?.lightningPolls);
+    const pollIndex = polls.findIndex((poll) => poll.id === params.pollId);
+    if (pollIndex === -1) {
+      throw new Error('Poll not found.');
+    }
+
+    const poll = polls[pollIndex];
+    if (!poll.active) {
+      throw new Error('This poll is closed.');
+    }
+
+    const updatedPoll: GroupLightningPoll = {
+      ...poll,
+      votes: {
+        ...poll.votes,
+        [params.userId]: params.choice,
+      },
+    };
+
+    polls[pollIndex] = updatedPoll;
+
+    transaction.set(
+      reference,
+      {
+        lightningPolls: polls.map(serializeLightningPoll),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    return updatedPoll;
+  });
+}
+
+export async function closeLightningPoll(params: { groupId: string; pollId: string; userId: string }): Promise<GroupLightningPoll> {
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const group = mapGroup(snapshot);
+    if (group.ownerId !== params.userId) {
+      throw new Error('Only group owners can close polls.');
+    }
+
+    const pollIndex = group.lightningPolls.findIndex((poll) => poll.id === params.pollId);
+    if (pollIndex === -1) {
+      throw new Error('Poll not found.');
+    }
+
+    const poll = group.lightningPolls[pollIndex];
+    const updatedPoll: GroupLightningPoll = {
+      ...poll,
+      active: false,
+    };
+
+    const nextPolls = [...group.lightningPolls];
+    nextPolls[pollIndex] = updatedPoll;
+
+    transaction.set(
+      reference,
+      {
+        lightningPolls: nextPolls.map(serializeLightningPoll),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    return updatedPoll;
+  });
+}
+
+export async function recordGroupNudge(params: { groupId: string; userId: string }): Promise<GroupLeaderControls> {
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const group = mapGroup(snapshot);
+    if (group.ownerId !== params.userId) {
+      throw new Error('Only group owners can nudge members.');
+    }
+
+    const nextControls: GroupLeaderControls = {
+      ...ensureLeaderControls(group.leaderControls),
+      lastNudgeAt: new Date().toISOString(),
+    };
+
+    transaction.set(
+      reference,
+      {
+        leaderControls: serializeLeaderControls(nextControls),
+        updatedAt: nextControls.lastNudgeAt,
+      },
+      { merge: true },
+    );
+
+    return nextControls;
+  });
+}
+
+type ToggleLeaderVoteParams = {
+  groupId: string;
+  userId: string;
+  voteId: string;
+  lock?: boolean;
+};
+
+export async function toggleScheduleVoteLock(params: ToggleLeaderVoteParams): Promise<GroupLeaderControls> {
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const group = mapGroup(snapshot);
+    if (group.ownerId !== params.userId) {
+      throw new Error('Only group owners can lock votes.');
+    }
+
+    const controls = ensureLeaderControls(group.leaderControls);
+    const lockedSet = new Set(controls.lockedScheduleVoteIds);
+    const isLocked = lockedSet.has(params.voteId);
+    const nextShouldLock = typeof params.lock === 'boolean' ? params.lock : !isLocked;
+
+    if (nextShouldLock) {
+      lockedSet.add(params.voteId);
+    } else {
+      lockedSet.delete(params.voteId);
+    }
+
+    const nextControls: GroupLeaderControls = {
+      ...controls,
+      lockedScheduleVoteIds: Array.from(lockedSet),
+    };
+
+    transaction.set(
+      reference,
+      {
+        leaderControls: serializeLeaderControls(nextControls),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    return nextControls;
+  });
+}
+
+type ToggleHighlightParams = {
+  groupId: string;
+  userId: string;
+  voteId: string;
+  highlight?: boolean;
+};
+
+export async function toggleScheduleVoteHighlight(params: ToggleHighlightParams): Promise<GroupLeaderControls> {
+  const reference = doc(db, COLLECTION_NAME, params.groupId);
+  return runTransaction(db, async (transaction) => {
+    const snapshot = await transaction.get(reference);
+    if (!snapshot.exists()) {
+      throw new Error('Group not found.');
+    }
+
+    const group = mapGroup(snapshot);
+    if (group.ownerId !== params.userId) {
+      throw new Error('Only group owners can highlight slots.');
+    }
+
+    const controls = ensureLeaderControls(group.leaderControls);
+    const highlightedSet = new Set(controls.highlightedVoteIds);
+    const isHighlighted = highlightedSet.has(params.voteId);
+    const nextShouldHighlight = typeof params.highlight === 'boolean' ? params.highlight : !isHighlighted;
+
+    if (nextShouldHighlight) {
+      highlightedSet.add(params.voteId);
+    } else {
+      highlightedSet.delete(params.voteId);
+    }
+
+    const nextControls: GroupLeaderControls = {
+      ...controls,
+      highlightedVoteIds: Array.from(highlightedSet),
+    };
+
+    transaction.set(
+      reference,
+      {
+        leaderControls: serializeLeaderControls(nextControls),
+        updatedAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+
+    return nextControls;
+  });
 }

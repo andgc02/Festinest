@@ -22,6 +22,25 @@ export type GroupChatMessage = {
   timestamp: string;
 };
 
+export type LightningPollChoice = 'left' | 'right';
+
+export type GroupLightningPoll = {
+  id: string;
+  prompt: string;
+  leftLabel: string;
+  rightLabel: string;
+  createdAt: string;
+  createdBy: string;
+  active: boolean;
+  votes: Record<string, LightningPollChoice>;
+};
+
+export type GroupLeaderControls = {
+  lockedScheduleVoteIds: string[];
+  highlightedVoteIds: string[];
+  lastNudgeAt?: string;
+};
+
 export type Group = {
   id: string;
   name: string;
@@ -33,6 +52,8 @@ export type Group = {
   memberIds: string[];
   scheduleVotes: GroupScheduleVote[];
   chatPreview: GroupChatMessage[];
+  lightningPolls: GroupLightningPoll[];
+  leaderControls: GroupLeaderControls;
   updatedAt?: string;
 };
 

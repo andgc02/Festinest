@@ -42,8 +42,8 @@ Status legend (use one marker per task):
 - `[DONE]` QR invite modal using `react-native-qrcode-svg`
 - `[DONE]` Notification preferences plumbing (Expo push)
 - `[DONE]` Group chat placeholder promoted to Firestore-backed preview
-- `[NEXT]` Lightning polls quick win for premium plan (swipe decisions)
-- `[NEXT]` Group leader controls (nudge, lock, highlight) gated behind premium
+- `[DONE]` Lightning polls quick win for premium plan (swipe decisions)
+- `[DONE]` Group leader controls (nudge, lock, highlight) gated behind premium
 - `[BLOCKED]` Moderation policy for group chat (product decision)
 
 ## Week 4 - Auth and Settings
