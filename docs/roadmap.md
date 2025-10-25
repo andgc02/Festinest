@@ -11,7 +11,7 @@ Status legend:
 - `[DONE]` Week 1 foundation work (routing, auth, theming, core components)
 - `[ACTIVE]` Week 2 feature polish across Festival Detail, Schedule Builder, and Group
 - `[NEXT]` Premium upsell foundations (profile sync, schedule preview, conflict solver)
-- `[NEXT]` Social collaboration (votes, invites) plus auth/settings depth for Weeks 3-4
+- `[ACTIVE]` Week 3 collaboration work (notifications plumbing, chat preview, invites ramp-up)
 - `[LATER]` Analytics, growth, premium upsell, offline support, partnerships
 
 ## Completed to Date
@@ -84,10 +84,12 @@ Status legend:
 - `[DONE]` Firestore group schema (members, votes, chat preview content)
 - `[DONE]` Real-time vote tally broadcast to all group members
 - `[DONE]` QR invite modal with `react-native-qrcode-svg` and share sheet
+- `[DONE]` Group home chat preview populated from Firestore messages (Week 3 sprint)
 - `[LATER]` Full chat experience (push notifications, unread state)
 - `[BLOCKED]` Moderation policy with product and operations
 
 ### Auth and Settings Expansion (Week 4)
+- `[DONE]` Notification preferences plumbing (Expo push token + Settings toggles)
 - `[NEXT]` Profile edit flow (name, avatar upload, genre preferences)
 - `[NEXT]` Saved festivals list tied to Firestore favorites collection
 - `[NEXT]` Password reset plus Google/Apple sign-in entry points
@@ -151,7 +153,7 @@ Status legend:
 - **Week 1 (complete):** foundation scaffolding, auth, theming, base components
 - **Week 2 (in flight):** screen polish, state management, avatars, save flows
 - **Premium foundations (current):** Search hardening, profile placeholder, schedule preview, Firestore prep
-- **Week 3 (next):** collaboration feature set (votes, chat preview, invites, notifications)
+- **Week 3 (active):** collaboration feature set (Expo push notifications, Firestore chat preview, invites)
 - **Week 4 (next):** deep auth/settings, onboarding, premium preview, QA automation
 - **Post-MVP:** analytics and growth, offline/premium features, partnership experiments
 

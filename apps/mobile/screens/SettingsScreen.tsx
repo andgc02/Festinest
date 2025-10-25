@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ActivityIndicator, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Card, FilterChip } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -12,6 +12,7 @@ import { fetchFestivals } from '@/services/festivals';
 import { Festival } from '@/types/festival';
 import { useGenrePreferences } from '@/hooks/useGenrePreferences';
 import { useProfileDetails } from '@/hooks/useProfileDetails';
+import { useNotificationPreferences } from '@/hooks/useNotificationPreferences';
 
 export function SettingsScreen() {
   const { signOut, user } = useAuth();
@@ -23,6 +24,16 @@ export function SettingsScreen() {
   const [festivalsError, setFestivalsError] = useState<string | null>(null);
   const { genres: preferredGenres, toggleGenre, loading: preferencesLoading } = useGenrePreferences();
   const { profile, loading: profileLoading } = useProfileDetails();
+  const {
+    preferences: notificationPreferences,
+    loading: notificationLoading,
+    syncing: notificationSyncing,
+    permissionStatus: notificationPermissionStatus,
+    ensurePermissions: ensureNotificationPermissions,
+    togglePreference: updateNotificationPreference,
+    error: notificationError,
+  } = useNotificationPreferences({ userId: user?.uid ?? undefined });
+  const notificationPermissionGranted = notificationPermissionStatus === 'granted';
 
   useEffect(() => {
     const load = async () => {
@@ -118,6 +129,42 @@ export function SettingsScreen() {
       </View>
 
       <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Notifications</Text>
+        <Text style={styles.sectionSubtitle}>Choose how Festinest keeps you in the loop.</Text>
+        {notificationError ? <Text style={styles.errorText}>{notificationError}</Text> : null}
+        <View style={styles.preferenceList}>
+          <NotificationPreferenceRow
+            label="Group activity"
+            description="Mentions, new chat replies, and fresh invites."
+            value={notificationPreferences.groupActivity}
+            onValueChange={(value) => void updateNotificationPreference('groupActivity', value)}
+            disabled={notificationLoading || notificationSyncing}
+          />
+          <NotificationPreferenceRow
+            label="Schedule updates"
+            description="Conflicts, votes closing soon, and lineup nudges."
+            value={notificationPreferences.scheduleUpdates}
+            onValueChange={(value) => void updateNotificationPreference('scheduleUpdates', value)}
+            disabled={notificationLoading || notificationSyncing}
+          />
+          <NotificationPreferenceRow
+            label="Premium alerts"
+            description="Lightning polls, leader controls, and perks worth sharing."
+            value={notificationPreferences.premiumAlerts}
+            onValueChange={(value) => void updateNotificationPreference('premiumAlerts', value)}
+            disabled={notificationLoading || notificationSyncing}
+          />
+        </View>
+        <Button
+          variant={notificationPermissionGranted ? 'outline' : 'primary'}
+          onPress={() => void ensureNotificationPermissions()}
+          loading={notificationLoading}
+        >
+          {notificationPermissionGranted ? 'Refresh push registration' : 'Enable push notifications'}
+        </Button>
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Saved Festivals</Text>
         <Text style={styles.sectionSubtitle}>Quick access to the festivals you&rsquo;ve bookmarked.</Text>
         {festivalsError ? <Text style={styles.errorText}>{festivalsError}</Text> : null}
@@ -163,7 +210,7 @@ export function SettingsScreen() {
       </View>
 
       <View style={styles.list}>
-        {['Notifications', 'Invite Friends'].map((item, index, array) => (
+        {['Invite Friends', 'Help & Support'].map((item, index, array) => (
           <TouchableOpacity key={item} style={[styles.listItem, index !== array.length - 1 && styles.listDivider]}>
             <Text style={{ fontSize: 16, color: Colors.text }}>{item}</Text>
           </TouchableOpacity>
@@ -238,6 +285,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: Colors.text },
   sectionSubtitle: { fontSize: 13, color: '#475569' },
+  preferenceList: { gap: 16, marginTop: 8 },
+  preferenceRow: { flexDirection: 'row', alignItems: 'center', gap: 16 },
   savedList: { gap: 12 },
   emptyState: {
     marginTop: 8,
@@ -293,4 +342,29 @@ function formatDateRange(startDate: string, endDate: string) {
 
   const formatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
   return `${formatter.format(start)}-${formatter.format(end)}`;
+}
+type NotificationPreferenceRowProps = {
+  label: string;
+  description: string;
+  value: boolean;
+  disabled?: boolean;
+  onValueChange: (value: boolean) => void;
+};
+
+function NotificationPreferenceRow({ label, description, value, disabled, onValueChange }: NotificationPreferenceRowProps) {
+  return (
+    <View style={styles.preferenceRow}>
+      <View style={{ flex: 1, gap: 4 }}>
+        <Text style={{ fontSize: 15, fontWeight: '600', color: Colors.text }}>{label}</Text>
+        <Text style={{ fontSize: 13, color: '#475569' }}>{description}</Text>
+      </View>
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        trackColor={{ true: '#C7D2FE', false: '#CBD5F5' }}
+        thumbColor={value ? Colors.primary : '#F8FAFC'}
+      />
+    </View>
+  );
 }

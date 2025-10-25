@@ -225,7 +225,44 @@ export async function fetchUserGroups(userId: string): Promise<Group[]> {
       return [];
     }
 
-    return snapshot.docs.map(mapGroup);
+    const groups = snapshot.docs.map(mapGroup);
+
+    const hydrated = await Promise.all(
+      groups.map(async (group) => {
+        if (group.chatPreview.length > 0) {
+          return group;
+        }
+
+        try {
+          const chatSnapshot = await getDocs(
+            query(collection(db, COLLECTION_NAME, group.id, 'chat'), orderBy('timestamp', 'desc'), limit(3)),
+          );
+
+          if (chatSnapshot.empty) {
+            return group;
+          }
+
+          const preview = chatSnapshot.docs
+            .map((docSnapshot) => mapChatMessage(docSnapshot))
+            .filter((message): message is GroupChatMessage => Boolean(message))
+            .reverse();
+
+          if (preview.length === 0) {
+            return group;
+          }
+
+          return {
+            ...group,
+            chatPreview: preview,
+          };
+        } catch (error) {
+          console.warn(`Unable to hydrate chat preview for group ${group.id}`, error);
+          return group;
+        }
+      }),
+    );
+
+    return hydrated;
   } catch (error) {
     console.warn(`Failed to fetch groups for user ${userId}, returning mock fallback`, error);
     return [getMockGroup(undefined, { ownerId: userId, memberIds: [userId] })];
@@ -504,12 +541,47 @@ export async function sendGroupChatMessage(params: {
   }
 
   try {
-    await addDoc(collection(db, COLLECTION_NAME, params.groupId, 'chat'), {
+    const createdAt = new Date().toISOString();
+    const reference = await addDoc(collection(db, COLLECTION_NAME, params.groupId, 'chat'), {
       authorId: params.authorId,
       authorName: params.authorName,
       message: trimmed,
       timestamp: serverTimestamp(),
     });
+
+    const previewMessage: GroupChatMessage = {
+      id: reference.id,
+      authorId: params.authorId,
+      authorName: params.authorName,
+      message: trimmed,
+      timestamp: createdAt,
+    };
+
+    try {
+      await runTransaction(db, async (transaction) => {
+        const groupRef = doc(db, COLLECTION_NAME, params.groupId);
+        const snapshot = await transaction.get(groupRef);
+        const existingPreview = snapshot.exists() ? mapChatPreview(snapshot.data()?.chatPreview) : [];
+
+        const nextPreview = [...existingPreview, previewMessage].slice(-4);
+        transaction.set(
+          groupRef,
+          {
+            chatPreview: nextPreview.map((message) => ({
+              id: message.id,
+              authorId: message.authorId,
+              authorName: message.authorName,
+              message: message.message,
+              timestamp: message.timestamp,
+            })),
+            updatedAt: createdAt,
+          },
+          { merge: true },
+        );
+      });
+    } catch (previewError) {
+      console.warn(`Unable to refresh chat preview for group ${params.groupId}`, previewError);
+    }
   } catch (error) {
     console.warn(`Failed to send chat message for group ${params.groupId}`, error);
     throw error;

@@ -145,6 +145,7 @@ export function GroupHomeScreen() {
     const ownerDisplay =
       item.ownerUsername && item.ownerUsername === username ? 'you' : item.ownerUsername || 'group owner';
     const isDeleting = deletingGroupId === item.id;
+    const previewMessages = (item.chatPreview ?? []).slice(-2);
 
     return (
       <Pressable
@@ -175,6 +176,32 @@ export function GroupHomeScreen() {
             </View>
           </View>
           <AvatarGroup avatars={item.members} maxVisible={5} size={36} />
+          <View style={styles.chatPreviewSection}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Text style={styles.chatPreviewLabel}>Chat preview</Text>
+              {previewMessages.length ? (
+                <Text style={styles.chatPreviewCount}>
+                  {item.chatPreview.length} message{item.chatPreview.length === 1 ? '' : 's'}
+                </Text>
+              ) : null}
+            </View>
+
+            {previewMessages.length ? (
+              previewMessages.map((message) => (
+                <View key={message.id} style={styles.chatPreviewRow}>
+                  <Text style={styles.chatPreviewMessage} numberOfLines={1}>
+                    <Text style={styles.chatPreviewAuthor}>{message.authorName}</Text>
+                    {`: ${message.message}`}
+                  </Text>
+                  <Text style={styles.chatPreviewTime}>{formatChatPreviewTime(message.timestamp)}</Text>
+                </View>
+              ))
+            ) : (
+              <Text style={[styles.chatPreviewMessage, styles.chatPreviewEmptyText]}>
+                No messages yet. Tap to start the conversation.
+              </Text>
+            )}
+          </View>
         </Card>
       </Pressable>
     );
@@ -294,6 +321,19 @@ const styles = StyleSheet.create({
     paddingTop: 48,
     gap: 16,
   },
+  chatPreviewSection: {
+    borderRadius: 16,
+    backgroundColor: '#F8FAFF',
+    padding: 12,
+    gap: 8,
+  },
+  chatPreviewLabel: { fontSize: 13, fontWeight: '600', color: '#475569' },
+  chatPreviewCount: { fontSize: 12, fontWeight: '600', color: '#94A3B8' },
+  chatPreviewRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  chatPreviewMessage: { flex: 1, fontSize: 14, color: Colors.text },
+  chatPreviewAuthor: { color: Colors.primary },
+  chatPreviewTime: { fontSize: 12, color: '#94A3B8' },
+  chatPreviewEmptyText: { color: '#94A3B8' },
 });
 
 function deriveUsername(user?: User | null) {
@@ -319,4 +359,30 @@ function slugify(value: string) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 24) || 'user';
+}
+
+function formatChatPreviewTime(timestamp?: string) {
+  if (!timestamp) {
+    return '';
+  }
+
+  const parsed = new Date(timestamp);
+  if (Number.isNaN(parsed.getTime())) {
+    return '';
+  }
+
+  const now = new Date();
+  const diffMs = now.getTime() - parsed.getTime();
+  const oneDayMs = 24 * 60 * 60 * 1000;
+  const oneWeekMs = oneDayMs * 7;
+
+  if (diffMs < oneDayMs) {
+    return parsed.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  }
+
+  if (diffMs < oneWeekMs) {
+    return parsed.toLocaleDateString('en-US', { weekday: 'short' });
+  }
+
+  return parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
