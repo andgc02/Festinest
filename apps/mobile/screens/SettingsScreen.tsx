@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, ActivityIndicator, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
-import { Button, Card, FilterChip } from '@/components/ui';
+import { Avatar, Button, Card, FilterChip } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
 import { Colors } from '@/styles/colors';
 import { Spacing } from '@/styles/spacing';
@@ -106,6 +106,13 @@ export function SettingsScreen() {
             style={styles.editLinkWrapper}>
             <Text style={styles.editLink}>Edit</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.profileAvatarRow}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.profileAvatarName}>{profile.displayName || 'Festival Fan'}</Text>
+            <Text style={styles.profileAvatarHint}>Visible across your groups and schedule.</Text>
+          </View>
+          <Avatar name={profile.displayName} imageUri={profile.avatarUri} size={56} />
         </View>
         <ProfileRow
           label="Name"
@@ -283,6 +290,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surface,
     padding: 20,
   },
+  profileAvatarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingBottom: 4,
+  },
+  profileAvatarName: { fontSize: 16, fontWeight: '600', color: Colors.text },
+  profileAvatarHint: { fontSize: 12, color: '#94A3B8', marginTop: 2 },
   sectionTitle: { fontSize: 18, fontWeight: '600', color: Colors.text },
   sectionSubtitle: { fontSize: 13, color: '#475569' },
   preferenceList: { gap: 16, marginTop: 8 },

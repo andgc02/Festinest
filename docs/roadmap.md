@@ -92,7 +92,7 @@ Status legend:
 
 ### Auth and Settings Expansion (Week 4)
 - `[DONE]` Notification preferences plumbing (Expo push token + Settings toggles)
-- `[NEXT]` Profile edit flow (name, avatar upload, genre preferences)
+- `[DONE]` Profile edit flow (name, avatar upload, genre preferences)
 - `[NEXT]` Saved festivals list tied to Firestore favorites collection
 - `[NEXT]` Password reset plus Google/Apple sign-in entry points
 - `[NEXT]` Onboarding wizard culminating in premium upsell CTA

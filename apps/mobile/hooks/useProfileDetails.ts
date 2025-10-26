@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 export type ProfileDetails = {
   displayName: string;
   homeBase: string;
+  avatarUri?: string;
 };
 
 const STORAGE_KEY = 'PROFILE_DETAILS_V1';
 const DEFAULT_PROFILE: ProfileDetails = {
   displayName: 'Festival Fan',
   homeBase: '',
+  avatarUri: undefined,
 };
 
 function parseStoredProfile(raw: unknown): ProfileDetails {
@@ -25,7 +27,10 @@ function parseStoredProfile(raw: unknown): ProfileDetails {
   const homeBase =
     typeof value.homeBase === 'string' && value.homeBase.trim().length ? value.homeBase.trim() : DEFAULT_PROFILE.homeBase;
 
-  return { displayName, homeBase };
+  const avatarUri =
+    typeof value.avatarUri === 'string' && value.avatarUri.trim().length ? value.avatarUri.trim() : undefined;
+
+  return { displayName, homeBase, avatarUri };
 }
 
 export function useProfileDetails() {

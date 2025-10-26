@@ -47,7 +47,7 @@ Status legend (use one marker per task):
 - `[BLOCKED]` Moderation policy for group chat (product decision)
 
 ## Week 4 - Auth and Settings
-- `[NEXT]` Profile edit flow (name, avatar upload, genre preferences)
+- `[DONE]` Profile edit flow (name, avatar upload, genre preferences)
 - `[NEXT]` Saved festivals syncing (user collection and favorites subcollection)
 - `[NEXT]` Password reset and social auth entry points
 - `[NEXT]` Onboarding wizard with premium upsell CTA
