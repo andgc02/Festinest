@@ -48,12 +48,12 @@ Status legend (use one marker per task):
 
 ## Week 4 - Auth and Settings
 - `[DONE]` Profile edit flow (name, avatar upload, genre preferences)
-- `[NEXT]` Saved festivals syncing (user collection and favorites subcollection)
-- `[NEXT]` Password reset and social auth entry points
-- `[NEXT]` Onboarding wizard with premium upsell CTA
-- `[NEXT]` Settings privacy and data export options
-- `[NEXT]` Festival companion mode (lite) surfaced for premium users
-- `[NEXT]` Custom festival nicknames flowing through badges, recaps, lists
+- `[DONE]` Saved festivals syncing (user collection and favorites subcollection)
+- `[DONE]` Password reset and social auth entry points
+- `[DONE]` Onboarding wizard with premium upsell CTA
+- `[DONE]` Settings privacy and data export options
+- `[DONE]` Festival companion mode (lite) surfaced for premium users
+- `[DONE]` Custom festival nicknames flowing through badges, recaps, lists
 - `[LATER]` Smart walk-time buffer and arrival warnings (premium)
 - `[LATER]` Festival archetype cards with seasonal refresh
 

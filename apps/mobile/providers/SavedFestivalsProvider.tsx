@@ -1,42 +1,96 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { collection, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/providers/AuthProvider';
 
-const STORAGE_KEY = 'SAVED_FESTIVALS_V1';
-const COLLECTION_ROOT = 'userSavedFestivals';
+type SavedFestivalRecord = {
+  id: string;
+  nickname?: string;
+  savedAt: number;
+};
 
 type SavedFestivalsContextValue = {
   savedIds: Set<string>;
   toggle: (festivalId: string) => void;
   isSaved: (festivalId: string) => boolean;
   loading: boolean;
+  getNickname: (festivalId: string) => string | undefined;
+  updateNickname: (festivalId: string, nickname: string) => Promise<void>;
 };
+
+const STORAGE_KEY = 'SAVED_FESTIVALS_V2';
+const USERS_COLLECTION = 'users';
+const FAVORITES_SUBCOLLECTION = 'favorites';
 
 const SavedFestivalsContext = createContext<SavedFestivalsContextValue | undefined>(undefined);
 
-async function loadLocalIds(): Promise<string[]> {
+function normalizeRecord(input: unknown): SavedFestivalRecord | null {
+  if (!input) {
+    return null;
+  }
+
+  if (typeof input === 'string') {
+    return { id: input, savedAt: Date.now() };
+  }
+
+  if (typeof input !== 'object') {
+    return null;
+  }
+
+  const value = input as Record<string, unknown>;
+  const idValue = value.id ?? value.festivalId;
+  if (typeof idValue !== 'string' || !idValue.trim()) {
+    return null;
+  }
+
+  const nickname =
+    typeof value.nickname === 'string' && value.nickname.trim().length ? value.nickname.trim() : undefined;
+  const savedAt = typeof value.savedAt === 'number' ? value.savedAt : Date.now();
+
+  return {
+    id: idValue,
+    nickname,
+    savedAt,
+  };
+}
+
+async function loadLocalRecords(): Promise<Record<string, SavedFestivalRecord>> {
   try {
     const raw = await AsyncStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      return [];
+      return {};
     }
     const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return [];
+    const results: Record<string, SavedFestivalRecord> = {};
+    if (Array.isArray(parsed)) {
+      parsed.forEach((entry) => {
+        const normalized = normalizeRecord(entry);
+        if (normalized) {
+          results[normalized.id] = normalized;
+        }
+      });
+      return results;
     }
-    return parsed.filter((item): item is string => typeof item === 'string');
+    if (typeof parsed === 'object' && parsed) {
+      Object.values(parsed as Record<string, unknown>).forEach((entry) => {
+        const normalized = normalizeRecord(entry);
+        if (normalized) {
+          results[normalized.id] = normalized;
+        }
+      });
+    }
+    return results;
   } catch (error) {
     console.warn('Failed to read saved festivals from storage', error);
-    return [];
+    return {};
   }
 }
 
-async function persistLocalIds(ids: Set<string>) {
+async function persistLocalRecords(records: Record<string, SavedFestivalRecord>) {
   try {
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(ids)));
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(Object.values(records)));
   } catch (error) {
     console.warn('Failed to persist saved festivals locally', error);
   }
@@ -44,32 +98,48 @@ async function persistLocalIds(ids: Set<string>) {
 
 export function SavedFestivalsProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [records, setRecords] = useState<Record<string, SavedFestivalRecord>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
-      const localIds = new Set(await loadLocalIds());
+      const localRecords = await loadLocalRecords();
 
       if (!user) {
-        setSavedIds(localIds);
+        setRecords(localRecords);
         setLoading(false);
         return;
       }
 
       try {
-        const snapshot = await getDocs(collection(db, COLLECTION_ROOT, user.uid, 'festivals'));
-        const remoteIds = new Set(snapshot.docs.map((document) => document.id));
-        if (remoteIds.size > 0) {
-          setSavedIds(remoteIds);
-          await persistLocalIds(remoteIds);
+        const snapshot = await getDocs(collection(db, USERS_COLLECTION, user.uid, FAVORITES_SUBCOLLECTION));
+        if (snapshot.empty) {
+          setRecords(localRecords);
         } else {
-          setSavedIds(localIds);
+          const remoteRecords: Record<string, SavedFestivalRecord> = {};
+          snapshot.forEach((document) => {
+            const data = document.data() ?? {};
+            const nickname =
+              typeof data.nickname === 'string' && data.nickname.trim().length ? data.nickname.trim() : undefined;
+            const savedAt =
+              typeof data.savedAt === 'number'
+                ? data.savedAt
+                : typeof data.savedAt === 'string'
+                  ? Date.parse(data.savedAt)
+                  : Date.now();
+            remoteRecords[document.id] = {
+              id: document.id,
+              nickname,
+              savedAt: Number.isNaN(savedAt) ? Date.now() : savedAt,
+            };
+          });
+          setRecords(remoteRecords);
+          await persistLocalRecords(remoteRecords);
         }
       } catch (error) {
         console.warn('Failed to load saved festivals from Firestore', error);
-        setSavedIds(localIds);
+        setRecords(localRecords);
       } finally {
         setLoading(false);
       }
@@ -78,19 +148,23 @@ export function SavedFestivalsProvider({ children }: { children: ReactNode }) {
     void load();
   }, [user?.uid]);
 
-  const addRemote = useCallback(
-    async (festivalId: string) => {
+  const persistRemote = useCallback(
+    async (record: SavedFestivalRecord) => {
       if (!user) {
         return;
       }
       try {
         await setDoc(
-          doc(db, COLLECTION_ROOT, user.uid, 'festivals', festivalId),
-          { savedAt: Date.now() },
+          doc(db, USERS_COLLECTION, user.uid, FAVORITES_SUBCOLLECTION, record.id),
+          {
+            savedAt: record.savedAt,
+            nickname: record.nickname ?? null,
+            updatedAt: Date.now(),
+          },
           { merge: true },
         );
       } catch (error) {
-        console.warn('Failed to add saved festival remotely', error);
+        console.warn('Failed to sync saved festival remotely', error);
       }
     },
     [user],
@@ -102,7 +176,7 @@ export function SavedFestivalsProvider({ children }: { children: ReactNode }) {
         return;
       }
       try {
-        await deleteDoc(doc(db, COLLECTION_ROOT, user.uid, 'festivals', festivalId));
+        await deleteDoc(doc(db, USERS_COLLECTION, user.uid, FAVORITES_SUBCOLLECTION, festivalId));
       } catch (error) {
         console.warn('Failed to remove saved festival remotely', error);
       }
@@ -110,26 +184,55 @@ export function SavedFestivalsProvider({ children }: { children: ReactNode }) {
     [user],
   );
 
+  const savedIds = useMemo(() => new Set(Object.keys(records)), [records]);
+
   const toggle = useCallback(
     (festivalId: string) => {
-      setSavedIds((prev) => {
-        const next = new Set(prev);
-        const exists = next.has(festivalId);
-        if (exists) {
-          next.delete(festivalId);
+      setRecords((previous) => {
+        const next = { ...previous };
+        if (next[festivalId]) {
+          delete next[festivalId];
           void removeRemote(festivalId);
         } else {
-          next.add(festivalId);
-          void addRemote(festivalId);
+          const record: SavedFestivalRecord = { id: festivalId, savedAt: Date.now() };
+          next[festivalId] = record;
+          void persistRemote(record);
         }
-        void persistLocalIds(next);
+        void persistLocalRecords(next);
         return next;
       });
     },
-    [addRemote, removeRemote],
+    [persistRemote, removeRemote],
+  );
+
+  const updateNickname = useCallback(
+    async (festivalId: string, nickname: string) => {
+      let updated: SavedFestivalRecord | null = null;
+      setRecords((previous) => {
+        if (!previous[festivalId]) {
+          return previous;
+        }
+        const trimmed = nickname.trim();
+        updated = {
+          ...previous[festivalId],
+          nickname: trimmed.length ? trimmed : undefined,
+        };
+        const next = {
+          ...previous,
+          [festivalId]: updated,
+        };
+        void persistLocalRecords(next);
+        return next;
+      });
+      if (updated) {
+        await persistRemote(updated);
+      }
+    },
+    [persistRemote],
   );
 
   const isSaved = useCallback((festivalId: string) => savedIds.has(festivalId), [savedIds]);
+  const getNickname = useCallback((festivalId: string) => records[festivalId]?.nickname, [records]);
 
   const value = useMemo<SavedFestivalsContextValue>(
     () => ({
@@ -137,8 +240,10 @@ export function SavedFestivalsProvider({ children }: { children: ReactNode }) {
       toggle,
       isSaved,
       loading,
+      getNickname,
+      updateNickname,
     }),
-    [savedIds, toggle, isSaved, loading],
+    [savedIds, toggle, isSaved, loading, getNickname, updateNickname],
   );
 
   return <SavedFestivalsContext.Provider value={value}>{children}</SavedFestivalsContext.Provider>;

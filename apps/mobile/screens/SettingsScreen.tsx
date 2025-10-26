@@ -1,6 +1,7 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, ActivityIndicator, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ActivityIndicator, Pressable, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
 import { Avatar, Button, Card, FilterChip } from '@/components/ui';
 import { typographyRN } from '@/constants/theme';
@@ -13,12 +14,21 @@ import { Festival } from '@/types/festival';
 import { useGenrePreferences } from '@/hooks/useGenrePreferences';
 import { useProfileDetails } from '@/hooks/useProfileDetails';
 import { useNotificationPreferences } from '@/hooks/useNotificationPreferences';
+import { usePrivacySettings } from '@/hooks/usePrivacySettings';
+import { usePremiumStatus } from '@/hooks/usePremiumStatus';
+import { FestivalNicknameModal } from '@/components/FestivalNicknameModal';
+
+const PRIVACY_VISIBILITY_OPTIONS = [
+  { value: 'public' as const, label: 'Public badges' },
+  { value: 'friends' as const, label: 'Friends only' },
+  { value: 'private' as const, label: 'Private only' },
+];
 
 export function SettingsScreen() {
   const { signOut, user } = useAuth();
   const router = useRouter();
   const email = user?.email ?? 'you@example.com';
-  const { savedIds, loading: savedLoading } = useSavedFestivals();
+  const { savedIds, loading: savedLoading, getNickname, updateNickname } = useSavedFestivals();
   const [festivals, setFestivals] = useState<Festival[]>([]);
   const [loadingFestivals, setLoadingFestivals] = useState(true);
   const [festivalsError, setFestivalsError] = useState<string | null>(null);
@@ -33,7 +43,19 @@ export function SettingsScreen() {
     togglePreference: updateNotificationPreference,
     error: notificationError,
   } = useNotificationPreferences({ userId: user?.uid ?? undefined });
+  const {
+    settings: privacySettings,
+    loading: privacyLoading,
+    requesting: privacyRequesting,
+    updateSetting: updatePrivacySetting,
+    exportData,
+    deleteData,
+    error: privacyError,
+  } = usePrivacySettings(user?.uid ?? undefined);
+  const { isPremium, loading: premiumStatusLoading } = usePremiumStatus(user?.uid ?? undefined);
   const notificationPermissionGranted = notificationPermissionStatus === 'granted';
+  const [nicknameTarget, setNicknameTarget] = useState<Festival | null>(null);
+  const [nicknameSaving, setNicknameSaving] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -91,6 +113,54 @@ export function SettingsScreen() {
     } catch (error) {
       Alert.alert('Logout failed', (error as Error).message);
     }
+  };
+
+  const handleNicknameSave = async (value: string) => {
+    if (!nicknameTarget) {
+      return;
+    }
+    setNicknameSaving(true);
+    try {
+      await updateNickname(nicknameTarget.id, value);
+      setNicknameTarget(null);
+    } catch (error) {
+      Alert.alert('Nickname update failed', (error as Error).message);
+    } finally {
+      setNicknameSaving(false);
+    }
+  };
+
+  const handleExportData = async () => {
+    try {
+      const requestId = await exportData();
+      Alert.alert('Export requested', `We queued your export. Reference: ${requestId}.`);
+    } catch (error) {
+      Alert.alert('Export failed', (error as Error).message);
+    }
+  };
+
+  const handleDeleteData = () => {
+    Alert.alert(
+      'Request data deletion',
+      'We will remove stored data after a short verification window. You will receive an email when the request is fulfilled.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Request delete',
+          style: 'destructive',
+          onPress: () => {
+            void (async () => {
+              try {
+                const requestId = await deleteData();
+                Alert.alert('Request received', `We logged your deletion request (${requestId}).`);
+              } catch (error) {
+                Alert.alert('Delete request failed', (error as Error).message);
+              }
+            })();
+          },
+        },
+      ],
+    );
   };
 
   return (
@@ -161,13 +231,82 @@ export function SettingsScreen() {
             onValueChange={(value) => void updateNotificationPreference('premiumAlerts', value)}
             disabled={notificationLoading || notificationSyncing}
           />
-        </View>
+      </View>
         <Button
           variant={notificationPermissionGranted ? 'outline' : 'primary'}
           onPress={() => void ensureNotificationPermissions()}
           loading={notificationLoading}
         >
           {notificationPermissionGranted ? 'Refresh push registration' : 'Enable push notifications'}
+        </Button>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Privacy & Data</Text>
+        <Text style={styles.sectionSubtitle}>Choose who can view your badges and manage your data rights.</Text>
+        {privacyError ? <Text style={styles.errorText}>{privacyError}</Text> : null}
+        {privacyLoading ? <ActivityIndicator size="small" color={Colors.primary} style={{ marginTop: 8 }} /> : null}
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
+          {PRIVACY_VISIBILITY_OPTIONS.map((option) => (
+            <FilterChip
+              key={option.value}
+              label={option.label}
+              selected={privacySettings.profileVisibility === option.value}
+              onPress={() => void updatePrivacySetting('profileVisibility', option.value)}
+              disabled={privacyLoading}
+              disableAnimation
+            />
+          ))}
+        </View>
+        <View style={styles.preferenceList}>
+          <NotificationPreferenceRow
+            label="Share anonymized trends"
+            description="Help us surface better recommendations by sharing obfuscated usage signals."
+            value={privacySettings.dataSharing}
+            onValueChange={(value) => void updatePrivacySetting('dataSharing', value)}
+            disabled={privacyLoading}
+          />
+          <NotificationPreferenceRow
+            label="Personalized tips"
+            description="Use your saved festivals and nicknames for smarter schedule nudges."
+            value={privacySettings.personalizedTips}
+            onValueChange={(value) => void updatePrivacySetting('personalizedTips', value)}
+            disabled={privacyLoading}
+          />
+        </View>
+        <View style={{ gap: 12 }}>
+          <Button variant="outline" onPress={handleExportData} loading={privacyRequesting} disabled={privacyLoading}>
+            Request data export
+          </Button>
+          <Button variant="secondary" onPress={handleDeleteData} loading={privacyRequesting} disabled={privacyLoading}>
+            Request data deletion
+          </Button>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Companion Mode (Premium)</Text>
+        <Text style={styles.sectionSubtitle}>
+          {isPremium
+            ? 'Launch the live dashboard for saved nicknames, group pulses, and walk-time alerts.'
+            : 'Start a premium preview to unlock the live companion dashboard for festival days.'}
+        </Text>
+        <View style={{ gap: 8 }}>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <Ionicons name="sparkles" size={14} color={Colors.primary} />
+            <Text style={{ fontSize: 13, color: '#475569' }}>Live schedule digest with nickname badges</Text>
+          </View>
+          <View style={{ flexDirection: 'row', gap: 8 }}>
+            <Ionicons name="chatbubble" size={14} color={Colors.primary} />
+            <Text style={{ fontSize: 13, color: '#475569' }}>Group pulse + lightning polls from one place</Text>
+          </View>
+        </View>
+        <Button
+          style={{ marginTop: 12 }}
+          variant={isPremium ? 'primary' : 'secondary'}
+          onPress={() => (isPremium ? router.push('/companion') : router.push('/onboarding'))}
+          loading={premiumStatusLoading}>
+          {isPremium ? 'Launch Companion Mode' : 'Start premium preview'}
         </Button>
       </View>
 
@@ -183,7 +322,9 @@ export function SettingsScreen() {
               <SavedFestivalItem
                 key={festival.id}
                 festival={festival}
+                nickname={getNickname(festival.id)}
                 onPress={() => router.push({ pathname: '/festival/[festivalId]', params: { festivalId: festival.id } })}
+                onNicknamePress={() => setNicknameTarget(festival)}
               />
             ))}
           </View>
@@ -227,6 +368,14 @@ export function SettingsScreen() {
       <Button variant="outline" onPress={handleLogout} style={{ marginTop: 32, marginBottom: 40 }}>
         Logout
       </Button>
+      <FestivalNicknameModal
+        visible={Boolean(nicknameTarget)}
+        festivalName={nicknameTarget?.name ?? ''}
+        initialNickname={nicknameTarget ? getNickname(nicknameTarget.id) : undefined}
+        saving={nicknameSaving}
+        onSave={(value) => handleNicknameSave(value)}
+        onDismiss={() => setNicknameTarget(null)}
+      />
     </ScrollView>
   );
 }
@@ -322,14 +471,24 @@ const styles = StyleSheet.create({
 
 type SavedFestivalItemProps = {
   festival: Festival;
+  nickname?: string;
   onPress: () => void;
+  onNicknamePress: () => void;
 };
 
-function SavedFestivalItem({ festival, onPress }: SavedFestivalItemProps) {
+function SavedFestivalItem({ festival, nickname, onPress, onNicknamePress }: SavedFestivalItemProps) {
   return (
     <TouchableOpacity onPress={onPress} accessibilityRole="button">
       <Card style={{ gap: 8 }}>
-        <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{festival.name}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontSize: 16, fontWeight: '600', color: Colors.text }}>{festival.name}</Text>
+            {nickname ? <Text style={{ fontSize: 13, color: Colors.primary, fontWeight: '600' }}>{`aka ${nickname}`}</Text> : null}
+          </View>
+          <Pressable onPress={(event) => { event.stopPropagation(); onNicknamePress(); }}>
+            <Text style={{ fontSize: 12, fontWeight: '600', color: '#5A67D8' }}>{nickname ? 'Edit' : 'Add name'}</Text>
+          </Pressable>
+        </View>
         <Text style={{ fontSize: 13, color: '#475569' }}>
           {festival.location} {'\u2022'} {formatDateRange(festival.startDate, festival.endDate)}
         </Text>

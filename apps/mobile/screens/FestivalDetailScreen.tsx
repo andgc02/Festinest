@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button, FilterChip, Modal, Skeleton, Toast } from '@/components/ui';
@@ -14,6 +14,7 @@ import { Artist } from '@/types/artist';
 import { useSavedFestivals } from '@/providers/SavedFestivalsProvider';
 import { useArtistsCatalog } from '@/hooks/useArtistsCatalog';
 import { formatArtistGenres, getArtistSocialLinks } from '@/utils/artist';
+import { FestivalNicknameModal } from '@/components/FestivalNicknameModal';
 
 export function FestivalDetailScreen() {
   const { festivalId } = useLocalSearchParams<{ festivalId?: string }>();
@@ -24,7 +25,9 @@ export function FestivalDetailScreen() {
   const [toastVisible, setToastVisible] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [groupModalVisible, setGroupModalVisible] = useState(false);
-  const { isSaved, toggle, loading: savedLoading } = useSavedFestivals();
+  const [nicknameModalVisible, setNicknameModalVisible] = useState(false);
+  const [nicknameSaving, setNicknameSaving] = useState(false);
+  const { isSaved, toggle, loading: savedLoading, getNickname, updateNickname } = useSavedFestivals();
   const { byId: artistsById } = useArtistsCatalog();
 
   useEffect(() => {
@@ -132,6 +135,7 @@ export function FestivalDetailScreen() {
   }
 
   const saved = isSaved(festival.id);
+  const nickname = getNickname(festival.id);
 
   const handleSaveToggle = () => {
     const nextSaved = !saved;
@@ -148,6 +152,18 @@ export function FestivalDetailScreen() {
     setGroupModalVisible(true);
   };
 
+  const handleNicknameSave = async (value: string) => {
+    setNicknameSaving(true);
+    try {
+      await updateNickname(festival.id, value);
+      setNicknameModalVisible(false);
+    } catch (error) {
+      Alert.alert('Nickname update failed', (error as Error).message);
+    } finally {
+      setNicknameSaving(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea} edges={safeAreaEdges}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -160,10 +176,18 @@ export function FestivalDetailScreen() {
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
               {festival.genre ? <FilterChip label={festival.genre} selected /> : null}
               {festival.artistsCount ? <FilterChip label={`${festival.artistsCount} artists`} /> : null}
+              {nickname ? <FilterChip label={`Nickname · ${nickname}`} /> : null}
             </View>
             <Button onPress={handleSaveToggle} style={{ width: '100%' }} disabled={savedLoading}>
               {saved ? 'Remove from My Festivals' : 'Add to My Festivals'}
             </Button>
+            {saved ? (
+              <TouchableOpacity onPress={() => setNicknameModalVisible(true)}>
+                <Text style={{ fontSize: 13, fontWeight: '600', color: '#5A67D8', textAlign: 'center' }}>
+                  {nickname ? 'Edit nickname' : 'Add nickname'}
+                </Text>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           {/* description not present in type; omit for now */}
@@ -201,6 +225,14 @@ export function FestivalDetailScreen() {
 
       <Toast visible={toastVisible} message={toastMessage} type="success" onHide={() => setToastVisible(false)} />
 
+      <FestivalNicknameModal
+        visible={nicknameModalVisible}
+        festivalName={festival.name}
+        initialNickname={nickname}
+        saving={nicknameSaving}
+        onSave={(value) => handleNicknameSave(value)}
+        onDismiss={() => setNicknameModalVisible(false)}
+      />
       <Modal
         visible={groupModalVisible}
         onDismiss={() => setGroupModalVisible(false)}

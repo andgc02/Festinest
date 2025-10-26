@@ -9,6 +9,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Colors } from '@/styles/colors';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
 import { SavedFestivalsProvider } from '@/providers/SavedFestivalsProvider';
+import { OnboardingProvider, useOnboarding } from '@/providers/OnboardingProvider';
 
 export default function RootLayout() {
   useEffect(() => {
@@ -19,12 +20,14 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <SavedFestivalsProvider>
-        <SafeAreaProvider>
-          <ThemeProvider value={DefaultTheme}>
-            <RootNavigator />
-            <StatusBar style="dark" backgroundColor={Colors.background} translucent={false} />
-          </ThemeProvider>
-        </SafeAreaProvider>
+        <OnboardingProvider>
+          <SafeAreaProvider>
+            <ThemeProvider value={DefaultTheme}>
+              <RootNavigator />
+              <StatusBar style="dark" backgroundColor={Colors.background} translucent={false} />
+            </ThemeProvider>
+          </SafeAreaProvider>
+        </OnboardingProvider>
       </SavedFestivalsProvider>
     </AuthProvider>
   );
@@ -32,6 +35,7 @@ export default function RootLayout() {
 
 function RootNavigator() {
   const { initializing, user } = useAuth();
+  const { loading: onboardingLoading, completed: onboardingComplete } = useOnboarding();
 
   if (initializing) {
     return null;
@@ -41,6 +45,18 @@ function RootNavigator() {
     return (
       <Stack screenOptions={{ headerTitleAlign: 'center' }}>
         <Stack.Screen name="login" options={{ headerShown: false }} />
+      </Stack>
+    );
+  }
+
+  if (onboardingLoading) {
+    return null;
+  }
+
+  if (!onboardingComplete) {
+    return (
+      <Stack screenOptions={{ headerTitleAlign: 'center' }}>
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
       </Stack>
     );
   }
@@ -72,6 +88,13 @@ function RootNavigator() {
           headerTintColor: Colors.text,
         }}
       />
+      <Stack.Screen
+        name="companion"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen name="onboarding" options={{ headerShown: false }} />
     </Stack>
   );
 }

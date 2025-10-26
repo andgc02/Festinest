@@ -93,10 +93,10 @@ Status legend:
 ### Auth and Settings Expansion (Week 4)
 - `[DONE]` Notification preferences plumbing (Expo push token + Settings toggles)
 - `[DONE]` Profile edit flow (name, avatar upload, genre preferences)
-- `[NEXT]` Saved festivals list tied to Firestore favorites collection
-- `[NEXT]` Password reset plus Google/Apple sign-in entry points
-- `[NEXT]` Onboarding wizard culminating in premium upsell CTA
-- `[LATER]` Privacy controls (data export, delete account workflow)
+- `[DONE]` Saved festivals list tied to Firestore favorites collection
+- `[DONE]` Password reset plus Google/Apple sign-in entry points
+- `[DONE]` Onboarding wizard culminating in premium upsell CTA
+- `[DONE]` Privacy controls (data export, delete account workflow)
 
 ### Analytics and Growth
 - `[NEXT]` Define analytics events (auth, discovery, save festival, vote)
@@ -140,11 +140,11 @@ Status legend:
 - `[LATER]` Premium upsell screen, paywall experiment, billing integration
 
 ### Premium Upsell Roadmap
-- `[NEXT]` Define paywall story and gating for premium companion features
+- `[DONE]` Define paywall story and gating for premium companion features
 - `[NEXT]` Custom festival nicknames surfaced in badges, recaps, and lists
 - `[NEXT]` Smart schedule conflict solver with suggested alternates
 - `[DONE]` Lightning polls and group leader controls inside shared schedules
-- `[NEXT]` Festival companion mode (lite) for in-festival usage
+- `[DONE]` Festival companion mode (lite) for in-festival usage
 - `[LATER]` Festival archetype personality cards and annual refresh
 - `[LATER]` Smart walk-time buffering with stage distance heuristics
 - `[LATER]` Artist streak tracker with follow-through suggestions

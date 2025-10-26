@@ -282,8 +282,9 @@ type FestivalListItemProps = {
 function FestivalListItem({ item, index, onPress }: FestivalListItemProps) {
   const dates = item.startDate && item.endDate ? formatDateRange(item.startDate, item.endDate) : 'Dates coming soon';
   const animatedStyle = useFadeInUp({ delay: index * 80 });
-  const { isSaved } = useSavedFestivals();
+  const { isSaved, getNickname } = useSavedFestivals();
   const saved = isSaved(item.id);
+  const nickname = getNickname(item.id);
 
   return (
     <Animated.View style={[{ marginBottom: 16 }, animatedStyle]}>
@@ -298,6 +299,11 @@ function FestivalListItem({ item, index, onPress }: FestivalListItemProps) {
             <Text style={{ fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.6, color: '#5A67D8' }}>
               {item.artistsCount ? `${item.artistsCount} artists` : item.genre ?? 'Lineup coming soon'}
             </Text>
+            {nickname ? (
+              <View style={styles.nicknamePill}>
+                <Text style={{ fontSize: 11, fontWeight: '600', color: '#9C4221' }}>{`aka ${nickname}`}</Text>
+              </View>
+            ) : null}
           </View>
           <View style={{ alignItems: 'center', gap: 8 }}>
             {saved ? (
@@ -324,6 +330,14 @@ const styles = StyleSheet.create({
   list: {
     paddingTop: 24,
     paddingBottom: 40,
+  },
+  nicknamePill: {
+    alignSelf: 'flex-start',
+    marginTop: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    borderRadius: 999,
+    backgroundColor: '#FEF3C7',
   },
 });
 

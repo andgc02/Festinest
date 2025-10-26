@@ -1,8 +1,12 @@
 import { ReactNode, createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  GoogleAuthProvider,
+  OAuthProvider,
   User,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   updateProfile,
@@ -17,6 +21,9 @@ type AuthContextValue = {
   signIn: (email: string, password: string) => Promise<User | null>;
   signUp: (email: string, password: string, options?: { displayName?: string }) => Promise<User | null>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  signInWithGoogle: (input: { idToken?: string | null; accessToken?: string | null }) => Promise<User | null>;
+  signInWithApple: (input: { identityToken: string; rawNonce?: string }) => Promise<User | null>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -100,6 +107,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async signOut() {
         await firebaseSignOut(auth);
         setUser(null);
+      },
+      async resetPassword(email: string) {
+        await sendPasswordResetEmail(auth, email);
+      },
+      async signInWithGoogle({ idToken, accessToken }: { idToken?: string | null; accessToken?: string | null }) {
+        if (!idToken && !accessToken) {
+          throw new Error('Missing Google credentials');
+        }
+        const credential = GoogleAuthProvider.credential(idToken ?? undefined, accessToken ?? undefined);
+        const result = await signInWithCredential(auth, credential);
+        setUser(result.user);
+        return result.user;
+      },
+      async signInWithApple({ identityToken, rawNonce }: { identityToken: string; rawNonce?: string }) {
+        if (!identityToken) {
+          throw new Error('Missing Apple identity token');
+        }
+        const provider = new OAuthProvider('apple.com');
+        const credential = provider.credential({ idToken: identityToken, rawNonce });
+        const result = await signInWithCredential(auth, credential);
+        setUser(result.user);
+        return result.user;
       },
     }),
     [user, initializing],
