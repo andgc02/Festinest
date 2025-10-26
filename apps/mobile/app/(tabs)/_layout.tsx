@@ -2,10 +2,10 @@ import { Redirect, Tabs, usePathname } from 'expo-router';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { HapticTab } from '@/components/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/styles/colors';
 import { useAuth } from '@/providers/AuthProvider';
+import { HapticTab } from '@/components/haptic-tab';
 
 export default function TabLayout() {
   const pathname = usePathname();
@@ -19,13 +19,13 @@ export default function TabLayout() {
   if (!initializing && user && (pathname === '/(tabs)' || pathname === '/(tabs)/')) {
     return <Redirect href="/(tabs)/festivals" />;
   }
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={['top', 'bottom']}>
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#5A67D8',
           tabBarInactiveTintColor: '#94A3B8',
+          tabBarButton: (props) => <HapticTab {...props} />,
           tabBarStyle: {
             backgroundColor: Colors.surface,
             borderTopColor: '#E2E8F0',
@@ -34,7 +34,7 @@ export default function TabLayout() {
             paddingTop: 8,
           },
           headerShown: false,
-          tabBarButton: HapticTab,
+          sceneStyle: { backgroundColor: Colors.background },
         }}>
         <Tabs.Screen
           name="festivals/index"
@@ -71,7 +71,10 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => <IconSymbol size={28} name="gearshape.fill" color={color} />,
           }}
         />
-      </Tabs>
+            </Tabs>
     </SafeAreaView>
   );
 }
+
+
+

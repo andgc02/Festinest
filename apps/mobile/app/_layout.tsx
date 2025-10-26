@@ -5,6 +5,7 @@ import * as SystemUI from 'expo-system-ui';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Colors } from '@/styles/colors';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider';
@@ -21,12 +22,14 @@ export default function RootLayout() {
     <AuthProvider>
       <SavedFestivalsProvider>
         <OnboardingProvider>
-          <SafeAreaProvider>
-            <ThemeProvider value={DefaultTheme}>
-              <RootNavigator />
-              <StatusBar style="dark" backgroundColor={Colors.background} translucent={false} />
-            </ThemeProvider>
-          </SafeAreaProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <SafeAreaProvider>
+              <ThemeProvider value={DefaultTheme}>
+                <RootNavigator />
+                <StatusBar style="dark" backgroundColor={Colors.background} translucent={false} />
+              </ThemeProvider>
+            </SafeAreaProvider>
+          </GestureHandlerRootView>
         </OnboardingProvider>
       </SavedFestivalsProvider>
     </AuthProvider>
@@ -45,6 +48,8 @@ function RootNavigator() {
     return (
       <Stack screenOptions={{ headerTitleAlign: 'center' }}>
         <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
       </Stack>
     );
   }

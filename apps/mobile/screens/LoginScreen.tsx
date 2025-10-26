@@ -3,7 +3,7 @@ import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import * as Crypto from 'expo-crypto';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, Animated, Easing, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { Button, Input } from '@/components/ui';
@@ -22,18 +22,13 @@ export function LoginScreen() {
   const [password, setPassword] = useState(ADMIN_PASSWORD);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [resetting, setResetting] = useState(false);
-  const [socialLoading, setSocialLoading] = useState<'google' | 'apple' | null>(null);
+  const [appleLoading, setAppleLoading] = useState(false);
   const [appleAvailable, setAppleAvailable] = useState(false);
   const router = useRouter();
   const { signIn, user, initializing, resetPassword, signInWithGoogle, signInWithApple } = useAuth();
   const cardOpacity = useRef(new Animated.Value(0)).current;
   const cardTranslate = useRef(new Animated.Value(8)).current;
-  const [googleRequest, googleResponse, promptGoogle] = Google.useAuthRequest({
-    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_EXPO_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
-  });
+  const googleConfig = useMemo(resolveGoogleConfig, []);
 
   useEffect(() => {
     if (!initializing && user) {
@@ -63,29 +58,13 @@ export function LoginScreen() {
     }
   }, []);
 
-  useEffect(() => {
-    if (!googleResponse) {
-      return;
-    }
-    if (googleResponse.type !== 'success') {
-      setSocialLoading(null);
-      return;
-    }
-
-    const run = async () => {
-      try {
-        const { idToken, accessToken } = googleResponse.authentication ?? {};
-        await signInWithGoogle({ idToken, accessToken });
-        router.replace('/(tabs)/festivals');
-      } catch (error) {
-        Alert.alert('Google sign-in failed', (error as Error).message);
-      } finally {
-        setSocialLoading(null);
-      }
-    };
-
-    void run();
-  }, [googleResponse, router, signInWithGoogle]);
+  const handleGoogleTokens = useCallback(
+    async ({ idToken, accessToken }: { idToken?: string | null; accessToken?: string | null }) => {
+      await signInWithGoogle({ idToken, accessToken });
+      router.replace('/(tabs)/festivals');
+    },
+    [router, signInWithGoogle],
+  );
 
   const handleLogin = async () => {
     setIsSubmitting(true);
@@ -116,26 +95,12 @@ export function LoginScreen() {
     }
   };
 
-  const handleGoogle = async () => {
-    if (!googleRequest) {
-      Alert.alert('Google sign-in unavailable', 'Double-check your Google OAuth client IDs.');
-      return;
-    }
-    setSocialLoading('google');
-    try {
-      await promptGoogle();
-    } catch (error) {
-      setSocialLoading(null);
-      Alert.alert('Google sign-in failed', (error as Error).message);
-    }
-  };
-
   const handleApple = async () => {
     if (!appleAvailable) {
       Alert.alert('Apple Sign In unavailable', 'Apple authentication is only available on supported devices.');
       return;
     }
-    setSocialLoading('apple');
+    setAppleLoading(true);
     try {
       const rawNonce = Math.random().toString(36).slice(2, 12);
       const hashedNonce = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, rawNonce);
@@ -150,12 +115,12 @@ export function LoginScreen() {
       router.replace('/(tabs)/festivals');
     } catch (error) {
       if ((error as Error & { code?: string }).code === 'ERR_CANCELED') {
-        setSocialLoading(null);
+        setAppleLoading(false);
         return;
       }
       Alert.alert('Apple sign-in failed', (error as Error).message);
     } finally {
-      setSocialLoading(null);
+      setAppleLoading(false);
     }
   };
 
@@ -208,11 +173,24 @@ export function LoginScreen() {
               {resetting ? 'Sending reset email...' : 'Forgot password?'}
             </Text>
           </TouchableOpacity>
-          <Button variant="secondary" onPress={handleGoogle} loading={socialLoading === 'google'}>
-            Continue with Google
-          </Button>
+          {googleConfig?.config ? (
+            <GoogleSignInButton
+              config={googleConfig.config}
+              onResult={async (tokens) => {
+                try {
+                  await handleGoogleTokens(tokens);
+                } catch (error) {
+                  Alert.alert('Google sign-in failed', (error as Error).message);
+                }
+              }}
+            />
+          ) : (
+            <Text style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8' }}>
+              {googleConfig?.reason ?? 'Google sign-in is disabled in this build.'}
+            </Text>
+          )}
           {appleAvailable ? (
-            <Button variant="outline" onPress={handleApple} loading={socialLoading === 'apple'}>
+            <Button variant="outline" onPress={handleApple} loading={appleLoading}>
               Continue with Apple
             </Button>
           ) : null}
@@ -248,3 +226,93 @@ const styles = StyleSheet.create({
     padding: 24,
   },
 });
+
+type GoogleSignInButtonProps = {
+  config: Parameters<typeof Google.useAuthRequest>[0];
+  onResult: (tokens: { idToken?: string | null; accessToken?: string | null }) => Promise<void>;
+};
+
+function GoogleSignInButton({ config, onResult }: GoogleSignInButtonProps) {
+  const [request, response, promptAsync] = Google.useAuthRequest(config);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!response) {
+      return;
+    }
+    if (response.type !== 'success') {
+      if (response.type !== 'dismiss') {
+        Alert.alert('Google sign-in cancelled', 'Please try again.');
+      }
+      setLoading(false);
+      return;
+    }
+
+    const run = async () => {
+      try {
+        const { idToken, accessToken } = response.authentication ?? {};
+        await onResult({ idToken, accessToken });
+      } catch (error) {
+        Alert.alert('Google sign-in failed', (error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void run();
+  }, [response, onResult]);
+
+  const handlePress = async () => {
+    if (!request) {
+      Alert.alert('Google sign-in unavailable', 'Double-check your Google OAuth client IDs.');
+      return;
+    }
+    setLoading(true);
+    const result = await promptAsync();
+    if (result.type !== 'success') {
+      if (result.type !== 'dismiss') {
+        Alert.alert('Google sign-in cancelled', 'Please try again.');
+      }
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Button variant="secondary" onPress={() => void handlePress()} loading={loading} disabled={!request || loading}>
+      Continue with Google
+    </Button>
+  );
+}
+
+function resolveGoogleConfig():
+  | { config: Parameters<typeof Google.useAuthRequest>[0]; reason?: undefined }
+  | { config: null; reason: string } {
+  const expoClientId = process.env.EXPO_PUBLIC_GOOGLE_EXPO_CLIENT_ID?.trim();
+  const iosClientId = process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID?.trim();
+  const androidClientId = process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID?.trim();
+  const webClientId = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID?.trim();
+
+  let reason: string | undefined;
+  if (Platform.OS === 'ios' && !iosClientId) {
+    reason = 'Set EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID to enable Google sign-in on iOS.';
+  } else if (Platform.OS === 'android' && !androidClientId) {
+    reason = 'Set EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID to enable Google sign-in on Android.';
+  } else if (Platform.OS === 'web' && !webClientId) {
+    reason = 'Set EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID to enable Google sign-in on web.';
+  } else if (!expoClientId && Platform.OS !== 'web') {
+    reason = 'Set EXPO_PUBLIC_GOOGLE_EXPO_CLIENT_ID to enable Google sign-in in Expo.';
+  }
+
+  if (reason) {
+    return { config: null, reason };
+  }
+
+  return {
+    config: {
+      expoClientId: expoClientId ?? undefined,
+      iosClientId: iosClientId ?? undefined,
+      androidClientId: androidClientId ?? undefined,
+      webClientId: webClientId ?? undefined,
+    },
+  };
+}
